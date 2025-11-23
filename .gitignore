@@ -1,0 +1,18 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+build.py
+__pycache__/
+.DS_Store
+
+# Editor directories
+.ruby-lsp/
+.vscode/
+.idea/
+
+# Node dependencies
+node_modules/
+package-lock.json

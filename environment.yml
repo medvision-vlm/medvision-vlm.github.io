@@ -1,0 +1,10 @@
+name: jekyll-medvision
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - ruby=3.3
+  - make
+  - gcc
+  - gxx
+  - pip

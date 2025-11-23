@@ -1,0 +1,39 @@
+title: "<img src=\"figure/medvision-logo-lite.png\" alt=\"MedVision Logo\" style=\"height: 1.2em; vertical-align: middle;\"> MedVision: Benchmarking Quantitative Medical Image Analysis"
+description: "MedVision is a dataset and benchmark for quantitative medical image analysis, including detection, tumor/lesion (T/L) size estimation, and angle/distance (A/D) measurement tasks."
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://medvision-vlm.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Author details
+authors:
+  - name: "Yongcheng Yao<sup>1</sup>"
+    url: "https://yongchengyao.github.io"
+  - name: "Yongshuo Zong<sup>1</sup>"
+  - name: "Raman Dutt<sup>1</sup>"
+  - name: "Yongxin Yang<sup>2</sup>"
+  - name: "Sotirios A Tsaftaris<sup>1</sup>"
+    newline_before: true
+  - name: "Timothy Hospedales<sup>1</sup>"
+
+publication: "<sup>1</sup>University of Edinburgh &nbsp;&nbsp; <sup>2</sup>Queen Mary University of London"
+doi: ""
+
+links:
+  paper: ""
+  arxiv: "https://arxiv.org/abs/2511.18676"
+  code: "https://github.com/YongchengYAO/MedVision"
+  data: "https://huggingface.co/datasets/YongchengYAO/MedVision"
+
+bibtex: |
+  @misc{yao2026medvisionbenchmarkingquantitativemedical,
+      title={MedVision: Benchmarking Quantitative Medical Image Analysis}, 
+      author={Yongcheng Yao and Yongshuo Zong and Raman Dutt and Yongxin Yang and Sotirios A Tsaftaris and Timothy Hospedales},
+      year={2026},
+      eprint={2511.18676},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2511.18676}, 
+  }
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-minimal # Fallback, but we use custom layout
