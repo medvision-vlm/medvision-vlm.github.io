@@ -1,0 +1,31 @@
+title: "MedVision: Dataset and Benchmark for Quantitative Medical Image Analysis"
+description: "MedVision is a dataset and benchmark for quantitative medical image analysis, including detection, tumor/lesion size estimation, and angle/distance measurement tasks."
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://medvision-vlm.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Author details
+authors:
+  - name: Yongcheng Yao
+    url: "https://yongchengyao.github.io"
+  - name: Yongshuo Zong
+  - name: Raman Dutt
+  - name: Yongxin Yang
+  - name: Sotirios A Tsaftaris
+  - name: Timothy Hospedales
+
+publication: ""
+doi: ""
+
+links:
+  paper: ""
+  arxiv: ""
+  code: "https://github.com/YongchengYAO/MedVision"
+  data: "https://huggingface.co/datasets/YongchengYAO/MedVision"
+
+bibtex: |
+  to be updated
+
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-minimal # Fallback, but we use custom layout

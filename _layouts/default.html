@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="{{ site.description }}">
+    <meta name="keywords" content="CartiMorph, Knee, Cartilage, Medical Imaging">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ site.title }}</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="{{ '/static/css/index.css' | relative_url }}">
+    <link rel="icon" href="{{ '/static/images/favicon.svg' | relative_url }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/js/bulma-slider.min.js"></script>
+    <script src="{{ '/static/js/index.js' | relative_url }}"></script>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">{{ site.title }}</h1>
+                        <div class="is-size-5 publication-authors">
+                            {% for author in site.authors %}
+                            <span class="author-block">
+                                {% if author.url %}
+                                <a href="{{ author.url }}">{{ author.name }}</a>
+                                {% else %}
+                                {{ author.name }}
+                                {% endif %}
+                                {% unless forloop.last %},{% endunless %}
+                            </span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">{{ site.publication }}</span>
+                        </div>
+                        {% if site.doi %}
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                                <a href="{{ site.doi }}" target="_blank">{{ site.doi }}</a>
+                            </span>
+                        </div>
+                        {% endif %}
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <!-- PDF Link. -->
+                                {% if site.links.paper and site.links.paper != "" %}
+                                <span class="link-block">
+                                    <a href="{{ site.links.paper }}"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                                        <span>Paper</span>
+                                    </a>
+                                </span>
+                                {% endif %}
+                                {% if site.links.arxiv and site.links.arxiv != "" %}
+                                <span class="link-block">
+                                    <a href="{{ site.links.arxiv }}"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon"><i class="ai ai-arxiv"></i></span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                                {% endif %}
+                                <!-- Code Link. -->
+                                {% if site.links.code and site.links.code != "" %}
+                                <span class="link-block">
+                                    <a href="{{ site.links.code }}"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon"><i class="fab fa-github"></i></span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>
+                                {% endif %}
+                                <!-- Dataset Link. -->
+                                {% if site.links.data and site.links.data != "" %}
+                                <span class="link-block">
+                                    <a href="{{ site.links.data }}"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon"><i class="far fa-images"></i></span>
+                                        <span>Data</span>
+                                    </a>
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <!-- Placeholder for teaser image/video -->
+                <h2 class="subtitle has-text-centered">
+                    {{ site.description }}
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Content from Markdown -->
+            <div class="content">
+                {{ content }}
+            </div>
+            <!--/ Content from Markdown -->
+        </div>
+    </section>
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre><code>{{ site.bibtex }}</code></pre>
+        </div>
+    </section>
+    </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+                        <p>
+                            This website is licensed under a <a rel="license"
+                                href="https://creativecommons.org/licenses/by-nc/4.0/deed.en">CC-BY-NC 4.0 License</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
