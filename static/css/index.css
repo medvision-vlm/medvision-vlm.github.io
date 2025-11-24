@@ -127,3 +127,19 @@ body {
 #interpolation-image-wrapper img {
   border-radius: 5px;
 }
+
+.caption {
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  display: block;
+}
+
+h2, h3, h4, h5, h6 {
+  text-align: center;
+  margin-top: 6rem;
+}
+
+table {
+  font-size: 0.8rem;
+}

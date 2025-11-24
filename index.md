@@ -23,7 +23,7 @@ layout: default
 
 **MedVision** includes 22 public datasets and 30.8M image-annotation pairs. The dataset is available at [here](https://huggingface.co/datasets/YongchengYAO/MedVision). Details are as follows:
 
-<p><b>Table 1:</b> The MedVision dataset consists of public medical images and quantitative annotations from this study. MRI: Magnetic Resonance Imaging; CT: Computed Tomography; PET: positron emission tomography; US: Ultrasound; b-box: bounding box; T/L: tumor/lesion size; A/D: angle/distance; HF: HuggingFace; GC: Grand-Challenge; <sup>&dagger;</sup> redistributed.</p>
+<p class="caption"><b>Table 1:</b> The MedVision dataset consists of public medical images and quantitative annotations from this study. MRI: Magnetic Resonance Imaging; CT: Computed Tomography; PET: positron emission tomography; US: Ultrasound; b-box: bounding box; T/L: tumor/lesion size; A/D: angle/distance; HF: HuggingFace; GC: Grand-Challenge; <sup>&dagger;</sup> redistributed.</p>
 <table>
   <thead>
     <tr>
@@ -92,7 +92,7 @@ layout: default
 
 ### Group-level detection performance
 
-<p><b>Table 2:</b> VLM performance on detection tasks. Targets are grouped into health anatomy and tumor/lesion detection tasks. Mean metrics weighted by sample sizes are reported in %. R: recall; P: precision; F1: F1 score; IoU: intersection over union; SR: success rate.</p>
+<p class="caption"><b>Table 2:</b> VLM performance on detection tasks. Targets are grouped into health anatomy and tumor/lesion detection tasks. Mean metrics weighted by sample sizes are reported in %. R: recall; P: precision; F1: F1 score; IoU: intersection over union; SR: success rate.</p>
 <table>
   <thead>
     <tr>
@@ -160,10 +160,10 @@ VLMs are asked to estimate the longest diameter and its perpendicular diameter o
     <img src="figure/TL-samples.png" alt="TL samples" class="fig" style="width: 100%;">
   </div>
 </div>
-<p><b>Figure 2:</b> Tumor/lesion size annotation. An ellipse is fitted to the tumor/lesion mask and 4 landmarks are recorded.</p> 
+<p class="caption"><b>Figure 2:</b> Tumor/lesion size annotation. An ellipse is fitted to the tumor/lesion mask and 4 landmarks are recorded.</p> 
 
 
-<p><b>Table 3:</b> VLM performance on tumor/lesion size estimation tasks. Mean relative error (MRE), success rate (SR), and MRE<sub>&lt;k</sub> are reported in %, while mean absolute error (MAE) is in millimeters.</p>
+<p class="caption"><b>Table 3:</b> VLM performance on tumor/lesion size estimation tasks. Mean relative error (MRE), success rate (SR), and MRE<sub>&lt;k</sub> are reported in %, while mean absolute error (MAE) is in millimeters.</p>
 <table>
   <thead>
     <tr>
@@ -211,10 +211,10 @@ VLMs are prompted with task description and definition of angle or distance. Exa
     <img src="figure/ceph-feta.png" alt="ceph-feta" class="fig" style="width: 100%;">
   </div>
 </div>
-<p><b>Figure 3:</b> Landmarks in the Ceph-Bio-400 (top-left) and FeTA24 datasets. Ground truth angle and distance measurements are calculated from these landmarks.</p> 
+<p class="caption"><b>Figure 3:</b> Landmarks in the Ceph-Bio-400 (top-left) and FeTA24 datasets. Ground truth angle and distance measurements are calculated from these landmarks.</p> 
 
 
-<p><b>Table 4:</b> VLM performance on angle and distance measurement tasks. Mean relative errors (MRE), MRE<sub>&lt;0.1</sub>, and success rate (SR) are reported in %. Mean absolute errors (MAE) are given in millimeters (distance) and degrees (angle).</p>
+<p class="caption"><b>Table 4:</b> VLM performance on angle and distance measurement tasks. Mean relative errors (MRE), MRE<sub>&lt;0.1</sub>, and success rate (SR) are reported in %. Mean absolute errors (MAE) are given in millimeters (distance) and degrees (angle).</p>
 <table>
   <thead>
     <tr>
