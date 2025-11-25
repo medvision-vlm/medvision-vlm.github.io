@@ -135,11 +135,11 @@ body {
   display: block;
 }
 
-h2, h3, h4, h5, h6 {
+.content h2, .content h3, .content h4, .content h5, .content h6 {
   text-align: center;
   margin-top: 6rem;
 }
 
-table {
+.content table {
   font-size: 0.8rem;
 }

@@ -18,7 +18,7 @@ doi: ""
 
 links:
   paper: ""
-  arxiv: ""
+  arxiv: "https://arxiv.org/abs/2511.18676"
   code: "https://github.com/YongchengYAO/MedVision"
   data: "https://huggingface.co/datasets/YongchengYAO/MedVision"
 
