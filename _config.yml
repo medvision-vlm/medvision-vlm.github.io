@@ -1,4 +1,4 @@
-title: "<img src=\"figure/medvision-logo-lite.png\" alt=\"MedVision Logo\" style=\"height: 1.5em; vertical-align: middle;\"> MedVision: Dataset and Benchmark for Quantitative Medical Image Analysis"
+title: "<img src=\"figure/medvision-logo-lite.png\" alt=\"MedVision Logo\" style=\"height: 1.2em; vertical-align: middle;\"> MedVision: Dataset and Benchmark for Quantitative Medical Image Analysis"
 description: "MedVision is a dataset and benchmark for quantitative medical image analysis, including detection, tumor/lesion (T/L) size estimation, and angle/distance (A/D) measurement tasks."
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://medvision-vlm.github.io" # the base hostname & protocol for your site, e.g. http://example.com
