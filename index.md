@@ -212,8 +212,9 @@ Running API-served frontier VLMs across the entire benchmark is prohibitively co
   <tbody>
     <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>9.6 🥇</td><td>26.9 🥇</td><td>100.0</td><td>24.1 🥇</td><td>$0</td></tr>
     <tr><td>Claude-Fable-5</td><td>12.5</td><td>46.5</td><td>100.0</td><td>23.7</td><td>$63.9</td></tr>
-    <tr><td>Gemini-3.1-Pro</td><td>15.2</td><td>49.9</td><td>79.2</td><td>18.1</td><td>$101.3</td></tr>
+    <tr><td>Gemini-3.1-Pro</td><td>15.2</td><td>49.9</td><td>79.2 &dagger;</td><td>18.1</td><td>$101.3</td></tr>
   </tbody>
 </table>
+<p class="caption" style="margin-top: .6rem; text-align: left;"><b>&dagger;</b> Gemini-3.1-Pro's thinking (non-disableable, default level) shares its 16,000-token output budget with the answer; ~20% of responses exhaust it on reasoning and return empty/truncated output, lowering SR.</p>
 
 <div class="case-viewer" data-task="TL-Pilot" data-autoplay="false"></div>
