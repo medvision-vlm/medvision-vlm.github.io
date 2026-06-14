@@ -66,12 +66,12 @@
       "Gemma3 (27B)", "HuatuoGPT-Vision (34B)", "InternVL3 (38B)", "MedGemma (4B)",
       "Qwen2.5-VL (7B)"],
     // Pilot study (not a ranked leaderboard): MedVision-V0 first as the reference,
-    // then the API model. Medals are suppressed for this task (see MEDAL_TASKS).
-    "TL-Pilot": ["MedVision-V0 (7B)", "Claude-Fable-5"]
+    // then the API models. Medals are suppressed for this task (see MEDAL_TASKS).
+    "TL-Pilot": ["MedVision-V0 (7B)", "Claude-Fable-5", "Gemini-3.1-Pro"]
   };
 
   // Tasks whose model buttons show 🥇🥈🥉 medals (= the ranked leaderboard tables).
-  // The pilot viewer is a 2-model comparison, not a ranking, so it is omitted.
+  // The pilot viewer is a multi-model comparison, not a ranking, so it is omitted.
   var MEDAL_TASKS = { Detection: 1, TL: 1, AD: 1 };
 
   // Anthropic logomark (single-path), painted with currentColor so it tracks the
@@ -82,6 +82,14 @@
     '<path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442' +
     'l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.541Zm-.3712 10.2232 ' +
     '2.2914-5.9456 2.2914 5.9456Z"/></svg>';
+
+  // Google Gemini four-point "spark" logomark (single-path, concave edges), painted with
+  // currentColor like ANTHROPIC_ICON so it tracks the button text color. Shown before
+  // Gemini model names in the model panel.
+  var GEMINI_ICON =
+    '<svg class="cv-model-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+    '<path d="M12 0C12 6.075 6.075 12 0 12C6.075 12 12 17.925 12 24C12 17.925 17.925 12 ' +
+    '24 12C17.925 12 12 6.075 12 0Z"/></svg>';
 
   // Sort model keys by their position in the task's leaderboard table; unknown models
   // (absent from MODEL_ORDER[taskKey]) are appended in their original order.
@@ -268,6 +276,8 @@
       var medalPrefix = (showMedals && m < 3 ? MEDALS[m] + " " : "");
       if (/^claude/i.test(this.modelKeys[m])) {
         mb.innerHTML = medalPrefix + ANTHROPIC_ICON + this.modelKeys[m];
+      } else if (/^gemini/i.test(this.modelKeys[m])) {
+        mb.innerHTML = medalPrefix + GEMINI_ICON + this.modelKeys[m];
       } else {
         mb.textContent = medalPrefix + this.modelKeys[m];
       }

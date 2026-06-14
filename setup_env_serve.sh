@@ -31,7 +31,7 @@ conda activate "${ENV_NAME}"
 #   - gcc_linux-64 / gxx_linux-64 : the C and C++ compilers (g++ is required for eventmachine)
 #   - sysroot_linux-64 >= 2.28    : matches the glibc symbols libruby.so references (statx@2.28, etc.)
 # Idempotent: re-running is a no-op once installed.
-conda install -n "${ENV_NAME}" -y -c conda-forge gcc_linux-64 gxx_linux-64 make "sysroot_linux-64>=2.28"
+#conda install -n "${ENV_NAME}" -y -c conda-forge gcc_linux-64 gxx_linux-64 make "sysroot_linux-64>=2.28"
 
 cd "${SCRIPT_DIR}"
 
