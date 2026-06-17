@@ -104,6 +104,26 @@
                                     </a>
                                 </span>
                                 {% endif %}
+                                <!-- Models Link. -->
+                                {% if site.links.models and site.links.models != "" %}
+                                <span class="link-block">
+                                    <a href="{{ site.links.models }}"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon"><i class="fas fa-robot"></i></span>
+                                        <span>Models</span>
+                                    </a>
+                                </span>
+                                {% endif %}
+                                <!-- Demo Link. -->
+                                {% if site.links.demo and site.links.demo != "" %}
+                                <span class="link-block">
+                                    <a href="{{ site.links.demo }}"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon"><i class="fas fa-rocket"></i></span>
+                                        <span>Demo</span>
+                                    </a>
+                                </span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
