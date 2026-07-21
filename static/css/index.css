@@ -1,0 +1,1308 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.footer .icon-link {
+    font-size: 25px;
+    color: #000;
+}
+
+.link-block a {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.dnerf {
+  font-family: 'Castoro', serif;
+  font-variant: small-caps;
+}
+
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+
+.publication-title {
+}
+
+.publication-banner {
+  max-height: parent;
+
+}
+
+.publication-banner video {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  object-fit: fit;
+}
+
+.publication-header .hero-body {
+}
+
+.publication-header .publication-title {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-venue {
+    color: #555;
+    width: 100%;
+    font-weight: bold;
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-abstract {
+}
+
+.publication-video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    overflow: hidden;
+}
+
+.publication-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 0;
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+
+.interpolation-panel {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.interpolation-panel .interpolation-image {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.interpolation-video-column {
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+#interpolation-image-wrapper {
+  width: 100%;
+}
+#interpolation-image-wrapper img {
+  border-radius: 5px;
+}
+
+.caption {
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  display: block;
+}
+
+.content h2, .content h3, .content h4, .content h5, .content h6 {
+  text-align: center;
+  margin-top: 6rem;
+}
+/* The 6rem above separates one section from the previous one — but when a page opens with a heading
+   (explorer.md) there is no previous section, so it stacks onto the section's own padding and leaves
+   a large empty band under the teaser. Only matches a content-leading heading; the main page starts
+   with a figure, so it is untouched. */
+.content > h2:first-child { margin-top: 2rem; }
+
+/* ---- Section separator: coordinate-origin ruler -------------------------
+   Marks a major transition (used before the Pilot Study). A teal→indigo
+   measurement axis with ruler ticks meeting a central rotated-diamond
+   "origin" node — echoing the project's scale-bar / coordinate-origin
+   visual language. CSS-only; tucks into the following heading's top gap. */
+.mv-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem;
+  width: min(680px, 86%);
+  margin: 3rem auto 0;
+}
+/* tighten the heading that opens right after a divider (overrides the
+   default 6rem heading top-margin) so the two read as one section opener */
+.mv-divider + h2 { margin-top: 2.5rem; }
+.mv-divider-rail { position: relative; flex: 1; height: 9px; }
+/* gradient measurement axis (centered baseline) */
+.mv-divider-rail::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: 2px; transform: translateY(-50%);
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+/* ruler tick marks crossing the axis */
+.mv-divider-rail::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg,
+    rgba(31, 36, 48, .26) 0 1px, transparent 1px 14px);
+}
+/* rails fade out toward the page edges */
+.mv-divider-rail.is-left::before, .mv-divider-rail.is-left::after {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 76%);
+          mask-image: linear-gradient(90deg, transparent, #000 76%);
+}
+.mv-divider-rail.is-right::before, .mv-divider-rail.is-right::after {
+  -webkit-mask-image: linear-gradient(270deg, transparent, #000 76%);
+          mask-image: linear-gradient(270deg, transparent, #000 76%);
+}
+/* coordinate-origin node: rotated square with a soft halo */
+.mv-divider-node {
+  flex: none;
+  width: 11px; height: 11px; border-radius: 2px;
+  background: linear-gradient(135deg, var(--mv-accent), var(--mv-accent-2));
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 5px var(--mv-accent-soft), 0 3px 10px rgba(59, 76, 200, .22);
+}
+
+.content table {
+  font-size: 0.8rem;
+}
+
+/* =========================================================================
+   MedVision "Clean academic+" theme
+   Appended block — do not edit rules above this line.
+   Sections:
+     1. :root design tokens
+     2. Card system (.mv-cards / .mv-card / .artifact-card / .stat-card /
+        .task-card) + .mv-btn
+     3. Scroll-reveal (.reveal / .reveal.in-view)
+     4. Text highlight classes (.hl-*)
+     5. Collapsible results (.mv-details + summary pill, tr.is-mv,
+        mobile table scroll)
+     6. Case viewer (#case-viewer and all .cv-* parts)
+     7. prefers-reduced-motion overrides
+   ========================================================================= */
+
+/* ---- 1. Design tokens ---------------------------------------------------- */
+:root {
+  --mv-accent: #0E8C8B;
+  --mv-accent-2: #3B4CC8;
+  --mv-accent-soft: #e6f4f4;
+  --mv-ink: #1f2430;
+  /* De-emphasis grey. Kept at >=4.5:1 on white (4.83:1) so low-SR metrics stay
+     legible for low-vision readers; a lighter grey drops below WCAG AA. */
+  --mv-muted: #6b7280;
+  --mv-surface: #ffffff;
+  --mv-border: #e4e7ec;
+  --mv-shadow: 0 6px 24px rgba(20, 30, 50, .08);
+}
+
+/* ---- 2. Card system + buttons ------------------------------------------- */
+.mv-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.mv-cards > * {
+  flex: 1 1 240px;
+}
+
+.mv-card {
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: var(--mv-shadow);
+  color: var(--mv-ink);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.mv-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(20, 30, 50, .16);
+}
+
+/* Artifact cards: top accent border + icon + title + text + button */
+.artifact-card {
+  border-top: 4px solid var(--mv-accent);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.artifact-card .artifact-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+
+.artifact-card h3 {
+  /* override global centered h3 spacing inside compact cards */
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-size: 1.15rem;
+}
+
+.artifact-card p {
+  flex: 1 1 auto;
+  margin-bottom: 1rem;
+  font-size: .92rem;
+}
+
+/* Stat cards: big number, label, comparison sub-line */
+.stat-card {
+  text-align: center;
+}
+
+.stat-card .stat-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--mv-accent);
+  line-height: 1.1;
+}
+
+.stat-card .stat-label {
+  margin-top: .25rem;
+  font-weight: 600;
+  color: var(--mv-ink);
+}
+
+.stat-card .stat-sub {
+  margin-top: .35rem;
+  font-size: .8rem;
+  color: #6b7280;
+}
+
+/* Task cards: inherit the base mv-card look, slightly tighter text */
+.task-card {
+  text-align: center;
+}
+
+.task-card h3 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-size: 1.1rem;
+}
+
+/* Pill buttons */
+.mv-btn {
+  display: inline-block;
+  background: var(--mv-accent);
+  color: #fff;
+  padding: .4rem .9rem;
+  border-radius: 999px;
+  font-size: .88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--mv-accent);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+.mv-btn:hover {
+  background: #0b6f6e;
+  border-color: #0b6f6e;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.mv-btn.is-light {
+  background: transparent;
+  color: var(--mv-accent);
+}
+
+.mv-btn.is-light:hover {
+  background: var(--mv-accent-soft);
+  color: var(--mv-accent);
+}
+
+/* ---- 3. Scroll reveal ---------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- 4. Text highlight classes ------------------------------------------ */
+.hl-orange { color: #d2691e; font-weight: 600; }
+.hl-green  { color: #2e8b57; font-weight: 600; }
+.hl-blue   { color: #1f6feb; font-weight: 600; }
+.hl-purple { color: #7b3fe4; font-weight: 600; }
+.hl-teal   { color: #0E8C8B; font-weight: 600; }
+.hl-pink   { color: #d6336c; font-weight: 600; }
+
+/* ---- 5. Collapsible results tables -------------------------------------- */
+.mv-details {
+  margin: 1.5rem 0;
+}
+
+.mv-details > summary {
+  display: inline-block;
+  list-style: none;
+  cursor: pointer;
+  background: var(--mv-accent);
+  color: #fff;
+  padding: .4rem .9rem;
+  border-radius: 999px;
+  font-size: .88rem;
+  font-weight: 600;
+  user-select: none;
+  transition: background .2s ease;
+}
+
+.mv-details > summary:hover {
+  background: #0b6f6e;
+}
+
+.mv-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.mv-details[open] > summary {
+  margin-bottom: 1rem;
+}
+
+/* MedVision-V0 row highlight inside results tables */
+.content table tr.is-mv {
+  background: var(--mv-accent-soft);
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 var(--mv-accent);
+}
+.content table tr.is-mv td:first-child { color: var(--mv-accent-2); }
+
+/* Medal markers in result tables */
+.medal { font-size: .92em; margin-left: .15em; }
+
+/* Wide tables scroll horizontally on small screens instead of overflowing */
+.content table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+/* Shrink the model-name column to its content on a full-width table.
+   Do NOT combine with .mv-center: width:1% needs a definite table width to
+   resolve against, and .mv-center sets width:auto, which makes the table
+   expand instead of shrink. A .mv-center table already shrink-wraps. */
+.content table.mv-tight-model th:first-child,
+.content table.mv-tight-model td:first-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Leaderboard tables — "calibrated readout"
+
+   The numbers are the subject, so the table is built to be read down a column:
+   monospaced tabular figures centred under their metric, gridlines removed
+   except where they mark a real sub-task boundary, and each medal sitting
+   inline beside the value it marks.
+
+   Sortability is shown WITHOUT arrows — the metric headers already carry
+   &uarr;/&darr; meaning "higher/lower is better", and a second arrow would
+   read as a contradiction. Instead the active column is washed in accent tint
+   and its header carries a rail on the edge where the top-ranked values sit.
+   ========================================================================== */
+
+/* ---- Figures ------------------------------------------------------------ */
+.content table.mv-sortable tbody td {
+  font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: .78rem;
+  text-align: center;
+  padding: .42rem .7em;
+  border: 0;
+  border-bottom: 1px solid var(--mv-border);
+  white-space: nowrap;
+}
+/* The model name is a label, not a measurement */
+.content table.mv-sortable tbody td:first-child {
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  font-size: .8rem;
+  font-weight: 500;
+  text-align: left;
+  padding-left: .55rem;
+  padding-right: .9rem;
+}
+
+/* ---- Headers ------------------------------------------------------------ */
+.content table.mv-sortable thead th {
+  border: 0;
+  border-bottom: 1px solid var(--mv-border);
+  padding: .4rem .7em;
+  text-align: center;
+  vertical-align: bottom;
+  color: var(--mv-ink);
+}
+.content table.mv-sortable thead tr:first-child th {
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  font-size: .68rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--mv-muted);
+  font-weight: 600;
+  text-align: center;
+  padding-bottom: .3rem;
+}
+.content table.mv-sortable thead th:first-child { text-align: left; padding-left: .55rem; }
+.content table.mv-sortable th.mv-th-sort {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: color .12s, background-color .12s;
+}
+.content table.mv-sortable th.mv-th-sort:hover { color: var(--mv-accent); }
+.content table.mv-sortable th.mv-th-sort:focus-visible {
+  outline: 2px solid var(--mv-accent);
+  outline-offset: -2px;
+}
+
+/* ---- The sort rail (signature) ------------------------------------------
+   A bar across the top of the header, marking the column the ranking now runs
+   on and pointing at the row holding its best value. Sorting is one-way, so
+   the rail has one position: faint on hover as the affordance, solid once the
+   column is active. */
+.content table.mv-sortable th.mv-th-sort::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--mv-accent);
+  opacity: 0;
+  transition: opacity .12s;
+}
+.content table.mv-sortable th.mv-th-sort:hover::before { opacity: .3; }
+.content table.mv-sortable th.mv-th-sort.is-sorted { color: var(--mv-accent); }
+.content table.mv-sortable th.mv-th-sort.is-sorted::before { opacity: 1; }
+
+/* ---- Active column wash ------------------------------------------------- */
+.content table.mv-sortable .is-sortcol { background: rgba(14, 140, 139, .055); }
+
+/* ---- Sub-task group boundaries ------------------------------------------
+   The only vertical rules in the table, because they are the only vertical
+   division that means something: one measured sub-task ends, another begins. */
+.content table.mv-sortable .is-groupstart { border-left: 1px solid var(--mv-border); }
+
+/* ---- Medals -------------------------------------------------------------
+   Inline, directly after the value, so the medal reads as a mark on that
+   number rather than a separate column. Value and medal centre together. */
+.content table .medal {
+  font-size: .82em;
+  line-height: 1;
+  margin-left: .3em;
+}
+
+/* ---- Rows --------------------------------------------------------------- */
+.content table.mv-sortable tbody tr:hover td { background: rgba(31, 36, 48, .035); }
+.content table.mv-sortable tbody tr:last-child td { border-bottom: 0; }
+
+/* Keep the model name readable while a wide table is scrolled sideways.
+   Every state below is fully opaque — a translucent sticky cell would let the
+   scrolled columns show through it. Declared last so these win the cascade. */
+.content table.mv-sortable tbody td:first-child,
+.content table.mv-sortable thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--mv-surface);
+}
+.content table.mv-sortable thead th:first-child { z-index: 3; }
+.content table.mv-sortable tbody tr:hover td:first-child { background: #f5f6f7; }
+.content table.mv-sortable tbody tr.is-mv td:first-child { background: var(--mv-accent-soft); }
+.content table.mv-sortable tbody tr.is-mv:hover td:first-child { background: #dcefef; }
+
+/* Metrics of a sub-task whose success rate fell below 50%: computed on a
+   minority of samples, so they are marked rather than hidden. Underlined in
+   the muted tone, which flags the caveat without dimming the figure itself —
+   these numbers still have to be read and compared. */
+.content table td.is-lowsr,
+.mv-lowsr-key {
+  text-decoration: underline;
+  text-decoration-color: var(--mv-muted);
+  text-underline-offset: .2em;
+}
+/* inline-block stops the cell's underline running through the medal, which
+   descendants cannot otherwise opt out of; the medal keeps its original look */
+.content table td.is-lowsr .medal { display: inline-block; }
+
+/* ---- Sub-task tabs (e.g. Angle vs Distance) ----------------------------- */
+.mv-tablist {
+  display: flex;
+  gap: .4rem;
+  margin: 0 0 .75rem;
+}
+.mv-tab {
+  font: inherit;
+  font-size: .82rem;
+  padding: .32rem .85rem;
+  border: 1px solid var(--mv-border);
+  border-radius: 999px;
+  background: var(--mv-surface);
+  color: var(--mv-ink);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.mv-tab:hover {
+  border-color: var(--mv-accent);
+  color: var(--mv-accent);
+}
+.mv-tab.is-active {
+  background: var(--mv-accent);
+  border-color: var(--mv-accent);
+  color: #fff;
+}
+
+/* Before the tab script initialises, show only the first panel so the page
+   does not flash every sub-task at once. Once ready, [hidden] takes over.
+   Neither rule applies without JS, where all panels stay stacked.
+
+   Sibling combinator, not :first-of-type — the panels share a parent with
+   .mv-tablist and all three are divs, so :first-of-type would match the
+   tablist and hide *every* panel. */
+.mv-js .mv-tabs:not(.is-ready) .mv-tabpanel ~ .mv-tabpanel {
+  display: none;
+}
+.mv-tabpanel[hidden] {
+  display: none;
+}
+
+/* Narrow tables that should be centered on the page (e.g. Table 3) */
+.content table.mv-center {
+  display: table;
+  width: auto;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- 6. Case viewer — "radiology workstation" module --------------------- */
+#case-viewer,
+.case-viewer {
+  --cv-accent: #0d9488;            /* teal-600, legible on light chrome */
+  --cv-accent-2: #4f46e5;          /* indigo-600 */
+  --cv-ink: #1f2430;
+  --cv-muted: #64748b;
+  --cv-line: rgba(15, 23, 42, .10);
+  position: relative;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(13, 148, 136, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  border: 1px solid var(--mv-border);
+  border-radius: 18px;
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  padding: 1.4rem 1.4rem 1.25rem;
+  margin: 2rem 0;
+  color: var(--cv-ink);
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  overflow: hidden;                /* clip top accent + grid texture */
+  overflow-anchor: none;           /* internal updates never scroll the page */
+}
+/* top accent strip */
+#case-viewer::before,
+.case-viewer::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--cv-accent), var(--cv-accent-2));
+}
+/* faint instrument-grid texture, fading downward */
+#case-viewer::after,
+.case-viewer::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+          mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+}
+#case-viewer > *,
+.case-viewer > * { position: relative; z-index: 1; }
+
+.cv-note { color: var(--cv-muted); font-size: .9rem; text-align: center; margin: 0; }
+
+/* Header: eyebrow + case-selection rail */
+.cv-head { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.cv-eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .72rem; font-weight: 600; letter-spacing: .18em; color: var(--cv-muted);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+.cv-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--cv-accent);
+  animation: cvPulse 2.4s ease-out infinite;
+}
+@keyframes cvPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(13, 148, 136, .5); }
+  70%  { box-shadow: 0 0 0 7px rgba(13, 148, 136, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+}
+
+/* Arrow navigator — the case selector (‹ NN / TOTAL › ▶) */
+.cv-nav { display: flex; align-items: center; gap: .45rem; margin-left: auto; }
+.cv-count {
+  font-family: "IBM Plex Mono", monospace; font-size: .9rem; font-weight: 700;
+  letter-spacing: .14em; color: var(--cv-ink); min-width: 5.6rem; text-align: center;
+  padding: .42rem .6rem; border-radius: 10px;
+  background: #ffffff; border: 1px solid var(--cv-line);
+}
+.cv-prev, .cv-next, .cv-play {
+  width: 2.2rem; height: 2.2rem; border-radius: 11px;
+  border: 1px solid var(--cv-line); background: #ffffff; color: var(--cv-ink);
+  font-size: 1.05rem; line-height: 1; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.cv-prev:hover, .cv-next:hover, .cv-play:hover {
+  border-color: var(--cv-accent); color: var(--cv-accent); transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, .20);
+}
+.cv-prev:active, .cv-next:active, .cv-play:active {
+  transform: translateY(0); box-shadow: none; background: #f1f5f9;
+}
+.cv-play { font-size: .68rem; letter-spacing: -.05em; }
+.cv-play.is-on { background: var(--cv-accent); color: #fff; border-color: var(--cv-accent); }
+
+/* Progress bar — sits between header and title */
+.cv-bar-track {
+  height: 3px; background: rgba(15, 23, 42, .10);
+  border-radius: 3px; margin: 0 0 1rem; overflow: hidden;
+}
+.cv-bar {
+  height: 100%; width: 0; border-radius: 3px; transition: width .35s ease;
+  background: linear-gradient(90deg, var(--cv-accent), var(--cv-accent-2));
+}
+
+/* Model-selection panel */
+.cv-models { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 0 0 1rem; }
+.cv-models-label {
+  font-family: "IBM Plex Mono", monospace; font-size: .66rem; font-weight: 700;
+  letter-spacing: .16em; color: var(--cv-muted); margin-right: .25rem;
+}
+.cv-model {
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: var(--cv-muted); background: #fff; border: 1px solid var(--cv-line);
+  border-radius: 8px; padding: .3rem .62rem; cursor: pointer;
+  transition: color .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.cv-model:hover { color: var(--cv-ink); border-color: var(--cv-accent); }
+.cv-model.is-active {
+  color: #fff; background: var(--cv-accent-2); border-color: var(--cv-accent-2);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, .25);
+}
+.cv-model-ico {
+  width: .95em; height: .95em; vertical-align: -.14em;
+  margin-right: .4em; fill: currentColor;
+}
+/* Target-filter panel — same visual style as model buttons */
+.cv-target {
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: var(--cv-muted); background: #fff; border: 1px solid var(--cv-line);
+  border-radius: 8px; padding: .3rem .62rem; cursor: pointer;
+  transition: color .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.cv-target:hover { color: var(--cv-ink); border-color: var(--cv-accent); }
+.cv-target.is-active {
+  color: #fff; background: var(--cv-accent-2); border-color: var(--cv-accent-2);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, .25);
+}
+
+/* AD landmark reference panel */
+.cv-lm-panel { margin: 0 0 1rem; }
+.cv-lm-grid {
+  display: flex; flex-wrap: wrap; gap: .2rem .9rem; margin-top: .4rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .70rem;
+}
+.cv-lm-entry { white-space: nowrap; }
+.cv-lm-key { font-weight: 700; color: var(--cv-accent-2); }
+.cv-lm-sep { color: var(--cv-muted); }
+.cv-lm-val { color: var(--cv-ink); }
+
+.cv-title {
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  font-weight: 600; font-size: 1.12rem; color: var(--cv-ink); letter-spacing: .005em;
+  padding: 0 0 .85rem; margin: 0 0 1rem; border-bottom: 1px solid var(--cv-line);
+}
+.cv-title::before { content: "▸ "; color: var(--cv-accent); font-weight: 700; }
+.cv-tk { font-weight: 700; color: var(--cv-accent-2); margin-right: .2rem; }
+.cv-tsep { margin: 0 .6rem; color: var(--cv-muted); }
+.cv-img-note {
+  font-size: .78rem; line-height: 1.5; color: var(--cv-muted);
+  font-style: italic; padding: 0 0 .85rem; margin: -.5rem 0 .5rem;
+}
+.cv-img-note strong { font-style: normal; color: var(--cv-ink); }
+
+/* Stage: OUTER box framing the inner boxes; text (left) + figure (right); fixed-height -> no page jump */
+.cv-stage {
+  display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem; align-items: stretch;
+  background: #eef3f7;
+  border: 1px solid var(--mv-border);
+  border-radius: 14px; padding: 1rem;
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, .06);
+}
+
+/* Left: scroll column of LIGHT panels floating on the dark chrome */
+.cv-text {
+  min-width: 0; height: 27rem;
+  overflow-y: auto; overflow-anchor: none; padding-right: .35rem; scrollbar-width: thin;
+}
+.cv-seg {
+  margin-bottom: .65rem;
+  background: #ffffff; border: 1px solid #e6e9ef; border-left: 3px solid var(--mv-accent);
+  border-radius: 12px; padding: .6rem .75rem; box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+}
+.cv-seg:last-child { margin-bottom: 0; }
+/* Subsection titles as uppercase pill badges */
+.cv-seg-label {
+  display: inline-flex; align-items: center;
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  font-weight: 700; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+  color: #fff; background: var(--mv-accent);
+  padding: .26rem .62rem; border-radius: 999px; margin-bottom: .6rem;
+}
+.cv-seg.cv-anim .cv-seg-label { background: var(--cv-accent-2); }
+.cv-seg-body {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .78rem; line-height: 1.55;
+  white-space: pre-wrap; word-break: break-word;   /* render \n as line breaks */
+  color: #111827;
+}
+/* [Response] panel: indigo accent + word-by-word reveal */
+.cv-seg.cv-anim {
+  border-left-color: var(--cv-accent-2);
+}
+.cv-anim .cv-token {
+  display: inline-block; opacity: 0;
+  animation: cvToken .5s cubic-bezier(.2, .8, .2, 1) both;
+  animation-delay: calc(var(--i, 0) * var(--step, 50ms));
+}
+@keyframes cvToken {
+  from { opacity: 0; transform: translateY(7px) scale(.94); }
+  to   { opacity: 1; transform: none; }
+}
+/* [Metrics] panel — revealed only after the Response finishes (delay set inline by JS) */
+.cv-after { opacity: 0; animation: cvFade .5s ease both; }
+@keyframes cvFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Right: figure column (viewport + caption) */
+.cv-figcol {
+  min-width: 0; height: 27rem;
+  display: flex; flex-direction: column; gap: .45rem;
+}
+/* Figure viewport (light lightbox on the dark chrome) */
+.cv-figs {
+  min-width: 0; flex: 1 1 auto; min-height: 0;
+  display: flex; align-items: center; justify-content: center; padding: .6rem;
+  background: #ffffff; border: 1px solid #e6e9ef; border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(45, 212, 191, .18), 0 2px 12px rgba(0, 0, 0, .25);
+}
+.cv-fig-cap {
+  flex: 0 0 auto; text-align: center;
+  font-size: .72rem; line-height: 1.4; color: var(--cv-muted); font-style: italic;
+}
+.cv-fig-cap sup { font-style: normal; }
+.cv-fig {
+  max-width: 100%; max-height: 100%; width: auto; height: auto;
+  object-fit: contain; border-radius: 6px; display: block;
+}
+.cv-fig-missing {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+  border: 1px dashed #cfd6df; border-radius: 8px; color: #98a2b3; background: #fafbfc;
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+}
+
+@media (max-width: 820px) {
+  .cv-stage { grid-template-columns: 1fr; }
+  .cv-text { height: 20rem; }
+  .cv-figcol { height: 18rem; }
+  .cv-nav { margin-left: 0; }
+}
+
+/* ---- 7. Reduced-motion overrides ---------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .cv-anim .cv-token { animation: none; opacity: 1; }
+  .cv-after { animation: none; opacity: 1; }
+  .cv-dot { animation: none; }
+  .mvx-dot { animation: none; }
+  .mv-sidenav-item { transition: none; }
+  .content table.mv-sortable th.mv-th-sort,
+  .content table.mv-sortable th.mv-th-sort::before,
+  .mv-tab { transition: none; }
+}
+
+/* ---- Closing sections: BibTeX + Acknowledgements read as one compact group -- */
+.section.mv-closing { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.section.mv-closing .content h2.title { margin-top: 2.5rem; }
+/* tighten the gap specifically between the two stacked closing sections */
+.section.mv-closing + .section.mv-closing { padding-top: 0; }
+.section.mv-closing + .section.mv-closing .content h2.title { margin-top: 1.25rem; }
+
+/* ---- Fixed cross-page nav rail (Project <-> Data Explorer) --------------- */
+.mv-sidenav {
+  position: fixed; left: 1rem; top: 50%; transform: translateY(-50%);
+  z-index: 30; display: flex; flex-direction: column; gap: .6rem;
+}
+.mv-sidenav-item {
+  display: flex; flex-direction: column; align-items: center; gap: .28rem;
+  width: 4rem; padding: .6rem .35rem; border-radius: 14px;
+  background: var(--mv-surface); border: 1px solid var(--mv-border);
+  box-shadow: var(--mv-shadow); color: var(--mv-ink); text-decoration: none;
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
+}
+.mv-sidenav-item:hover {
+  transform: translateY(-2px); border-color: var(--mv-accent); color: var(--mv-accent);
+  box-shadow: 0 10px 26px rgba(14, 140, 139, .18);
+}
+.mv-sidenav-item.is-active { background: var(--mv-accent); border-color: var(--mv-accent); color: #fff; }
+.mv-sidenav-ico { font-size: 1.15rem; line-height: 1; }
+.mv-sidenav-label { font-size: .6rem; font-weight: 600; letter-spacing: .03em; text-align: center; line-height: 1.15; }
+@media (max-width: 1200px) { .mv-sidenav { display: none; } }
+
+/* =========================================================================
+   8. Dataset Explorer (#mv-explorer / .mvx-*)
+   A sibling of the §6 Case Viewer "workstation": same gradient card, top
+   accent strip, instrument-grid texture, IBM Plex type, indigo-active
+   selectors. All rules id-scoped so they beat Bulma's .content defaults.
+   ========================================================================= */
+#mv-explorer {
+  position: relative; margin: 2rem 0; padding: 1.5rem 1.5rem 1.35rem;
+  border: 1px solid var(--mv-border); border-radius: 18px;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(14, 140, 139, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--mv-ink); font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  overflow: hidden;
+}
+#mv-explorer::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+#mv-explorer::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .035) 1px, transparent 1px);
+  background-size: 28px 28px; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+          mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+}
+#mv-explorer > * { position: relative; z-index: 1; }
+
+/* header: eyebrow + live query breadcrumb (the signature data-readout) */
+#mv-explorer .mvx-head {
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+  padding-bottom: .9rem; margin-bottom: 1.15rem; border-bottom: 1px solid rgba(15, 23, 42, .10);
+}
+#mv-explorer .mvx-eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mv-accent);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+#mv-explorer .mvx-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mv-accent);
+  animation: cvPulse 2.4s ease-out infinite;   /* reuse §6 keyframe */
+}
+#mv-explorer .mvx-crumb {
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: #64748b;
+  margin-left: auto; text-align: right; min-width: 0;
+}
+#mv-explorer .mvx-crumb b { color: var(--mv-accent-2); font-weight: 700; }
+#mv-explorer .mvx-crumb .sep { color: #cbd5e1; margin: 0 .35rem; }
+
+/* steps */
+#mv-explorer .mvx-step { margin: 0 0 1.4rem; }
+#mv-explorer .mvx-step:last-child { margin-bottom: 0; }
+#mv-explorer .mvx-label {
+  display: flex; align-items: center; gap: .55rem;
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: .7rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--mv-ink); margin-bottom: .7rem;
+}
+#mv-explorer .mvx-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.35rem; height: 1.35rem; border-radius: 6px;
+  background: var(--mv-accent); color: #fff; font-size: .72rem; font-weight: 700;
+}
+#mv-explorer .mvx-hint {
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .01em; text-transform: none; color: #94a3b8;
+}
+
+/* pill selectors (body part / anatomy / modality) — like .cv-model/.cv-target */
+#mv-explorer .mvx-options { display: flex; flex-wrap: wrap; gap: .45rem; }
+#mv-explorer .mvx-pill {
+  font-family: "IBM Plex Mono", monospace; font-size: .78rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 9px; padding: .4rem .7rem; cursor: pointer; line-height: 1.2;
+  transition: color .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+#mv-explorer .mvx-pill:hover:not(.is-disabled) { color: var(--mv-ink); border-color: var(--mv-accent); transform: translateY(-1px); }
+#mv-explorer .mvx-pill.is-active {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 2px 10px rgba(59, 76, 200, .25);
+}
+#mv-explorer .mvx-pill.is-disabled { opacity: .4; cursor: not-allowed; }
+#mv-explorer .mvx-count { opacity: .6; font-weight: 600; margin-left: .3em; }
+
+/* dataset cards — like .cv-seg (teal left rail), active indigo */
+#mv-explorer .mvx-datasets { display: flex; flex-wrap: wrap; gap: .5rem; }
+#mv-explorer .mvx-ds {
+  min-width: 8.5rem; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-left: 3px solid var(--mv-accent); border-radius: 11px; padding: .55rem .8rem; cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+#mv-explorer .mvx-ds:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(15, 23, 42, .08); }
+#mv-explorer .mvx-ds.is-active { border-color: var(--mv-accent-2); border-left-color: var(--mv-accent-2); background: var(--mv-accent-soft); }
+#mv-explorer .mvx-ds b { display: block; font-size: .9rem; font-weight: 700; color: var(--mv-ink); }
+#mv-explorer .mvx-ds small { font-family: "IBM Plex Mono", monospace; font-size: .72rem; color: #64748b; }
+
+/* version control + notes */
+#mv-explorer .mvx-controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+#mv-explorer .mvx-select {
+  font-family: "IBM Plex Mono", monospace; font-size: .82rem;
+  border: 1px solid rgba(15, 23, 42, .10); border-radius: 9px; padding: .42rem .7rem;
+  background: #fff; color: var(--mv-ink); cursor: pointer;
+}
+#mv-explorer .mvx-select:hover { border-color: var(--mv-accent); }
+#mv-explorer .mvx-note {
+  font-size: .82rem; line-height: 1.5; color: #475569;
+  background: rgba(255, 255, 255, .6); border-left: 3px solid var(--mv-accent);
+  padding: .55rem .8rem; border-radius: 6px; margin-top: .7rem;
+}
+
+/* result: config chips + light command panel */
+#mv-explorer .mvx-result {
+  background: #eef3f7; border: 1px solid var(--mv-border); border-radius: 14px;
+  padding: 1.05rem; margin-top: .3rem; box-shadow: inset 0 1px 3px rgba(15, 23, 42, .06);
+}
+#mv-explorer .mvx-configline { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .85rem; }
+#mv-explorer .mvx-cfg {
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 8px; padding: .35rem .6rem; cursor: pointer;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+#mv-explorer .mvx-cfg:hover { color: var(--mv-ink); border-color: var(--mv-accent); }
+#mv-explorer .mvx-cfg.is-active { color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2); }
+#mv-explorer .mvx-cfg .mvx-tag { opacity: .7; font-weight: 500; }
+#mv-explorer .mvx-cfg.is-active .mvx-tag { opacity: .85; }
+#mv-explorer .mvx-cmd-wrap { position: relative; }
+#mv-explorer .mvx-cmd {
+  margin: 0; background: #fff; border: 1px solid #e6e9ef; border-left: 3px solid var(--mv-accent);
+  border-radius: 12px; padding: .95rem 1rem .9rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; line-height: 1.6;
+  color: #1f2937; white-space: pre; overflow-x: auto; box-shadow: 0 2px 10px rgba(15, 23, 42, .05);
+}
+#mv-explorer .mvx-cmd .k { color: var(--mv-accent-2); font-weight: 600; }   /* keywords → indigo */
+#mv-explorer .mvx-cmd .s { color: var(--mv-accent); }                        /* strings  → teal */
+#mv-explorer .mvx-cmd .c { color: #94a3b8; font-style: italic; }             /* comments → muted */
+#mv-explorer .mvx-copy {
+  position: absolute; top: .55rem; right: .55rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  border: 1px solid rgba(15, 23, 42, .12); background: #fff; color: #475569;
+  border-radius: 8px; padding: .3rem .6rem; cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+#mv-explorer .mvx-copy:hover { color: var(--mv-accent); border-color: var(--mv-accent); box-shadow: 0 3px 10px rgba(14, 140, 139, .15); }
+#mv-explorer .mvx-empty { color: #64748b; font-style: italic; padding: .4rem 0; margin: 0; }
+
+/* ---- Anatomy covered by the hovered config -------------------------------
+   Amber, shared with the annotation-set panel below: teal reads as ordinary
+   chrome here (borders, eyebrows, keys are all teal), so the highlight needs a
+   hue that appears nowhere else. Selection stays indigo (.is-active); a pill
+   that is both selected AND covered keeps the indigo fill and gains an amber
+   ring, so the two states never collide.                                     */
+#mv-explorer .mvx-pill.is-hint {
+  border-color: #d97706;
+  background: #fffbeb;
+  color: #b45309;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, .25);
+}
+#mv-explorer .mvx-pill.is-active.is-hint {
+  background: var(--mv-accent-2);
+  border-color: var(--mv-accent-2);
+  color: #fff;
+  box-shadow: 0 0 0 2px #d97706;
+}
+
+/* ---- Dataset provenance + task spec sheet (key/value rows) --------------- */
+#mv-explorer .mvx-info,
+#mv-explorer .mvx-task,
+#mv-explorer .mvx-instance {
+  margin-top: .7rem; padding: .75rem .85rem;
+  background: #fff; border: 1px solid var(--mv-border);
+  border-left: 3px solid var(--mv-accent); border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, .04);
+}
+#mv-explorer .mvx-kv { display: flex; gap: .75rem; padding: .28rem 0; align-items: baseline; }
+#mv-explorer .mvx-kv + .mvx-kv { border-top: 1px dashed var(--mv-border); }
+#mv-explorer .mvx-k {
+  flex: 0 0 5.6rem; font-family: "IBM Plex Mono", monospace; font-size: .66rem;
+  font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mv-accent);
+  padding-top: .15rem;
+}
+#mv-explorer .mvx-v { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: .25rem; font-size: .85rem; color: var(--mv-ink); }
+#mv-explorer .mvx-link { color: var(--mv-accent-2); word-break: break-all; text-decoration: none; border-bottom: 1px solid rgba(59, 76, 200, .3); }
+#mv-explorer .mvx-link:hover { border-bottom-color: var(--mv-accent-2); }
+#mv-explorer .mvx-lic {
+  align-self: flex-start; font-family: "IBM Plex Mono", monospace; font-size: .72rem;
+  background: var(--mv-accent-soft); color: var(--mv-accent);
+  border-radius: 6px; padding: .1rem .45rem;
+}
+#mv-explorer .mvx-path { font-family: "IBM Plex Mono", monospace; font-size: .78rem; color: #334155; word-break: break-all; }
+
+/* A key/value row whose value needs the panel's full width (the label map): the key sits on its
+   own line instead of eating a 5.6rem column. */
+#mv-explorer .mvx-kv.is-block { flex-direction: column; align-items: stretch; gap: .3rem; }
+#mv-explorer .mvx-kv.is-block .mvx-k { flex: 0 0 auto; padding-top: 0; }
+
+/* Label / landmark map: id -> name. Flows into as many columns as the width allows (row-major, so
+   ids stay in reading order), and is height-capped so a 117-label map cannot run away. */
+#mv-explorer .mvx-map {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: .1rem .9rem; width: 100%; max-height: 13rem; overflow-y: auto;
+}
+#mv-explorer .mvx-map-row { display: flex; gap: .5rem; align-items: baseline; padding: .1rem 0; }
+#mv-explorer .mvx-map-k {
+  flex: 0 0 2.4rem; font-family: "IBM Plex Mono", monospace; font-size: .74rem;
+  color: var(--mv-accent-2); font-weight: 600; text-align: right;
+}
+#mv-explorer .mvx-map-v { font-size: .82rem; color: var(--mv-ink); }
+#mv-explorer .mvx-map-row.is-target .mvx-map-v { font-weight: 600; }
+#mv-explorer .mvx-map-tag {
+  font-family: "IBM Plex Mono", monospace; font-size: .6rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  background: var(--mv-accent); color: #fff; border-radius: 5px; padding: .05rem .3rem;
+}
+
+/* Annotation-set caution: the one place the explorer must slow the reader down, so it is the
+   only element allowed outside the teal/indigo pair. Amber reads as "care", not "error". */
+#mv-explorer .mvx-instance { border-left-color: #d97706; }
+#mv-explorer .mvx-warn {
+  margin-top: .55rem; padding: .5rem .6rem; border-radius: 8px;
+  background: #fffbeb; border: 1px solid #fde68a;
+  font-size: .78rem; line-height: 1.5; color: #78350f;
+}
+#mv-explorer .mvx-warn b { color: #78350f; font-weight: 600; }
+#mv-explorer .mvx-warn .mvx-link { color: #b45309; border-bottom-color: rgba(180, 83, 9, .4); white-space: nowrap; }
+#mv-explorer .mvx-warn .mvx-link:hover { border-bottom-color: #b45309; }
+
+@media (max-width: 640px) {
+  #mv-explorer { padding: 1.1rem 1rem 1rem; }
+  #mv-explorer .mvx-crumb { display: none; }
+  #mv-explorer .mvx-kv { flex-direction: column; gap: .15rem; }
+  #mv-explorer .mvx-k { flex-basis: auto; }
+}
+
+/* =========================================================================
+   9. Interactive radar (.mv-radar / .mvr-*)
+   One per task section; the interactive twin of the static Figure 3. Same
+   "workstation" card as §8 Dataset Explorer, but class-scoped (three mounts).
+   Selectors are class+descendant so they beat Bulma's .content defaults.
+   ========================================================================= */
+.mv-radar {
+  position: relative; margin: 2rem 0; padding: 1.5rem 1.5rem 1.35rem;
+  border: 1px solid var(--mv-border); border-radius: 18px;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(14, 140, 139, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--mv-ink); font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  overflow: hidden;
+}
+.mv-radar::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+.mv-radar::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .035) 1px, transparent 1px);
+  background-size: 28px 28px; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+          mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+}
+.mv-radar > * { position: relative; z-index: 1; }
+
+/* header: eyebrow + live crumb */
+.mv-radar .mvr-head {
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+  padding-bottom: .9rem; margin-bottom: 1.15rem; border-bottom: 1px solid rgba(15, 23, 42, .10);
+}
+.mv-radar .mvr-eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mv-accent);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+.mv-radar .mvr-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mv-accent);
+  animation: cvPulse 2.4s ease-out infinite;   /* reuse §6 keyframe */
+}
+.mv-radar .mvr-crumb {
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: #64748b;
+  margin-left: auto; text-align: right; min-width: 0;
+}
+.mv-radar .mvr-crumb b { color: var(--mv-accent-2); font-weight: 700; }
+.mv-radar .mvr-sep { color: #cbd5e1; margin: 0 .35rem; }
+
+/* controls: metric selector + A/D view toggle (segmented pills) */
+.mv-radar .mvr-controls { display: flex; flex-wrap: wrap; gap: 1.1rem 1.6rem; margin-bottom: 1.1rem; }
+.mv-radar .mvr-seg { display: flex; align-items: center; gap: .55rem; }
+.mv-radar .mvr-seglabel {
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--mv-muted);
+}
+.mv-radar .mvr-segbtns { display: inline-flex; flex-wrap: wrap; gap: .35rem; }
+.mv-radar .mvr-segbtn {
+  font-family: "IBM Plex Mono", monospace; font-size: .78rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 9px; padding: .34rem .66rem; cursor: pointer; line-height: 1.2;
+  transition: color .15s ease, background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.mv-radar .mvr-segbtn:hover { color: var(--mv-ink); border-color: var(--mv-accent); transform: translateY(-1px); }
+.mv-radar .mvr-segbtn.is-active {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 2px 10px rgba(59, 76, 200, .25);
+}
+/* single-option control: a static readout, not a button */
+.mv-radar .mvr-segstatic {
+  font-family: "IBM Plex Mono", monospace; font-size: .82rem; font-weight: 700;
+  color: var(--mv-accent-2); padding: .34rem .1rem; line-height: 1.2;
+}
+
+/* stage: chart + spoke-number legend side by side */
+.mv-radar .mvr-stage { display: flex; flex-wrap: wrap; gap: 1.2rem; align-items: flex-start; }
+.mv-radar .mvr-svgwrap { flex: 1 1 360px; min-width: 260px; max-width: 470px; margin: 0 auto; }
+.mv-radar .mvr-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.mv-radar .mvr-ringlab {
+  font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 700; fill: #94a3b8;
+  paint-order: stroke; stroke: rgba(255, 255, 255, .85); stroke-width: 3px;
+}
+.mv-radar .mvr-spokenum {
+  font-family: "IBM Plex Mono", monospace; font-size: 15px;
+  paint-order: stroke; stroke: rgba(255, 255, 255, .8); stroke-width: 2.5px;
+}
+.mv-radar .mvr-trace { transition: opacity .12s ease, stroke-width .12s ease; }
+.mv-radar .mvr-vertex { cursor: pointer; transition: r .1s ease; }
+
+/* spoke-number -> target-name legend */
+.mv-radar .mvr-map { flex: 1 1 210px; min-width: 190px; }
+.mv-radar .mvr-maptitle {
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--mv-muted); margin-bottom: .55rem;
+}
+.mv-radar .mvr-maplist { display: grid; grid-template-columns: 1fr; gap: .18rem .8rem; }
+@media (min-width: 900px) { .mv-radar .mvr-maplist { grid-template-columns: 1fr 1fr; } }
+.mv-radar .mvr-maprow { display: flex; gap: .45rem; align-items: baseline; font-size: .78rem; line-height: 1.3; }
+.mv-radar .mvr-mapn {
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; color: var(--mv-muted);
+  min-width: 1.4em; text-align: right;
+}
+.mv-radar .mvr-mapname { color: var(--mv-ink); }
+.mv-radar .mvr-maprow.is-tl .mvr-mapn,
+.mv-radar .mvr-maprow.is-tl .mvr-mapname { color: #770087; font-weight: 600; }
+
+/* model legend chips */
+.mv-radar .mvr-legend { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(15, 23, 42, .10); }
+.mv-radar .mvr-quick { display: flex; gap: .4rem; margin-bottom: .7rem; }
+.mv-radar .mvr-quickbtn {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: var(--mv-accent); background: transparent; border: 1px solid var(--mv-accent);
+  border-radius: 999px; padding: .22rem .7rem; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.mv-radar .mvr-quickbtn:hover { background: var(--mv-accent-soft); }
+.mv-radar .mvr-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.mv-radar .mvr-chip {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-family: "IBM Plex Sans", sans-serif; font-size: .78rem; font-weight: 500; color: var(--mv-ink);
+  background: #fff; border: 1px solid rgba(15, 23, 42, .12); border-radius: 9px;
+  padding: .3rem .6rem; cursor: pointer; line-height: 1.15;
+  transition: opacity .15s ease, border-color .15s ease, transform .1s ease, box-shadow .15s ease;
+}
+.mv-radar .mvr-chip:hover { transform: translateY(-1px); border-color: var(--mv-accent); box-shadow: 0 3px 12px rgba(15, 23, 42, .08); }
+.mv-radar .mvr-chip:not(.is-active) { opacity: .4; }
+.mv-radar .mvr-chip:not(.is-active) .mvr-chipname { text-decoration: line-through; }
+.mv-radar .mvr-sw { width: 12px; height: 12px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); }
+
+/* floating hover tooltip */
+.mv-radar .mvr-tip {
+  position: absolute; z-index: 6; pointer-events: none; max-width: 260px;
+  background: var(--mv-ink); color: #fff; border-radius: 9px; padding: .5rem .65rem;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, .32); font-size: .76rem; line-height: 1.35;
+}
+.mv-radar .mvr-tiphead { display: flex; align-items: center; gap: .45rem; font-weight: 700; margin-bottom: .2rem; }
+.mv-radar .mvr-tipsw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.mv-radar .mvr-tiptarget { color: #cbd5e1; font-size: .72rem; margin-bottom: .25rem; }
+.mv-radar .mvr-tiptarget.is-tl { color: #e6b3f2; }
+.mv-radar .mvr-tipval { font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+.mv-radar .mvr-tipsub { font-family: "IBM Plex Mono", monospace; font-size: .68rem; color: #94a3b8; margin-top: .1rem; }
+.mv-radar .mvr-empty { color: var(--mv-muted); font-style: italic; }
+
+/* a11y: visible keyboard focus + reduced motion */
+.mv-radar .mvr-chip:focus-visible,
+.mv-radar .mvr-segbtn:focus-visible,
+.mv-radar .mvr-quickbtn:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .mv-radar .mvr-dot { animation: none; }
+  .mv-radar .mvr-chip, .mv-radar .mvr-segbtn, .mv-radar .mvr-quickbtn,
+  .mv-radar .mvr-trace, .mv-radar .mvr-vertex { transition: none; }
+}
+@media (max-width: 640px) {
+  .mv-radar { padding: 1.1rem 1rem 1rem; }
+  .mv-radar .mvr-crumb { display: none; }
+}

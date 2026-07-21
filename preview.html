@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<!--
+  LOCAL PREVIEW — not part of the site. Open directly in a browser (file://) to eyeball the
+  redesigned Dataset Explorer + sidebar + donut without a Jekyll build. Delete before committing
+  (or it will be published by Jekyll). Fonts/Bulma/FontAwesome load from CDN (needs internet);
+  index.css + explorer scripts load from the repo (relative paths).
+-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MedVision — Explorer preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+  <nav class="mv-sidenav" aria-label="Site sections">
+    <a class="mv-sidenav-item" href="#">
+      <span class="mv-sidenav-ico"><i class="fas fa-house"></i></span>
+      <span class="mv-sidenav-label">Project</span>
+    </a>
+    <a class="mv-sidenav-item is-active" href="#">
+      <span class="mv-sidenav-ico"><i class="fas fa-magnifying-glass"></i></span>
+      <span class="mv-sidenav-label">Data Explorer</span>
+    </a>
+  </nav>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="content">
+        <h2>🔎 Dataset Explorer</h2>
+        <p style="text-align:center;max-width:46rem;margin:0 auto;">Pick a body part, choose anatomy labels,
+          select a modality — then copy the exact <code>load_dataset(...)</code> command for a matching test config.</p>
+        <div id="mv-explorer"></div>
+        <h2>📊 Dataset Statistics</h2>
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full">
+            <img src="figure/stats/dataset_summary_rings_filtered_1x2_whitebg.svg"
+                 alt="Single-instance annotation counts (MedVision v1.1.1)" class="fig" style="width:100%;">
+          </div>
+        </div>
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full">
+            <img src="figure/stats/dataset_summary_rings_raw_1x2_whitebg.svg"
+                 alt="Multi-instance annotation counts (MedVision v1.1.1)" class="fig" style="width:100%;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="static/js/explorer-data.js"></script>
+  <script src="static/js/explorer.js"></script>
+</body>
+</html>
