@@ -33,18 +33,23 @@
         <h2>🔎 Dataset Explorer</h2>
         <p style="text-align:center;max-width:46rem;margin:0 auto;">Pick a body part, choose anatomy labels,
           select a modality — then copy the exact <code>load_dataset(...)</code> command for a matching test config.</p>
+        <h2>📌 Annotation Version Control</h2>
+        <p style="text-align:center;max-width:46rem;margin:0 auto;">Pick a planner version to see
+          which annotation each dataset and task would load, and which pairs need an acknowledgement.</p>
+        <div id="mv-versions"></div>
+        <h2>🔎 Dataset Explorer</h2>
         <div id="mv-explorer"></div>
         <h2>📊 Dataset Statistics</h2>
         <div class="columns is-centered has-text-centered">
           <div class="column is-full">
             <img src="figure/stats/dataset_summary_rings_filtered_1x2_whitebg.svg"
-                 alt="Single-instance annotation counts (MedVision v1.1.1)" class="fig" style="width:100%;">
+                 alt="Single-instance annotation counts (MedVision v1.2.0)" class="fig" style="width:100%;">
           </div>
         </div>
         <div class="columns is-centered has-text-centered">
           <div class="column is-full">
             <img src="figure/stats/dataset_summary_rings_raw_1x2_whitebg.svg"
-                 alt="Multi-instance annotation counts (MedVision v1.1.1)" class="fig" style="width:100%;">
+                 alt="Multi-instance annotation counts (MedVision v1.2.0)" class="fig" style="width:100%;">
           </div>
         </div>
       </div>
@@ -52,6 +57,7 @@
   </section>
 
   <script src="static/js/explorer-data.js"></script>
+  <script src="static/js/version-control.js"></script>
   <script src="static/js/explorer.js"></script>
 </body>
 </html>

@@ -24,11 +24,55 @@
 
     var CONFIGS = DATA.configs;
     var BODY_PARTS = DATA.body_parts || {};
-    var VERSIONS = DATA.versions || ["1.1.1"];
-    var LATEST = DATA.latest_version || VERSIONS[0];
+    // The repo release, hardcoded in MedVision.py — this is what MedVision_ACK_RELEASE must equal.
+    // Deliberately NOT the newest annotation version: a release that regenerates nothing still
+    // advances this and still invalidates old acknowledgements.
+    var RELEASE = DATA.release_version;
+    // Everything this panel shows — configs, labels, annotation versions — is exported from the
+    // medvision_ds dataset codebase, so the release that produced it is stated in the header
+    // rather than left implicit. Version comes from the blob, never hardcoded.
+    var DS_REPO_URL = "https://huggingface.co/datasets/YongchengYAO/MedVision";
+    var ANNOTATION_INDEX = DATA.annotation_index || {};
     var DATASET_INFO = DATA.dataset_info || {};
     var TASKS = DATA.tasks || {};
     var MODALITY_ORDER = ["CT", "MRI", "Ultrasound", "X-Ray", "PET"];
+
+    // ── annotation versions ───────────────────────────────────────────────────
+    // From v1.2.0 the release version and the annotation version are separate: MedVision_PLANNER_
+    // VERSION names a release, and each (dataset, plan kind) loads the newest annotation published
+    // at or before it. The selector therefore offers a config's OWN annotation versions, not the
+    // catalogue's release list — KiTS23 T/L publishes 1.0.0/1.1.0/1.1.1, so v1.1.1 is its newest
+    // and v1.2.0 never appears for it even though that release exists. Two payoffs: every option
+    // maps 1:1 to a distinct set of annotation files (picking a release that resolves to the same
+    // files as another was a distinction without a difference), and the pinned version IS the
+    // version loaded, so the landmark folder and the label map can be read straight off it.
+    // MedVision_ACK_RELEASE still mirrors _enforce_release_ack(): required below a config's newest.
+    function vcmp(a, b) {
+      var x = String(a).split("."), y = String(b).split(".");
+      for (var i = 0; i < 3; i++) {
+        var xi = Number(x[i] || 0), yi = Number(y[i] || 0);
+        if (xi !== yi) return xi < yi ? -1 : 1;
+      }
+      return 0;
+    }
+
+    function declaredFor(cfg) {
+      var task = TASKS[cfg.task_key];
+      var kind = (task && task.kind) || String(cfg.task_key || "").split("|")[1] || "";
+      return (ANNOTATION_INDEX[cfg.dataset] || {})[kind] || [];
+    }
+
+    // A config's own annotation versions, newest first.
+    function versionsFor(cfg) {
+      return declaredFor(cfg).slice().sort(function (a, b) { return vcmp(b, a); });
+    }
+
+    function newestFor(cfg) { return versionsFor(cfg)[0] || null; }
+
+    function ackNeeded(cfg, version) {
+      var newest = newestFor(cfg);
+      return !!(newest && vcmp(version, newest) < 0);
+    }
 
     // Anatomy pills of the current render, by group — so hovering a config can highlight the
     // anatomy it covers without re-rendering (which would drop hover/focus).
@@ -41,8 +85,14 @@
     };
 
     // The loader's default is the single-instance (filtered) set; "multi" adds one env line.
-    var state = { bodyPart: null, anatomy: {}, modality: null, dataset: null, version: LATEST,
-                  instanceMode: "single" };
+    // Two version fields, deliberately. `versionPref` is the last version the reader explicitly
+    // picked; `version` is what the current config actually resolves to. Collapsing them into one
+    // silently downgrades: KiTS23's detection config publishes only 1.0.0, so moving from it to
+    // the T/L config — which also publishes 1.0.0 — would keep a v1.0.0 the reader never chose,
+    // instead of the v1.1.1 they would get arriving at T/L directly. Keeping the preference apart
+    // means an explicit v1.0.0 sweep still sticks, while an auto-clamp does not become a choice.
+    var state = { bodyPart: null, anatomy: {}, modality: null, dataset: null,
+                  versionPref: null, version: null, instanceMode: "single" };
 
     var CONCEPTS_URL = "https://medvision.readthedocs.io/en/latest/dataset/concepts.html" +
                        "#multi-instance-vs-single-instance-annotations";
@@ -97,6 +147,21 @@
       if (text != null) e.textContent = text;
       return e;
     }
+    // Header provenance chip, shared verbatim with version-control.js (no bundler here, and each
+    // panel file is self-contained). Sits between the eyebrow and the crumb so the crumb's
+    // margin-left:auto still pins it right.
+    function provenanceChip() {
+      var a = el("a", "mv-provenance");
+      a.href = DS_REPO_URL;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.title = "Built from the medvision_ds dataset codebase at Release-v" + RELEASE
+              + " — opens the Hugging Face dataset repo.";
+      a.appendChild(el("span", "mv-provenance-src", "medvision_ds"));
+      a.appendChild(el("span", "mv-provenance-ver", "Release-v" + RELEASE));
+      return a;
+    }
+
     function stepBlock(num, label, hintText) {
       var step = el("div", "mvx-step");
       var lab = el("div", "mvx-label");
@@ -114,24 +179,30 @@
       eyebrow.appendChild(el("span", "mvx-dot"));
       eyebrow.appendChild(el("span", null, "DATASET EXPLORER"));
       head.appendChild(eyebrow);
+      head.appendChild(provenanceChip());
 
-      var crumb = el("div", "mvx-crumb");
       var parts = [];
       if (state.bodyPart) parts.push(state.bodyPart);
       var anat = selectedAnatomy();
       if (anat.length) parts.push(anat.join(" · "));
       if (state.modality) parts.push(state.modality);
-      if (state.dataset) { parts.push(state.dataset); parts.push("v" + state.version); }
-      if (!parts.length) {
-        crumb.textContent = "pick a body part to begin";
-      } else {
-        parts.forEach(function (p, i) {
-          if (i) crumb.appendChild(el("span", "sep", "›"));  // ›
-          crumb.appendChild(el("b", null, p));
-        });
-      }
-      head.appendChild(crumb);
+      if (state.dataset) parts.push(state.dataset);
+
+      crumbNode = el("div", "mvx-crumb");
+      if (!parts.length) crumbNode.textContent = "pick a body part to begin";
+      else parts.forEach(crumbPush);
+      head.appendChild(crumbNode);
       return head;
+    }
+
+    // The header is emitted before the version is known — step 6 settles it per config — so the
+    // crumb is left open and the version appended there. Writing it from `state.version` up here
+    // would render the PREVIOUS selection's version for one frame after every change.
+    var crumbNode = null;
+    function crumbPush(text) {
+      if (!crumbNode) return;
+      if (crumbNode.children.length) crumbNode.appendChild(el("span", "sep", "›"));  // ›
+      crumbNode.appendChild(el("b", null, text));
     }
 
     // Highlight (or clear) the anatomy pills covered by a config's labels. Called on hover/focus
@@ -409,26 +480,10 @@
       mount.appendChild(s4);
       if (!state.dataset) return;
 
-      // Step 5 — version
-      var s5 = stepBlock(5, "Annotation version");
-      var ctrls = el("div", "mvx-controls");
-      var sel = el("select", "mvx-select");
-      VERSIONS.forEach(function (v) {
-        var o = el("option", null, "v" + v + (v === LATEST ? " (latest)" : ""));
-        o.value = v;
-        if (v === state.version) o.selected = true;
-        sel.appendChild(o);
-      });
-      sel.onchange = function () { state.version = sel.value; render(); };
-      ctrls.appendChild(sel);
-      s5.appendChild(ctrls);
-      s5.appendChild(el("div", "mvx-note",
-        "Only tumor/lesion (T/L) annotations differ across versions. The leaderboard uses v1.0.0; " +
-        "v1.1.1 is recommended for new work."));
-      mount.appendChild(s5);
-
-      // Step 6 — matching configs + command
-      var s6 = stepBlock(6, "Load command");
+      // Step 5 — which config. Must precede the version step: the annotation versions on offer
+      // belong to the config's plan kind, and one dataset's kinds can differ (KiTS23 detection
+      // publishes only 1.0.0 while its biometry publishes 1.0.0/1.1.0/1.1.1).
+      var s5 = stepBlock(5, "Config", "task and plane");
       var mine = dsMap[state.dataset].slice().sort(function (a, b) {
         return a.config < b.config ? -1 : (a.config > b.config ? 1 : 0);
       });
@@ -452,17 +507,49 @@
         if (state.chosenConfig === c.config) chosenCfg = c;
         cfgLine.appendChild(chip);
       });
-      s6.appendChild(cfgLine);
-      if (chosenCfg) s6.appendChild(taskPanel(chosenCfg));
-      if (chosenCfg) s6.appendChild(instancePanel(chosenCfg));
+      s5.appendChild(cfgLine);
+      mount.appendChild(s5);
+      if (!chosenCfg) return;
+
+      // Step 6 — annotation version, scoped to what THIS config publishes.
+      var s6 = stepBlock(6, "Annotation version");
+      var versions = versionsFor(chosenCfg);
+      // Honour an explicit pick when this config publishes it; otherwise show its newest.
+      state.version = (state.versionPref && versions.indexOf(state.versionPref) !== -1)
+        ? state.versionPref : versions[0];
+      crumbPush("v" + state.version);
+      var ctrls = el("div", "mvx-controls");
+      var sel = el("select", "mvx-select");
+      versions.forEach(function (v) {
+        var o = el("option", null, "v" + v + (v === versions[0] ? " (latest)" : ""));
+        o.value = v;
+        if (v === state.version) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.onchange = function () { state.versionPref = sel.value; render(); };
+      ctrls.appendChild(sel);
+      s6.appendChild(ctrls);
+      var vnote = "These are the annotation versions published for this config. ";
+      vnote += versions.length === 1
+        ? "It has been published once, at v" + versions[0] + ", and never regenerated — so no other " +
+          "version exists for it, whatever release you pin."
+        : "Only tumor/lesion (T/L) annotations have ever been regenerated; the leaderboard uses v1.0.0.";
+      s6.appendChild(el("div", "mvx-note", vnote));
+      mount.appendChild(s6);
+
+      // Step 7 — what the config loads, and the command
+      var s7 = stepBlock(7, "Load command");
+      s7.appendChild(taskPanel(chosenCfg));
+      s7.appendChild(instancePanel(chosenCfg));
 
       var result = el("div", "mvx-result");
+      var needAck = ackNeeded(chosenCfg, state.version);
       var wrap = el("div", "mvx-cmd-wrap");
       var pre = el("pre", "mvx-cmd");
-      pre.innerHTML = commandHTML(state.chosenConfig, state.version, isMulti(chosenCfg));
+      pre.innerHTML = commandHTML(state.chosenConfig, state.version, isMulti(chosenCfg), needAck);
       var copy = el("button", "mvx-copy", "Copy");
       copy.onclick = function () {
-        var text = commandText(state.chosenConfig, state.version, isMulti(chosenCfg));
+        var text = commandText(state.chosenConfig, state.version, isMulti(chosenCfg), needAck);
         function done() { copy.textContent = "Copied!"; setTimeout(function () { copy.textContent = "Copy"; }, 1500); }
         function fail() { copy.textContent = "Select & copy"; setTimeout(function () { copy.textContent = "Copy"; }, 2000); }
         try {
@@ -477,8 +564,8 @@
         "Loading a *_Test config downloads the full source dataset — the loader fetches and preprocesses the raw " +
         "images for both the training and testing subjects (the split is applied per-subject after download), so " +
         "budget for the whole dataset's footprint even when you only need the test slices."));
-      s6.appendChild(result);
-      mount.appendChild(s6);
+      s7.appendChild(result);
+      mount.appendChild(s7);
     }
 
     // ── command builders ──────────────────────────────────────────────────────
@@ -488,14 +575,17 @@
       });
     }
 
-    function ackLine(version, html) {
-      if (version === LATEST) return "";
+    // `needed` is per config: the gate fires only when the pin is older than this config's newest
+    // annotation. The VALUE is the repo release, not that annotation version — so acknowledging an
+    // old KiTS23 T/L pin means "1.2.0", and the next release invalidates it again.
+    function ackLine(needed, html) {
+      if (!needed) return "";
       var comment = html
-        ? '<span class="c"># Pinned below the latest — acknowledge the release:</span>\n'
-        : "# Pinned below the latest — acknowledge the release:\n";
+        ? '<span class="c"># Older than this config\'s newest annotation — acknowledge the release:</span>\n'
+        : "# Older than this config's newest annotation — acknowledge the release:\n";
       var line = html
-        ? 'os.environ[<span class="s">"MedVision_ACK_RELEASE"</span>] = <span class="s">"' + esc(LATEST) + '"</span>\n'
-        : 'os.environ["MedVision_ACK_RELEASE"] = "' + LATEST + '"\n';
+        ? 'os.environ[<span class="s">"MedVision_ACK_RELEASE"</span>] = <span class="s">"' + esc(RELEASE) + '"</span>\n'
+        : 'os.environ["MedVision_ACK_RELEASE"] = "' + RELEASE + '"\n';
       return comment + line;
     }
 
@@ -509,13 +599,13 @@
         : 'os.environ["MedVision_DISABLE_SAMPLE_FILTERING"] = "true"   # multi-instance (unfiltered)\n';
     }
 
-    function commandText(config, version, multi) {
+    function commandText(config, version, multi, needAck) {
       return (
         "import os\n" +
         "from datasets import load_dataset          # pip install datasets==3.6.0\n\n" +
         'os.environ["MedVision_DATA_DIR"] = "/path/to/Data"\n' +
         'os.environ["MedVision_PLANNER_VERSION"] = "' + version + '"\n' +
-        ackLine(version, false) +
+        ackLine(needAck, false) +
         multiLine(multi, false) +
         "\n" +
         "ds = load_dataset(\n" +
@@ -527,13 +617,13 @@
       );
     }
 
-    function commandHTML(config, version, multi) {
+    function commandHTML(config, version, multi, needAck) {
       return (
         '<span class="k">import</span> os\n' +
         '<span class="k">from</span> datasets <span class="k">import</span> load_dataset          <span class="c"># pip install datasets==3.6.0</span>\n\n' +
         'os.environ[<span class="s">"MedVision_DATA_DIR"</span>] = <span class="s">"/path/to/Data"</span>\n' +
         'os.environ[<span class="s">"MedVision_PLANNER_VERSION"</span>] = <span class="s">"' + esc(version) + '"</span>\n' +
-        ackLine(version, true) +
+        ackLine(needAck, true) +
         multiLine(multi, true) +
         "\n" +
         "ds = load_dataset(\n" +

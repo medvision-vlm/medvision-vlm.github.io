@@ -7,10 +7,13 @@ title: Dataset Explorer
 
 <div class="reveal" markdown="1">
 
-MedVision consolidates **22 public medical imaging datasets** into one
-uniformly structured resource: **29K 3D images** and **11.2M annotated 2D slices**, carrying **24.3M
-single-instance annotations** and **45.3M multi-instance annotations**. The imaging spans five modalities — X-ray (XR), CT, MRI,
+MedVision consolidates **30 public medical imaging datasets** into one
+uniformly structured resource. The imaging spans five modalities — X-ray (XR), CT, MRI,
 ultrasound (US) and PET — across many anatomical regions.
+
+Across all 30 datasets released through **v1.2.0** — which added AFIDs, DEEP-PSMA, LIDC-IDRI,
+LNQ2023, MAMA-MIA, PDDCA, PI-CAI and VerSe — that is **32.7K 3D images** and **11.9M annotated 2D
+slices**, carrying **24.7M single-instance annotations** and **46.7M multi-instance annotations**.
 
 Source images are kept as *3D volumes reoriented to RAS+* (a canonical right-anterior-superior axis convention),
 which makes plane definitions consistent across datasets that were originally stored with different orientations.
@@ -19,7 +22,8 @@ planes — axial, coronal or sagittal — at load time.
 This keeps the on-disk footprint tied to the volumes themselves (a full copy is around 1 TB) rather than to an
 exploded set of PNGs.
 
-**Segmentation masks.** Every dataset except *Ceph-Biometrics-400* ships with segmentation masks: dense manual
+**Segmentation masks.** Every dataset except *Ceph-Biometrics-400* and *AFIDs* — both landmark-only —
+ships with segmentation masks: dense manual
 ground truth drawn by expert annotators, and the source of the label names shown in each task's label map below. To
 download the image and mask files, load any of a dataset's detection configs — MedVision distributes only the
 annotations, and the loader fetches and preprocesses the raw imaging into the dataset folder you specify.
@@ -43,7 +47,7 @@ Read more in the documentation: [📚 what MedVision holds](https://medvision.re
 
 <div class="reveal" markdown="1">
 
-Annotation counts per dataset for annotation **v1.1.1**, across the three quantitative tasks — detection (Box),
+Annotation counts per dataset for the 30 datasets released through annotation **v1.2.0**, across the three quantitative tasks — detection (Box),
 tumor/lesion size (T/L), and angle/distance (A/D) — with an enlarged panel for the smaller datasets. The two sets
 differ only by filtering: **single-instance** keeps a target only when it is a single, large-enough instance, while
 **multi-instance** keeps every annotated target whatever its instance count or size.
@@ -52,18 +56,18 @@ differ only by filtering: **single-instance** keeps a target only when it is a s
 
 <div class="columns is-centered has-text-centered reveal">
   <div class="column is-full">
-    <img src="figure/stats/dataset_summary_rings_filtered_1x2_whitebg.svg" alt="Single-instance annotation counts per dataset across the MedVision benchmark (annotation v1.1.1)" class="fig" style="width: 100%;">
+    <img src="figure/stats/dataset_summary_rings_filtered_1x2_whitebg.svg" alt="Single-instance annotation counts per dataset across the MedVision benchmark (annotation v1.2.0)" class="fig" style="width: 100%;">
   </div>
 </div>
 
 <div class="columns is-centered has-text-centered reveal">
   <div class="column is-full">
-    <img src="figure/stats/dataset_summary_rings_raw_1x2_whitebg.svg" alt="Multi-instance annotation counts per dataset across the MedVision benchmark (annotation v1.1.1)" class="fig" style="width: 100%;">
+    <img src="figure/stats/dataset_summary_rings_raw_1x2_whitebg.svg" alt="Multi-instance annotation counts per dataset across the MedVision benchmark (annotation v1.2.0)" class="fig" style="width: 100%;">
   </div>
 </div>
 
 
-<div class="mv-divider" role="separator" aria-label="Pilot Study section">
+<div class="mv-divider" role="separator" aria-label="Dataset Explorer section">
   <span class="mv-divider-rail is-left"></span>
   <span class="mv-divider-node"></span>
   <span class="mv-divider-rail is-right"></span>
@@ -91,6 +95,45 @@ quantitative tasks: **detection** (bounding box), **tumor/lesion size** (T/L), a
 <div id="mv-explorer"></div>
 
 
+<div class="mv-divider" role="separator" aria-label="Annotation Version Control section">
+  <span class="mv-divider-rail is-left"></span>
+  <span class="mv-divider-node"></span>
+  <span class="mv-divider-rail is-right"></span>
+</div>
+
+
+## 📌 Annotation Version Control
+
+<div class="reveal" markdown="1">
+
+MedVision annotations are under version control. `MedVision_PLANNER_VERSION` picks which annotations you get, and it works as a **ceiling** rather
+than an exact match: *the newest annotations that existed at or before this point*. Each *config* —
+one dataset and one task, the name you pass to `load_dataset`, e.g.
+`KiTS23_TumorLesionSize_Task01_Axial_Test` — answers that for itself. Only tumor/lesion annotations
+have ever been corrected, on 6 of 30 datasets, so a version that never touched your config changes
+nothing; `latest` is safe to leave set.
+
+Asking for older annotations has to be deliberate. If your setting lands below a config's newest, the
+load stops until you set `MedVision_ACK_RELEASE` — the *yes, I know I am asking for something older
+than what exists* switch. **Either value works.** That config's newest version (`1.1.1`) says you
+know this dataset moved past your setting, and lapses the next time it is corrected. The release
+(`1.2.0`) says you have read that release, and is the only one that works across many configs at
+once, whose newest versions differ. The check is per config, so `1.1.1` never stops a dataset that
+`1.2.0` left alone.
+
+The selector below lists every accepted value; anything else is refused as a typo. Rows are
+datasets, columns the three tasks, and a cell's bars are that config's annotation versions.
+The highlighted bar is what you get; a bar to its right is a newer annotation being skipped, and its
+number is the acknowledgement value in the last column.
+
+<div id="mv-versions"></div>
+
+Full detail in the [📚 v1.2.0 release note](https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.2.0.md)
+· [📚 loading a config](https://medvision.readthedocs.io/en/latest/dataset/loading.html)
+
+</div>
+
+
 <div class="mv-divider" role="separator" aria-label="Report an Issue section">
   <span class="mv-divider-rail is-left"></span>
   <span class="mv-divider-node"></span>
@@ -102,7 +145,7 @@ quantitative tasks: **detection** (bounding box), **tumor/lesion size** (T/L), a
 
 <div class="reveal" markdown="1">
 
-MedVision distributes only the annotations — the raw imaging is fetched from **22 upstream hosts**, each of which
+MedVision distributes only the annotations — the raw imaging is fetched from **30 upstream hosts**, each of which
 can move, re-license or retire its files without notice. If something breaks, please tell us:
 [🧑🏻‍💻 open an issue on GitHub](https://github.com/YongchengYAO/MedVision/issues).
 
@@ -134,7 +177,7 @@ Two kinds of data contribution are especially welcome.
 redistribution, and it carries what MedVision measures — segmentation masks, landmarks, or anything a physical
 measurement can be derived from, with spacing metadata in the header — propose it in
 [🧑🏻‍💻 a GitHub issue](https://github.com/YongchengYAO/MedVision/issues). We will look at integrating it on the same
-terms as the other 22: RAS+ volumes, the same config grammar, and targets in real-world units. The
+terms as the other 30: RAS+ volumes, the same config grammar, and targets in real-world units. The
 [📚 dataset guide](https://huggingface.co/blog/YongchengYAO/medvision-dataset) walks through how a dataset is added.
 
 **2. Own proprietary data? Let's build a challenge.** If you hold data you cannot release outright, we are

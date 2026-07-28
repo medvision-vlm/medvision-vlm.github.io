@@ -22,7 +22,7 @@ layout: default
 <div class="reveal" markdown="1">
 
 * **Research gap.** Modern VLMs <span class="hl-orange">cannot reliably produce precise quantitative measurements</span> from medical images.
-* **Dataset.** <span class="hl-teal">MedVision</span> — a large-scale, multi-anatomy, multi-modality dataset for quantitative medical image analysis (22 public datasets, 29K 3D images, 11.2M annotated 2D slices, 24.3M single-instance annotations, and 45.3M multi-instance annotations). 
+* **Dataset.** <span class="hl-teal">MedVision</span> — a large-scale, multi-anatomy, multi-modality dataset for quantitative medical image analysis (30 public datasets, 32.7K 3D images, 11.9M annotated 2D slices, 24.7M single-instance annotations, and 46.7M multi-instance annotations). 
 * **Benchmark.** The first comprehensive evaluation of contemporary VLMs on <span class="hl-blue">detection, tumor/lesion (T/L) size estimation, and angle/distance (A/D) measurement</span> in medical images.
 * **Model.** <span class="hl-purple">MedVision-V0</span>, a 7B model trained on MedVision via <span class="hl-purple">supervised fine-tuning (SFT) and reinforcement fine-tuning (RFT)</span>; it significantly outperforms all evaluated VLMs across all three tasks — a strong, open baseline.
 * **Open release.** <span class="hl-green">Data, model, and code (training and evaluation)</span> are all publicly available.

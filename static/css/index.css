@@ -227,6 +227,16 @@ body {
   --mv-shadow: 0 6px 24px rgba(20, 30, 50, .08);
 }
 
+/* Inline code. Bulma ships `code { color: #da1039 }` — a red that reads as an error everywhere it
+   appears, and that this site uses for nothing else. Indigo instead, matching the `.k` identifier
+   token in the explorer/version command panels, so an env var looks the same in prose and in code.
+   Scoped to standalone code so Bulma's `pre code { color: currentColor }` still governs blocks. */
+:not(pre) > code {
+  color: var(--mv-accent-2);
+  background-color: #eef1f9;
+  border-radius: 5px;
+}
+
 /* ---- 2. Card system + buttons ------------------------------------------- */
 .mv-cards {
   display: flex;
@@ -1305,4 +1315,247 @@ body {
 @media (max-width: 640px) {
   .mv-radar { padding: 1.1rem 1rem 1rem; }
   .mv-radar .mvr-crumb { display: none; }
+}
+
+/* =========================================================================
+   9b. Provenance chip (.mv-provenance) — shared by §8 and §10
+   Both panels are rendered from data exported out of the medvision_ds dataset
+   codebase, so each header states the release that produced it. Two-tone pill:
+   source on the left, release on the right. Deliberately TEAL (--mv-accent, the
+   eyebrow hue) rather than indigo or amber — in the §10 ledger those two carry
+   cell state, and chrome must not borrow a state colour. No transform, so it
+   needs no reduced-motion guard. Id-scoped to beat Bulma's `.content a`.
+   ========================================================================= */
+#mv-explorer .mv-provenance,
+#mv-versions .mv-provenance {
+  display: inline-flex; align-items: stretch; overflow: hidden;
+  font-family: "IBM Plex Mono", monospace; font-size: .64rem; font-weight: 600;
+  letter-spacing: .05em; text-decoration: none; white-space: nowrap;
+  border: 1px solid rgba(14, 140, 139, .34); border-radius: 999px;
+  background: rgba(255, 255, 255, .74);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+#mv-explorer .mv-provenance:hover,
+#mv-versions .mv-provenance:hover {
+  border-color: var(--mv-accent); box-shadow: 0 2px 10px rgba(14, 140, 139, .20);
+}
+#mv-explorer .mv-provenance:focus-visible,
+#mv-versions .mv-provenance:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+#mv-explorer .mv-provenance-src,
+#mv-versions .mv-provenance-src { padding: .22rem .5rem; color: var(--mv-accent); }
+#mv-explorer .mv-provenance-ver,
+#mv-versions .mv-provenance-ver { padding: .22rem .55rem; background: var(--mv-accent); color: #fff; }
+@media (max-width: 640px) {
+  #mv-explorer .mv-provenance-src,
+  #mv-versions .mv-provenance-src { display: none; }   /* keep the release, drop the source word */
+}
+
+/* =========================================================================
+   10. Annotation version ledger (#mv-versions / .mvv-*)
+   A sibling of the §8 Dataset Explorer workstation. The one idea it adds is a
+   shared release axis: every cell draws the same four slots, so bars align
+   down all 30 rows and the pinned release reads as a tinted vertical band.
+   Colour carries state and nothing else — indigo loads, amber needs an
+   acknowledgement (the site's warning hue, used nowhere as chrome), grey is
+   published-but-not-selected. All rules id-scoped to beat Bulma's .content.
+   ========================================================================= */
+#mv-versions {
+  position: relative; margin: 2rem 0; padding: 1.5rem 1.5rem 1.35rem;
+  border: 1px solid var(--mv-border); border-radius: 18px;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(14, 140, 139, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--mv-ink); font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  overflow: hidden;
+}
+#mv-versions::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+#mv-versions > * { position: relative; z-index: 1; }
+#mv-versions .mvv-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* header */
+#mv-versions .mvv-head {
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+  padding-bottom: .9rem; margin-bottom: 1.15rem; border-bottom: 1px solid rgba(15, 23, 42, .10);
+}
+#mv-versions .mvv-eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mv-accent);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+#mv-versions .mvv-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mv-accent);
+  animation: cvPulse 2.4s ease-out infinite;   /* reuse §6 keyframe */
+}
+#mv-versions .mvv-readout {
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: #64748b;
+  margin-left: auto; text-align: right; min-width: 0;
+}
+#mv-versions .mvv-readout b { color: var(--mv-accent-2); font-weight: 700; }
+#mv-versions .mvv-readout b.is-warn { color: #b45309; }
+#mv-versions .mvv-readout .sep { color: #cbd5e1; margin: 0 .35rem; }
+
+/* planner-version selector */
+#mv-versions .mvv-block { margin: 0 0 1.1rem; }
+#mv-versions .mvv-label {
+  display: flex; align-items: center; gap: .55rem;
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: .7rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--mv-ink); margin-bottom: .7rem;
+}
+#mv-versions .mvv-hint {
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .01em; text-transform: none; color: #94a3b8;
+}
+#mv-versions .mvv-options { display: flex; flex-wrap: wrap; gap: .45rem; }
+#mv-versions .mvv-pill {
+  font-family: "IBM Plex Mono", monospace; font-size: .78rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 9px; padding: .4rem .7rem; cursor: pointer; line-height: 1.2;
+  display: inline-flex; align-items: baseline; gap: .4rem;
+  transition: color .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+#mv-versions .mvv-pill:hover { color: var(--mv-ink); border-color: var(--mv-accent); transform: translateY(-1px); }
+#mv-versions .mvv-pill.is-active {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 2px 10px rgba(59, 76, 200, .25);
+}
+#mv-versions .mvv-sub { font-size: .68rem; opacity: .6; font-weight: 500; }
+#mv-versions .mvv-pill.is-active .mvv-sub { opacity: .75; }
+
+/* env block — same light command panel as the explorer */
+#mv-versions .mvv-cmd {
+  font-family: "IBM Plex Mono", monospace; font-size: .78rem; line-height: 1.7;
+  background: #fff; border: 1px solid rgba(15, 23, 42, .10); border-radius: 12px;
+  padding: .85rem 1rem; margin: 0 0 .8rem; color: var(--mv-ink);
+  white-space: pre; overflow-x: auto;
+}
+#mv-versions .mvv-cmd .k { color: var(--mv-accent-2); font-weight: 600; }
+#mv-versions .mvv-cmd .s { color: var(--mv-accent); }
+#mv-versions .mvv-cmd .c { color: #94a3b8; }
+
+#mv-versions .mvv-note {
+  font-size: .84rem; line-height: 1.6; color: #64748b; margin: 0 0 1rem;
+  border-left: 3px solid var(--mv-accent); padding-left: .8rem;
+}
+#mv-versions .mvv-note b { color: var(--mv-ink); font-weight: 600; }
+
+/* legend */
+#mv-versions .mvv-legend {
+  display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; margin: 0 0 .9rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .7rem; color: #64748b;
+}
+#mv-versions .mvv-key { display: inline-flex; align-items: center; gap: .4rem; }
+#mv-versions .mvv-swatch {
+  width: 18px; height: 12px; border-radius: 4px; display: inline-block;
+  border: 1px solid transparent; background: #eef1f5;
+}
+#mv-versions .mvv-swatch.is-loaded { background: var(--mv-accent-2); }
+#mv-versions .mvv-swatch.is-ack { background: #d97706; }
+#mv-versions .mvv-swatch.is-skipped { border-color: #d97706; border-style: dashed; background: #fffbeb; }
+
+/* the ledger */
+#mv-versions .mvv-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#mv-versions .mvv-table {
+  border-collapse: collapse; width: 100%; min-width: 1040px; table-layout: fixed;
+  background: transparent; font-size: .8rem;
+}
+#mv-versions .mvv-table th,
+#mv-versions .mvv-table td { border: 0; padding: 0; background: transparent; vertical-align: middle; }
+#mv-versions .mvv-corner {
+  text-align: left; font-family: "IBM Plex Mono", monospace; font-size: .66rem;
+  letter-spacing: .14em; text-transform: uppercase; color: #94a3b8;
+  font-weight: 700; padding: 0 .6rem .5rem 0; white-space: nowrap;
+}
+/* fixed layout reads its widths from this row: four even columns */
+#mv-versions .mvv-colhead {
+  padding: 0 .95rem .45rem; text-align: left; vertical-align: bottom;
+  border-bottom: 1px solid rgba(15, 23, 42, .16);
+}
+#mv-versions .mvv-corner { border-bottom: 1px solid rgba(15, 23, 42, .16); }
+/* Each width is max(header label, cell content) plus room to breathe — BOTH constraints matter and
+   they bind in different columns. Dataset and tumor/lesion are sized by their cells (a name like
+   Ceph-Biometrics-400 ~140px; three version bars ~176px). Angle/distance and Acknowledge hold one
+   small chip but carry long labels, so their HEADERS set the width — sizing those two by cell
+   content alone made "ANGLE / DISTANCE" overrun its column and crowd its neighbour.
+   `table-layout: fixed` reads these off the first row. */
+#mv-versions .mvv-table th:nth-child(1) { width: 22%; }
+#mv-versions .mvv-table th:nth-child(2) { width: 15%; }
+#mv-versions .mvv-table th:nth-child(3) { width: 26%; }
+#mv-versions .mvv-table th:nth-child(4) { width: 17%; }
+#mv-versions .mvv-table th:nth-child(5) { width: 20%; }
+/* the gutters ARE the column separation, so the table must not waste them on the outer edges */
+#mv-versions .mvv-table th:first-child,
+#mv-versions .mvv-table td:first-child { padding-left: 0 !important; }
+#mv-versions .mvv-table th:last-child,
+#mv-versions .mvv-table td:last-child { padding-right: 0 !important; }
+/* how many datasets publish this task — explains why a lane is mostly empty */
+#mv-versions .mvv-colcount {
+  display: block; font-family: "IBM Plex Mono", monospace; font-size: .6rem; font-weight: 500;
+  letter-spacing: .06em; color: #a3adbb; margin-top: .18rem; text-transform: none;
+}
+#mv-versions .mvv-coltitle {
+  display: block; font-family: "IBM Plex Mono", monospace; font-size: .66rem; font-weight: 700;
+  /* .1em tracking added ~10% to every label and pushed ANGLE / DISTANCE out of its column */
+  letter-spacing: .05em; text-transform: uppercase; color: var(--mv-ink); margin-bottom: .3rem;
+}
+#mv-versions .mvv-row { border-top: 1px solid rgba(15, 23, 42, .04); }
+/* Columns are separated by whitespace, not rules or fills. Colour is unavailable — in this table it
+   already means state (indigo loads, amber needs acknowledgement) — and a grid of rules cages 30
+   rows. Generous gutters plus a consistent left edge in every cell (bars AND the empty-cell dash
+   start at the same x) let proximity do the work. */
+#mv-versions .mvv-row:hover th,
+#mv-versions .mvv-row:hover td { background: rgba(59, 76, 200, .05); }
+#mv-versions .mvv-rowhead {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: #475569; text-align: left; padding: .28rem .6rem .28rem .45rem !important;
+  white-space: nowrap; border-left: 3px solid transparent;
+}
+/* an amber rail pulls the rows that need action out of an alphabetical list */
+#mv-versions .mvv-row.needs-ack .mvv-rowhead { border-left-color: #d97706; color: #78350f; }
+
+#mv-versions .mvv-cell { padding: .32rem .95rem !important; text-align: left; }
+#mv-versions .mvv-dash { color: #d3dae2; font-size: .8rem; padding-left: .15rem; }
+/* Consecutive labelled bars: only the versions this pair published, ascending. No placeholder
+   columns — each bar names itself, so nothing has to be read off a distant header. */
+#mv-versions .mvv-bars { display: flex; flex-wrap: wrap; gap: 4px; }
+#mv-versions .mvv-bar {
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 600; line-height: 1;
+  padding: .3rem .5rem; border-radius: 5px; border: 1px solid transparent;
+  color: #7a8596; background: #e8edf3; white-space: nowrap;
+}
+#mv-versions .mvv-bar.is-older { color: #94a3b8; background: #eef1f5; }
+#mv-versions .mvv-bar.is-loaded {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 1px 5px rgba(59, 76, 200, .3);
+}
+#mv-versions .mvv-bar.is-ack {
+  color: #fff; background: #d97706; border-color: #d97706;
+  box-shadow: 0 1px 5px rgba(217, 119, 6, .3);
+}
+/* the config-specific acknowledgement value — the same number as the skipped bar it refers to,
+   restated as the thing you export. Outlined, not filled: it is a value to copy, not a state. */
+#mv-versions .mvv-ackval {
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 600; line-height: 1;
+  padding: .3rem .5rem; border-radius: 5px; white-space: nowrap;
+  color: #b45309; background: #fffbeb; border: 1px solid rgba(217, 119, 6, .55);
+}
+/* the bar that makes the acknowledgement necessary: newer, published, skipped over */
+#mv-versions .mvv-bar.is-skipped { color: #b45309; background: #fffbeb; border-color: #d97706; border-style: dashed; }
+
+#mv-versions .mvv-pill:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+#mv-versions .mvv-empty { color: var(--mv-muted); font-family: "IBM Plex Mono", monospace; }
+
+@media (prefers-reduced-motion: reduce) {
+  #mv-versions .mvv-dot { animation: none; }
+  #mv-versions .mvv-pill { transition: none; }
+}
+@media (max-width: 640px) {
+  #mv-versions { padding: 1.1rem 1rem 1rem; }
+  #mv-versions .mvv-readout { display: none; }
 }
