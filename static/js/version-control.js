@@ -94,12 +94,15 @@
       return Object.keys(seen).sort(vcmp);
     })();
 
-    // What each accepted value actually changed, from doc/release-v1.2.0.md ("How annotation versions
-    // are resolved"). Shown as the pill's tooltip: the selector is the accepted set — the loader
-    // refuses anything else as a typo — so it is the right place to say what choosing one means.
-    // Keyed by version and looked up defensively, so a future version simply gets no tooltip.
+    // What each accepted value actually changed, from the release notes (doc/release-v1.2.0.md,
+    // "How annotation versions are resolved", and doc/release-v1.2.1.md). Shown as the pill's
+    // tooltip: the selector is the accepted set — the loader refuses anything else as a typo — so it
+    // is the right place to say what choosing one means. Keyed by version and looked up defensively,
+    // so a future version simply gets no tooltip. Everything else here is data-driven; this table
+    // and its "latest" line are the one thing a release has to update by hand.
     var PIN_MEANING = {
-      "latest": "Resolves to the current release, 1.2.0.",
+      "latest": "Resolves to the current release, 1.2.1.",
+      "1.2.1": "Corrects MAMA-MIA and PI-CAI to RAS+; their v1.2.0 is withdrawn.",
       "1.2.0": "Adds 8 datasets; existing annotations unchanged.",
       "1.1.1": "Fixes transposed in-plane voxel spacing in the tumor/lesion ellipse fit.",
       "1.1.0": "Corrected tumor/lesion filtering, cluster threshold 20px.",
@@ -125,8 +128,10 @@
       if (!versions.length) return { kind: "absent" };
       var newest = versions[versions.length - 1];
       var loaded = resolveAt(versions, pinRelease());
-      // Nothing at or before the pin. The config still exists — its annotations were simply first
-      // published later — so this is "nothing to load here", not "not released yet".
+      // Nothing at or before the pin. The config still exists — its annotations were either first
+      // published later, or withdrawn (MAMA-MIA and PI-CAI at 1.2.0, removed from the hub in
+      // v1.2.1) — so this is "nothing to load here", not "not released yet". Both causes read the
+      // same way to a user: the earliest version on offer is above their pin.
       if (loaded === null) return { kind: "none", newest: newest, first: versions[0] };
       return {
         kind: vcmp(loaded, newest) < 0 ? "ack" : "loaded",
@@ -324,8 +329,13 @@
         msg = dataset + " " + colLabel + ": nothing to load at this pin — its earliest annotation " +
               "is v" + s.first + ".";
       } else if (s.kind === "ack") {
+        // Both accepted values, per-config first — matching envPanel and ackCell. This string is
+        // the tooltip AND the screen-reader text, and a screen-reader user never reaches the
+        // acknowledge column that carries the per-config number, so naming only the release here
+        // told them the panel's own story wrong.
         msg = dataset + " " + colLabel + ": loads v" + s.loaded + "; v" + s.newest +
-              " exists, so MedVision_ACK_RELEASE=" + RELEASE + " is required.";
+              " exists, so MedVision_ACK_RELEASE=" + s.newest + " is required (or " + RELEASE +
+              " to acknowledge the whole release).";
       } else {
         msg = dataset + " " + colLabel + ": loads v" + s.loaded + ", its newest.";
       }

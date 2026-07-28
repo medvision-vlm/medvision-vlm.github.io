@@ -3,6 +3,63 @@ layout: default
 title: Dataset Explorer
 ---
 
+## 🚀 Releases
+
+<div class="reveal" markdown="1">
+
+<ol class="mv-releases">
+  <li class="mv-release is-current">
+    <time class="mv-release-date" datetime="2026-08-3">Aug 3, 2026</time>
+    <span class="mv-release-what">Release MedVision dataset <b>v1.2.1</b></span>
+    <span class="mv-release-kind">bugfix<a class="mv-release-fnref" href="#mv-fn4" id="mv-fnref4">4</a></span>
+    <a class="mv-release-note" href="https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.2.1.md" target="_blank" rel="noopener">release-v1.2.1</a>
+  </li>
+  <li class="mv-release">
+    <time class="mv-release-date" datetime="2026-07-28">Jul 28, 2026</time>
+    <span class="mv-release-what">Release MedVision dataset <b>v1.2.0</b></span>
+    <span class="mv-release-kind">new datasets</span>
+    <span class="mv-release-flag is-bug">withdrawn: MAMA-MIA &amp; PI-CAI<a class="mv-release-fnref" href="#mv-fn3" id="mv-fnref3">3</a></span>
+    <a class="mv-release-note" href="https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.2.0.md" target="_blank" rel="noopener">release-v1.2.0</a>
+  </li>
+  <li class="mv-release">
+    <time class="mv-release-date" datetime="2026-06-29">Jun 29, 2026</time>
+    <span class="mv-release-what">Release MedVision dataset <b>v1.1.1</b></span>
+    <span class="mv-release-kind">bugfix<a class="mv-release-fnref" href="#mv-fn2" id="mv-fnref2">2</a></span>
+    <a class="mv-release-note" href="https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.1.1.md" target="_blank" rel="noopener">release-v1.1.1</a>
+  </li>
+  <li class="mv-release">
+    <time class="mv-release-date" datetime="2026-05-14">May 14, 2026</time>
+    <span class="mv-release-what">Release MedVision dataset <b>v1.1.0</b></span>
+    <span class="mv-release-kind">new filter</span>
+    <span class="mv-release-flag is-bug">bug: sagittal/coronal T/L<a class="mv-release-fnref" href="#mv-fn1" id="mv-fnref1b">1</a></span>
+    <a class="mv-release-note" href="https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.1.0.md" target="_blank" rel="noopener">release-v1.1.0</a>
+  </li>
+  <li class="mv-release">
+    <time class="mv-release-date" datetime="2025-10-08">Oct 8, 2025</time>
+    <span class="mv-release-what">Release MedVision dataset <b>v1.0.0</b></span>
+    <span class="mv-release-flag is-bug">bug: sagittal/coronal T/L<a class="mv-release-fnref" href="#mv-fn1" id="mv-fnref1a">1</a></span>
+    <span class="mv-release-note is-none">first release</span>
+  </li>
+</ol>
+
+<ol class="mv-release-fns">
+  <li id="mv-fn1">For T/L tasks, use axial slices only — the error in T/L annotations on sagittal and coronal slices is resolved in <b>v1.1.1</b>.</li>
+  <li id="mv-fn2">Fixed a T/L annotation error in anisotropic slices (mostly sagittal and coronal).</li>
+  <li id="mv-fn3">Missing image reorientation to RAS+: annotations were recorded in the orientation the source shipped, while the loader reoriented the images to RAS+ at loading stage. Withdrawn in <b>v1.2.1</b>.</li>
+  <li id="mv-fn4">Reissues the MAMA-MIA &amp; PI-CAI annotations in RAS+. If you have ever loaded either, clear the cache once — the release note has the snippet.</li>
+</ol>
+
+
+</div>
+
+
+<div class="mv-divider" role="separator" aria-label="Images and Annotations section">
+  <span class="mv-divider-rail is-left"></span>
+  <span class="mv-divider-node"></span>
+  <span class="mv-divider-rail is-right"></span>
+</div>
+
+
 ## 🗂️ Images & Annotations
 
 <div class="reveal" markdown="1">
@@ -11,8 +68,7 @@ MedVision consolidates **30 public medical imaging datasets** into one
 uniformly structured resource. The imaging spans five modalities — X-ray (XR), CT, MRI,
 ultrasound (US) and PET — across many anatomical regions.
 
-Across all 30 datasets released through **v1.2.0** — which added AFIDs, DEEP-PSMA, LIDC-IDRI,
-LNQ2023, MAMA-MIA, PDDCA, PI-CAI and VerSe — that is **32.7K 3D images** and **11.9M annotated 2D
+Upon release v1.2.1, it consists of **32.7K 3D images** and **11.9M annotated 2D
 slices**, carrying **24.7M single-instance annotations** and **46.7M multi-instance annotations**.
 
 Source images are kept as *3D volumes reoriented to RAS+* (a canonical right-anterior-superior axis convention),
@@ -47,8 +103,8 @@ Read more in the documentation: [📚 what MedVision holds](https://medvision.re
 
 <div class="reveal" markdown="1">
 
-Annotation counts per dataset for the 30 datasets released through annotation **v1.2.0**, across the three quantitative tasks — detection (Box),
-tumor/lesion size (T/L), and angle/distance (A/D) — with an enlarged panel for the smaller datasets. The two sets
+Annotation counts per dataset for the 30 datasets released through annotation **v1.2.1**, across the three quantitative tasks — detection (Box),
+tumor/lesion size (T/L), and angle/distance (A/D). The two sets
 differ only by filtering: **single-instance** keeps a target only when it is a single, large-enough instance, while
 **multi-instance** keeps every annotated target whatever its instance count or size.
 
@@ -65,6 +121,48 @@ differ only by filtering: **single-instance** keeps a target only when it is a s
     <img src="figure/stats/dataset_summary_rings_raw_1x2_whitebg.svg" alt="Multi-instance annotation counts per dataset across the MedVision benchmark (annotation v1.2.0)" class="fig" style="width: 100%;">
   </div>
 </div>
+
+<div class="reveal" markdown="1">
+
+The same collection viewed by **imaging modality** and **anatomy** rather than by dataset. The top
+row counts 3D volumes and 2D slices per modality; the bottom row counts volumes and both annotation
+views per anatomy group.
+
+Two things to read carefully. The slice counts are **summed over all three planes**, so one volume
+contributes three times. And the anatomy panels do **not** partition the collection: a volume counts
+once in every anatomy group it contains, so a whole-abdomen CT adds to liver, kidney and spleen
+alike, and the bars deliberately sum to more than the unique-image total.
+
+</div>
+
+<div class="columns is-centered has-text-centered reveal">
+  <div class="column is-full">
+    <img src="figure/stats/dataset_summary_whitebg.svg" alt="MedVision collection statistics by imaging modality and anatomy (annotation v1.2.0)" class="fig" style="width: 100%;">
+  </div>
+</div>
+
+
+<div class="mv-divider" role="separator" aria-label="Dataset Preview section">
+  <span class="mv-divider-rail is-left"></span>
+  <span class="mv-divider-node"></span>
+  <span class="mv-divider-rail is-right"></span>
+</div>
+
+
+## 🩻 Dataset Preview
+
+<div class="reveal" markdown="1">
+
+What MedVision covers, before you filter it. Every **body part** on the left connects to the
+**anatomy labels** it contains on the right — labels come from each dataset's segmentation masks and
+landmark sets, so this is the vocabulary the explorer below searches over.
+
+It reads both ways. Pick a dataset from the panel on top to light up the body parts and anatomy
+labels it annotates — or point at any row to light up the datasets that carry it.
+
+</div>
+
+<div id="mv-preview"></div>
 
 
 <div class="mv-divider" role="separator" aria-label="Dataset Explorer section">
@@ -87,7 +185,10 @@ pip install datasets==3.6.0
 Narrow the **MedVision** data to the subset you need, then copy the exact loading command. 
 
 Pick a **body part**, choose *one or more* **anatomy** labels, and select an **imaging modality** — the explorer lists the dataset configs 
-that fit, with a ready-to-run `load_dataset(...)` snippet for each matching test config. Covers the three
+that fit. Choose one, pin an **annotation version**, and say whether you want the **test** split (the benchmark
+set) or the **train** split (the source of MedVision-V0's post-training data) — the panel writes a ready-to-run
+`load_dataset(...)` snippet for exactly that choice. Subjects are split 70/30, and each split is its own
+config name, so switching moves both the `name=` and the `split=`. Covers the three
 quantitative tasks: **detection** (bounding box), **tumor/lesion size** (T/L), and **angle/distance** (A/D).
 
 </div>
@@ -106,29 +207,45 @@ quantitative tasks: **detection** (bounding box), **tumor/lesion size** (T/L), a
 
 <div class="reveal" markdown="1">
 
-MedVision annotations are under version control. `MedVision_PLANNER_VERSION` picks which annotations you get, and it works as a **ceiling** rather
-than an exact match: *the newest annotations that existed at or before this point*. Each *config* —
-one dataset and one task, the name you pass to `load_dataset`, e.g.
-`KiTS23_TumorLesionSize_Task01_Axial_Test` — answers that for itself. Only tumor/lesion annotations
-have ever been corrected, on 6 of 30 datasets, so a version that never touched your config changes
-nothing; `latest` is safe to leave set.
+MedVision annotations are versioned. `MedVision_PLANNER_VERSION` chooses which ones you load, and
+the loader will not start without it. Setting it to `latest` is recommended.
+The rest of this section is only for pinning an older version.
 
-Asking for older annotations has to be deliberate. If your setting lands below a config's newest, the
-load stops until you set `MedVision_ACK_RELEASE` — the *yes, I know I am asking for something older
-than what exists* switch. **Either value works.** That config's newest version (`1.1.1`) says you
-know this dataset moved past your setting, and lapses the next time it is corrected. The release
-(`1.2.0`) says you have read that release, and is the only one that works across many configs at
-once, whose newest versions differ. The check is per config, so `1.1.1` never stops a dataset that
-`1.2.0` left alone.
+The setting is a **ceiling**, not an exact match: you get the newest annotations published at or
+before the version you name, separately for each annotation type.
 
-The selector below lists every accepted value; anything else is refused as a typo. Rows are
-datasets, columns the three tasks, and a cell's bars are that config's annotation versions.
-The highlighted bar is what you get; a bar to its right is a newer annotation being skipped, and its
-number is the acknowledgement value in the last column.
+**A withdrawn version is the exception to that ceiling.** MAMA-MIA's and PI-CAI's `1.2.0`
+annotations were recorded in the orientation their source shipped rather than RAS+, so **v1.2.1**
+reissued them and deleted the old files from the hub. `1.2.1` is now the earliest version either
+dataset offers, and a pin below it has nothing left to fall back to — loading raises an error naming
+`1.2.1`. Every other dataset resolves at `1.2.0` exactly as before. If you have ever loaded either
+dataset, refresh the annotation file *and* the Arrow cache once; the release note has the snippet.
+
+**Pinning below a dataset's newest annotation needs acknowledgement.** Say you
+pinned `1.1.0`, and release `1.1.1` later fixed an error and updated the annotations.
+Since the data loader defaults to updating the dataset codebase `medvision_ds` first, it
+checks the newest annotation version against the one you pinned. If the requested version
+is older than the latest, loading pauses and you are prompted to read the release note.
+Read it carefully to judge whether the update is essential. You can then take the updated
+version, or keep the old one by setting `MedVision_ACK_RELEASE` to either of the values below.
+
+- **`1.1.1` — that dataset's newest annotation.** It goes stale on purpose: correct that data again
+  and the number changes, so you are asked again.
+- **`1.2.1` — the release.** Reads as *I have read release `1.2.1`*. Use it for a sweep: one
+  variable holds one value, but a sweep spans datasets at different newest versions, so only the
+  release clears them all. It always names the current release, so a `1.2.0` acknowledgement no
+  longer clears anything; a per-dataset value like `1.1.1` still does, because that dataset's
+  annotations did not change.
+
+In the selector below, rows are datasets and the first three columns are detection, tumor/lesion
+size and angle/distance. A cell's bars are that config's annotation versions: the highlighted bar is
+what you get, and a bar to its right is a newer annotation you are skipping. Its number — the value
+to acknowledge with — repeats in the last column. Any other value is refused as a typo.
 
 <div id="mv-versions"></div>
 
-Full detail in the [📚 v1.2.0 release note](https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.2.0.md)
+Full detail in the [📚 v1.2.1 release note](https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.2.1.md)
+· [📚 v1.2.0 release note](https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.2.0.md)
 · [📚 loading a config](https://medvision.readthedocs.io/en/latest/dataset/loading.html)
 
 </div>
@@ -183,5 +300,39 @@ terms as the other 30: RAS+ volumes, the same config grammar, and targets in rea
 **2. Own proprietary data? Let's build a challenge.** If you hold data you cannot release outright, we are
 interested in partnering on a challenge around it: a public split for training alongside a **private test set for fair model comparison**. 
 Please get in touch. Contact: [🌏 homepage](https://yongchengyao.github.io/).
+
+</div>
+
+
+<div class="mv-divider" role="separator" aria-label="How to Cite section">
+  <span class="mv-divider-rail is-left"></span>
+  <span class="mv-divider-node"></span>
+  <span class="mv-divider-rail is-right"></span>
+</div>
+
+
+## 📄 How to Cite
+
+<div class="reveal" markdown="1">
+
+MedVision is a meta-dataset, and any use of it draws on two distinct contributions. The imaging
+data, segmentation masks and accompanying metadata are contributed by the **source dataset
+providers**; the quantitative annotations derived from them — bounding boxes, tumor/lesion sizes,
+and angle/distance measurements — are contributed by **MedVision**. Please credit both: cite the
+publication accompanying each source dataset you use, together with the MedVision paper.
+
+A methods or data-availability statement might read:
+
+> Imaging data and segmentation masks were obtained from AbdomenAtlas (Li et al., 2024); the
+> quantitative annotations used in this study were provided by MedVision (Yao et al., 2026).
+
+**Finding the source publication.** Select a dataset in the [🔎 Dataset Explorer](#-dataset-explorer)
+above — each dataset panel lists its **Paper**, **Website**, **Source** and **License**, so the
+reference you need for any config is already on this page. Several datasets record more than one
+publication; cite every entry listed.
+
+Citing a source dataset is not a substitute for complying with its terms. The licence of each source
+dataset continues to govern how its imaging may be used and redistributed, independently of
+MedVision's own licence. The BibTeX entry for MedVision is at the foot of this page.
 
 </div>

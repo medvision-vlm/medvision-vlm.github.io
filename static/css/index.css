@@ -371,6 +371,19 @@ body {
   transform: none;
 }
 
+/* Breathing room around the figure blocks on the Dataset Explorer page — `.columns` carries
+   `.reveal` only there, so index.md's figures are untouched. Bulma pays its negative gutter
+   (.columns{margin-top:-.75rem}) back with .column{padding:.75rem}; on a single-column figure the
+   two cancel exactly, so the image lands flush under the paragraph above it, while
+   .columns:not(:last-child){margin-bottom:calc(1.5rem - .75rem)} leaves a gap below — tight AND
+   lopsided. These margins override both ends, for ~2.75rem of clear space either side once the
+   column padding is added. Two figures in a row collapse to one 2rem margin, so they stay grouped
+   rather than drifting a full gap apart. */
+.columns.reveal {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 /* ---- 4. Text highlight classes ------------------------------------------ */
 .hl-orange { color: #d2691e; font-weight: 600; }
 .hl-green  { color: #2e8b57; font-weight: 600; }
@@ -1318,7 +1331,7 @@ body {
 }
 
 /* =========================================================================
-   9b. Provenance chip (.mv-provenance) — shared by §8 and §10
+   9b. Provenance chip (.mv-provenance) — shared by §8, §10 and §11
    Both panels are rendered from data exported out of the medvision_ds dataset
    codebase, so each header states the release that produced it. Two-tone pill:
    source on the left, release on the right. Deliberately TEAL (--mv-accent, the
@@ -1327,7 +1340,8 @@ body {
    needs no reduced-motion guard. Id-scoped to beat Bulma's `.content a`.
    ========================================================================= */
 #mv-explorer .mv-provenance,
-#mv-versions .mv-provenance {
+#mv-versions .mv-provenance,
+#mv-preview .mv-provenance {
   display: inline-flex; align-items: stretch; overflow: hidden;
   font-family: "IBM Plex Mono", monospace; font-size: .64rem; font-weight: 600;
   letter-spacing: .05em; text-decoration: none; white-space: nowrap;
@@ -1336,18 +1350,23 @@ body {
   transition: border-color .18s ease, box-shadow .18s ease;
 }
 #mv-explorer .mv-provenance:hover,
-#mv-versions .mv-provenance:hover {
+#mv-versions .mv-provenance:hover,
+#mv-preview .mv-provenance:hover {
   border-color: var(--mv-accent); box-shadow: 0 2px 10px rgba(14, 140, 139, .20);
 }
 #mv-explorer .mv-provenance:focus-visible,
-#mv-versions .mv-provenance:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+#mv-versions .mv-provenance:focus-visible,
+#mv-preview .mv-provenance:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
 #mv-explorer .mv-provenance-src,
-#mv-versions .mv-provenance-src { padding: .22rem .5rem; color: var(--mv-accent); }
+#mv-versions .mv-provenance-src,
+#mv-preview .mv-provenance-src { padding: .22rem .5rem; color: var(--mv-accent); }
 #mv-explorer .mv-provenance-ver,
-#mv-versions .mv-provenance-ver { padding: .22rem .55rem; background: var(--mv-accent); color: #fff; }
+#mv-versions .mv-provenance-ver,
+#mv-preview .mv-provenance-ver { padding: .22rem .55rem; background: var(--mv-accent); color: #fff; }
 @media (max-width: 640px) {
   #mv-explorer .mv-provenance-src,
-  #mv-versions .mv-provenance-src { display: none; }   /* keep the release, drop the source word */
+  #mv-versions .mv-provenance-src,
+  #mv-preview .mv-provenance-src { display: none; }   /* keep the release, drop the source word */
 }
 
 /* =========================================================================
@@ -1558,4 +1577,440 @@ body {
 @media (max-width: 640px) {
   #mv-versions { padding: 1.1rem 1rem 1rem; }
   #mv-versions .mvv-readout { display: none; }
+}
+
+/* =========================================================================
+   11. Release ledger (.mv-releases)
+   A page component (not id-scoped): the dated list that opens explorer.md.
+   Numbering it 01/02/03 would be false — the dates already order it, and a
+   release's identity is its version, not its position. So the structure is a
+   measurement rail: the same teal→indigo axis as .mv-divider, with a node per
+   release and the current one drawn as the divider's rotated-diamond origin.
+   Dates are set in a fixed mono column so they read as a column, not prose.
+   ========================================================================= */
+.content ol.mv-releases {
+  list-style: none;
+  margin: 1.15rem 0 1.1rem;
+  padding: .15rem 0 .15rem 1.7rem;
+  position: relative;
+}
+.content ol.mv-releases::before {              /* the release axis */
+  content: ""; position: absolute; left: 5px; top: .95rem; bottom: .95rem; width: 2px;
+  border-radius: 2px; opacity: .38;
+  background: linear-gradient(180deg, var(--mv-accent-2), var(--mv-accent));
+}
+.mv-release {
+  position: relative; display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: .35rem .8rem; padding: .4rem 0;
+}
+.mv-release::before {                          /* published-release node */
+  content: ""; position: absolute; left: -1.7rem; top: .78em;
+  width: 9px; height: 9px; margin-left: 1px; border-radius: 50%;
+  background: var(--mv-surface); border: 2px solid var(--mv-accent);
+  box-sizing: border-box;
+}
+.mv-release.is-current::before {               /* current release: the origin node */
+  width: 10px; height: 10px; margin-left: .5px; border: 0; border-radius: 2px;
+  background: linear-gradient(135deg, var(--mv-accent), var(--mv-accent-2));
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 4px var(--mv-accent-soft);
+}
+.mv-release-date {
+  flex: 0 0 6.6rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: var(--mv-muted); letter-spacing: .01em; white-space: nowrap;
+}
+.mv-release-what { flex: 1 1 14rem; font-size: .95rem; color: var(--mv-ink); }
+.mv-release-what b {
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; color: var(--mv-accent);
+}
+.mv-release.is-current .mv-release-what::after {
+  content: "latest";                           /* stated, not implied by the node colour alone */
+  font-family: "IBM Plex Mono", monospace; font-size: .6rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; vertical-align: .12em;
+  margin-left: .5rem; padding: .1rem .35rem; border-radius: 5px;
+  background: var(--mv-accent); color: #fff;
+}
+.content .mv-release-note {
+  flex: none; font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: var(--mv-accent); background: var(--mv-accent-soft);
+  border: 1px solid rgba(14, 140, 139, .28); border-radius: 6px;
+  padding: .12rem .45rem; text-decoration: none; white-space: nowrap;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.content a.mv-release-note:hover { color: #fff; background: var(--mv-accent); border-color: var(--mv-accent); }
+.content a.mv-release-note:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+.content .mv-release-note.is-none {            /* no note to link: v1.0.0 predates the release-note folder */
+  color: var(--mv-muted); background: transparent; border-color: var(--mv-border); font-weight: 500;
+}
+/* Release KIND: what a release changed. A category, not a status — so one neutral look for every
+   kind. Colour is deliberately off the table. Teal already means "current / link" in this row (the
+   latest badge, the note pill), and §10 bound amber to "needs acknowledgement", which is a per-user
+   STATE: a permanent amber `bugfix` chip would alarm every visitor, including those already on
+   v1.2.0 with nothing to acknowledge. So the tag carries its meaning in the word, and borrows the
+   latest badge's uppercase tracked micro-mono — this page's classification voice — so it can never
+   be mistaken for the filename-case, clickable release-note pill sitting beside it. */
+.content .mv-release-kind {
+  flex: none;
+  font-family: "IBM Plex Mono", monospace; font-size: .62rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; line-height: 1;
+  color: var(--mv-muted); background: transparent;
+  border: 1px solid var(--mv-border); border-radius: 5px;
+  padding: .18rem .4rem; white-space: nowrap;
+}
+/* Release FLAG: a different question from KIND. Kind says what a release changed — a category, so
+   colourless per the note above. A flag says whether you should USE this release, which is advice,
+   and advice that stays silent is advice nobody takes. So this one does spend colour, on the two
+   hues the site has already bound: amber for a known defect (the warning hue §10 uses for "needs
+   acknowledgement" — here it is the dataset, not the reader, that needs the action), teal for the
+   version to pick. The earlier objection does not transfer: an amber `bugfix` chip would have
+   alarmed readers with nothing to act on, whereas an amber `bug: …` chip is precisely for readers
+   who are on that version and do need to move. Same micro-mono as kind, filled rather than outlined,
+   so the flag reads as the louder of the two chips without inventing a third typographic voice. */
+.content .mv-release-flag {
+  flex: none;
+  font-family: "IBM Plex Mono", monospace; font-size: .62rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; line-height: 1;
+  border-radius: 5px; padding: .18rem .4rem; white-space: nowrap;
+}
+.content .mv-release-flag.is-bug { color: #b45309; background: #fffbeb; border: 1px solid rgba(217, 119, 6, .55); }
+.content .mv-release-flag.is-rec { color: var(--mv-accent); background: var(--mv-accent-soft); border: 1px solid rgba(14, 140, 139, .45); }
+/* The marker rides the chip it qualifies: superscripted, one notch smaller, tracking dropped so a
+   bare digit does not float away from the word. Clickable, because a footnote you cannot jump to
+   from a chip this terse is a promise the row does not keep. */
+.content a.mv-release-fnref {
+  font-size: .82em; font-weight: 700; letter-spacing: 0;
+  vertical-align: super; line-height: 0; margin-left: .12em;
+  color: inherit; text-decoration: none; border-bottom: 0;
+}
+.content a.mv-release-fnref:hover { text-decoration: underline; }
+.content a.mv-release-fnref:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; border-radius: 2px; }
+/* Footnotes: set as apparatus, not prose — indented off the same rail the ledger hangs from, with
+   the marker in the margin so the numbers line up as a column and the ledger above stays scannable. */
+.content ol.mv-release-fns {
+  list-style: none; counter-reset: mv-fn;
+  margin: .1rem 0 .2rem; padding: 0 0 0 1.7rem;
+  font-size: .78rem; line-height: 1.5; color: var(--mv-muted);
+}
+.content ol.mv-release-fns li {
+  counter-increment: mv-fn; position: relative;
+  padding-left: 1.05rem; margin: .28rem 0;
+}
+.content ol.mv-release-fns li::before {
+  content: counter(mv-fn);
+  position: absolute; left: 0; top: -.1em;
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
+  color: var(--mv-accent);
+}
+.content ol.mv-release-fns li b { color: var(--mv-ink); font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+.content ol.mv-release-fns li:target { color: var(--mv-ink); }
+@media (max-width: 640px) {
+  .mv-release-date { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .content .mv-release-note { transition: none; }
+}
+
+/* =========================================================================
+   12. Dataset Preview (#mv-preview / .mvp-*)
+   The anatomical coverage plate: body parts on the left, the anatomy labels
+   they contain on the right, joined by leader lines — the hairline pointers
+   of an anatomical plate, where a printed label runs out to the structure it
+   names. `body_parts` is a partition (every label has exactly one parent), so
+   the graph is a tree and the lines provably never cross; and the edges are
+   unweighted set membership, which is why they are hairlines of one width and
+   not ribbons. Same workstation card as §8/§10. Colour here names the
+   INTERACTION, and each hue owns both ends of its own: amber is pointing — the
+   row under the pointer and the dataset chips carrying it — and indigo is
+   choosing — the chip you picked and the rows it annotates. Warm and loud for
+   the momentary answer, cool and quiet for the state you sit with; a selection
+   and a probe can share the screen without either being misread.
+   ========================================================================= */
+#mv-preview {
+  position: relative; margin: 2rem 0; padding: 1.5rem 1.5rem 1.35rem;
+  border: 1px solid var(--mv-border); border-radius: 18px;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(14, 140, 139, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--mv-ink); font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  /* `clip` trims the texture and the accent strip to the radius exactly as `hidden` did, but
+     WITHOUT becoming a scroll container — which is what lets .mvp-head below actually stick.
+     `hidden` stays first so a browser that does not know `clip` still clips, and only loses
+     the sticky readout. */
+  overflow: hidden;
+  overflow: clip;
+}
+#mv-preview::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+#mv-preview::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .035) 1px, transparent 1px);
+  background-size: 28px 28px; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+          mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 42%);
+}
+#mv-preview > * { position: relative; z-index: 1; }
+
+/* Header: eyebrow + provenance + live readout. Sticky, because the readout is the answer
+   channel — the plate is ~50rem tall and the dataset chips sit above it, so pointing at a row
+   near the bottom would light chips that are long since off-screen. The negative side margins
+   bleed the bar to the card edges so nothing scrolls past it in the gutters; the negative top
+   margin is cancelled by matching padding, leaving the resting layout exactly where it was. */
+#mv-preview .mvp-head {
+  position: sticky; top: 0; z-index: 3;
+  /* flex-wrap: nowrap is load-bearing, not tidiness. A wrapping flex container decides where to
+     break using each item's HYPOTHETICAL main size — for flex-basis:auto that is the max-content
+     width, i.e. the width the text would take if it never wrapped. So the readout's own
+     white-space:nowrap has no say in it: past a certain string length the readout drops to a
+     second flex line and the head grows by a line plus the row gap (~32px, about 1.5 plate rows).
+     Forbidding the line makes it shrink and ellipsise instead, which costs nothing but a tail. */
+  display: flex; align-items: center; gap: .8rem; flex-wrap: nowrap;
+  margin: -.8rem -1.5rem 1.15rem; padding: .8rem 1.5rem .9rem;
+  border-bottom: 1px solid rgba(15, 23, 42, .10);
+  background: rgba(255, 255, 255, .93);
+  -webkit-backdrop-filter: blur(7px);
+          backdrop-filter: blur(7px);
+}
+#mv-preview .mvp-eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mv-accent);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+#mv-preview .mvp-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mv-accent);
+  animation: cvPulse 2.4s ease-out infinite;   /* reuse the §6 keyframe */
+}
+/* One line, always. The readout's text changes on every hover, and the head is sticky — so if it
+   were allowed to wrap, a longer string would make the head taller, push the plate down by about
+   one row, move the row out from under the pointer, fire mouseleave, revert the text, and start
+   over. That loop is visible as the whole panel shaking. Three of the 51 rows have a readout long
+   enough to cross the wrap threshold; nowrap makes the head's height independent of its content,
+   so none of them can. The tail is what gets clipped, which is the right thing to lose: the row
+   name and the dataset count come first, the sample of names last. */
+#mv-preview .mvp-readout {
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: #64748b;
+  margin-left: auto; text-align: right; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#mv-preview .mvp-readout b { color: var(--mv-accent-2); font-weight: 700; }
+#mv-preview .mvp-readout .sep { color: #cbd5e1; margin: 0 .35rem; }
+/* The readout names the interaction it is reporting. Choosing a dataset leaves the <b> indigo,
+   as above; pointing turns the whole answer — the row's name and the dataset count — amber, to
+   match the band on the plate and the chips it just lit. */
+#mv-preview .mvp-readout b.is-probe,
+#mv-preview .mvp-hit { color: #b45309; font-weight: 700; }
+#mv-preview .mvp-names { color: #94a3b8; }
+
+/* dataset panel */
+#mv-preview .mvp-panel { margin-bottom: 1.3rem; }
+#mv-preview .mvp-panel-label {
+  display: flex; align-items: center; gap: .55rem;
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: .7rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--mv-ink); margin-bottom: .7rem;
+}
+#mv-preview .mvp-hint {
+  font-family: "IBM Plex Sans", 'Google Sans', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .01em; text-transform: none; color: #94a3b8;
+}
+#mv-preview .mvp-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+#mv-preview .mvp-chip {
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 8px; padding: .33rem .55rem; cursor: pointer; line-height: 1.2;
+  transition: color .15s ease, background .15s ease, border-color .15s ease,
+              opacity .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+#mv-preview .mvp-chip:hover { color: var(--mv-ink); border-color: var(--mv-accent); transform: translateY(-1px); }
+#mv-preview .mvp-chip.is-active {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 2px 10px rgba(59, 76, 200, .25);
+}
+/* Pointing at a row answers here: the datasets carrying it go amber, the rest step back. An
+   already-selected dataset keeps its indigo fill and takes an amber ring instead, so "I chose
+   this" and "this carries what you are pointing at" stay two separate readings. A selected
+   dataset is never dimmed, even when it misses — the choice is still yours. */
+#mv-preview .mvp-chip.is-match {
+  color: #b45309; background: #fffbeb; border-color: rgba(217, 119, 6, .55);
+}
+#mv-preview .mvp-chip.is-miss:not(.is-active) { opacity: .32; }
+#mv-preview .mvp-chip.is-active.is-match {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, .55), 0 2px 10px rgba(59, 76, 200, .25);
+}
+/* the reset: dashed, because it clears a choice rather than making one */
+#mv-preview .mvp-chip.is-all { border-style: dashed; }
+#mv-preview .mvp-chip.is-all.is-active { border-style: solid; }
+#mv-preview .mvp-chip-n { opacity: .55; margin-left: .45em; }
+#mv-preview .mvp-chip:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+
+/* the plate: body parts | leader-line channel | anatomy labels */
+/* Centred, not stretched: the label column is sized to its longest label rather
+   than to the card, so the plate reads as one figure instead of two lists pinned
+   to opposite edges. The channel gets a full column of its own — the leader lines
+   need horizontal run, or the 14 abdominal ones collapse into a wedge. */
+#mv-preview .mvp-plate {
+  --mvp-row: 1.35rem;
+  position: relative;
+  display: grid;
+  /* The maxima sum to ~41rem; the stacked fallback below takes over well before the card can get
+     that narrow, and the minima are a floor so a track can never collapse to nothing in between. */
+  grid-template-columns: minmax(5rem, 13rem) minmax(3rem, 13rem) minmax(6rem, max-content);
+  justify-content: center;
+  align-items: center;
+}
+#mv-preview .mvp-colhead {
+  font-family: "IBM Plex Mono", monospace; font-size: .62rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--mv-accent);
+  padding-bottom: .55rem;
+}
+#mv-preview .mvp-colhead.is-left { text-align: right; padding-right: .6rem; }
+#mv-preview .mvp-colhead.is-right { text-align: left; padding-left: .6rem; }
+
+#mv-preview .mvp-wires { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+#mv-preview .mvp-wire {
+  fill: none; stroke: rgba(15, 23, 42, .17); stroke-width: 1;
+  transition: stroke .25s ease, stroke-width .25s ease;
+}
+#mv-preview .mvp-wire.is-on { stroke: var(--mv-accent-2); stroke-width: 1.5; }
+#mv-preview .mvp-wire.is-off { stroke: rgba(15, 23, 42, .06); }
+#mv-preview .mvp-wire.is-probe { stroke: #d97706; stroke-width: 1.6; }
+
+#mv-preview .mvp-part,
+#mv-preview .mvp-label {
+  display: flex; align-items: center; gap: .4rem; min-width: 0; cursor: pointer;
+  /* background is deliberately absent: the probe tint is a gradient, which does not interpolate,
+     so it snaps in while the edge and the leader lines fade. Instant is the right answer for a
+     pointer anyway — the edge arriving under it is what softens the change. */
+  transition: opacity .25s ease, box-shadow .14s ease;
+}
+#mv-preview .mvp-part { justify-content: flex-end; padding-right: .6rem; }
+#mv-preview .mvp-label { padding-left: .6rem; }
+#mv-preview .mvp-part.is-off,
+#mv-preview .mvp-label.is-off { opacity: .3; }
+
+/* The probe: an amber band under the row you are pointing at, with a solid edge on the
+   channel side — the side its leader lines leave from. A band rather than a recolour, so it
+   never argues with the indigo a selected dataset has already put on the same row, and so the
+   feedback covers the whole target instead of a few glyphs. Kin rows (the labels under a
+   probed body part) get the wash without the edge: in scope, not pointed at.
+   These follow .is-off deliberately — pointing at a row always makes it legible again. */
+/* The tint is a gradient, not a flat fill, and it runs toward the channel. A body-part cell is as
+   tall as its label list — fourteen rows for Abdomen — and a flat slab over that much of the card
+   outweighs the leader lines it is supposed to be introducing. Fading it out at the far edge puts
+   the weight beside the name and the terminal, where the reading happens, and leaves the empty
+   half of the column alone. */
+#mv-preview .mvp-part.is-probe,
+#mv-preview .mvp-label.is-probe,
+#mv-preview .mvp-label.is-probe-kin { opacity: 1; }
+#mv-preview .mvp-part.is-probe {
+  background: linear-gradient(90deg, rgba(217, 119, 6, 0), rgba(217, 119, 6, .14) 64%);
+  box-shadow: inset -2px 0 0 #d97706; border-radius: 5px 0 0 5px;
+}
+#mv-preview .mvp-label.is-probe {
+  background: linear-gradient(90deg, rgba(217, 119, 6, .14), rgba(217, 119, 6, 0));
+  box-shadow: inset 2px 0 0 #d97706; border-radius: 0 5px 5px 0;
+}
+#mv-preview .mvp-label.is-probe-kin {
+  background: linear-gradient(90deg, rgba(217, 119, 6, .085), rgba(217, 119, 6, 0));
+}
+#mv-preview .mvp-part:focus-visible,
+#mv-preview .mvp-label:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 1px; }
+
+/* Body part in sans, anatomy label in mono: the label IS a token the explorer
+   below matches on, the body part is only a grouping we impose. */
+#mv-preview .mvp-part .mvp-name {
+  font-size: .82rem; font-weight: 600; color: var(--mv-ink); text-align: right;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  transition: color .25s ease;
+}
+#mv-preview .mvp-label .mvp-name {
+  font-family: "IBM Plex Mono", monospace; font-size: .755rem; color: #475569;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color .25s ease;
+}
+#mv-preview .mvp-n { font-family: "IBM Plex Mono", monospace; font-size: .64rem; color: #a3adba; flex: none; }
+#mv-preview .mvp-part.is-on .mvp-name,
+#mv-preview .mvp-label.is-on .mvp-name { color: var(--mv-accent-2); font-weight: 700; }
+#mv-preview .mvp-part.is-probe .mvp-name,
+#mv-preview .mvp-label.is-probe .mvp-name { color: #b45309; font-weight: 700; }
+
+/* Terminals. Hollow → filled is the non-colour cue for "covered", so the plate
+   still reads without hue. The body-part end is the divider's rotated square,
+   the label end a round pointer dot. */
+#mv-preview .mvp-dot-node {
+  flex: none; width: 7px; height: 7px; border-radius: 50%; box-sizing: border-box;
+  background: #fff; border: 1.5px solid rgba(15, 23, 42, .3);
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+#mv-preview .mvp-part .mvp-dot-node { width: 8px; height: 8px; border-radius: 2px; transform: rotate(45deg); }
+#mv-preview .mvp-part.is-on .mvp-dot-node,
+#mv-preview .mvp-label.is-on .mvp-dot-node {
+  background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 0 0 3px rgba(59, 76, 200, .18);
+}
+#mv-preview .mvp-part.is-probe .mvp-dot-node,
+#mv-preview .mvp-label.is-probe .mvp-dot-node {
+  background: #d97706; border-color: #d97706; box-shadow: 0 0 0 3px rgba(217, 119, 6, .20);
+}
+
+#mv-preview .mvp-foot {
+  display: flex; flex-direction: column; gap: .3rem; margin-top: 1.1rem;
+  font-size: .8rem; line-height: 1.5; color: #475569;
+  background: rgba(255, 255, 255, .6); border-left: 3px solid var(--mv-accent);
+  padding: .55rem .8rem; border-radius: 6px;
+}
+#mv-preview .mvp-foot-row { display: flex; gap: .6rem; align-items: baseline; }
+#mv-preview .mvp-foot-k {
+  flex: none; font-family: "IBM Plex Mono", monospace; font-size: .66rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--mv-accent);
+}
+#mv-preview .mvp-empty { color: #64748b; font-style: italic; padding: .4rem 0; margin: 0; }
+
+/* Below the width where a leader line has room to be read, the plate becomes
+   what it always was underneath: each body part followed by its labels. */
+@media (max-width: 860px) {
+  #mv-preview .mvp-plate { display: block; }
+  #mv-preview .mvp-wires,
+  #mv-preview .mvp-colhead { display: none; }
+  #mv-preview .mvp-part {
+    justify-content: flex-start; margin-top: .75rem; padding: 0 0 .25rem;
+    border-bottom: 1px solid rgba(15, 23, 42, .09);
+  }
+  #mv-preview .mvp-part .mvp-name { text-align: left; white-space: normal; overflow: visible; }
+  #mv-preview .mvp-part .mvp-dot-node { order: -1; }
+  #mv-preview .mvp-label { padding-left: 1.15rem; min-height: 1.5rem; }
+  #mv-preview .mvp-label .mvp-name { white-space: normal; }
+  /* No channel here, so the probe edge and its tint both move to the reading edge. */
+  #mv-preview .mvp-part.is-probe,
+  #mv-preview .mvp-label.is-probe {
+    background: linear-gradient(90deg, rgba(217, 119, 6, .14), rgba(217, 119, 6, 0));
+    box-shadow: inset 2px 0 0 #d97706; border-radius: 4px;
+  }
+}
+@media (max-width: 640px) {
+  #mv-preview { padding: 1.1rem 1rem 1rem; }
+  /* Here the wrap comes back, but forced rather than conditional: flex-basis:100% puts the
+     readout on a line of its own for EVERY string, so the head is two lines whatever it says.
+     Two stable lines are fine; one line that sometimes becomes two is what shook the plate. */
+  #mv-preview .mvp-head {
+    margin-left: -1rem; margin-right: -1rem; padding-left: 1rem; padding-right: 1rem;
+    flex-wrap: wrap;
+  }
+  /* The readout used to be dropped here for want of room. It now carries the answer to a
+     tap, so it gets a line of its own instead. */
+  #mv-preview .mvp-readout { margin-left: 0; text-align: left; flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #mv-preview .mvp-dot { animation: none; }
+  #mv-preview .mvp-chip,
+  #mv-preview .mvp-wire,
+  #mv-preview .mvp-part,
+  #mv-preview .mvp-label,
+  #mv-preview .mvp-name,
+  #mv-preview .mvp-dot-node { transition: none; }
 }

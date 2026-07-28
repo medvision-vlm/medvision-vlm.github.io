@@ -1,7 +1,8 @@
 /* MedVision Dataset Explorer viewer.
  *
  * Reads window.MEDVISION_EXPLORER (emitted by script/visualization/export_explorer_data.py) and
- * builds a cascading filter: body part -> anatomy -> modality -> dataset -> version -> load command.
+ * builds a cascading filter: body part -> anatomy -> modality -> dataset -> config -> version ->
+ * split -> load command.
  * No external dependencies. No-op if the #mv-explorer mount is absent (safe to load on every page).
  */
 (function () {
@@ -24,9 +25,12 @@
 
     var CONFIGS = DATA.configs;
     var BODY_PARTS = DATA.body_parts || {};
-    // The repo release, hardcoded in MedVision.py — this is what MedVision_ACK_RELEASE must equal.
-    // Deliberately NOT the newest annotation version: a release that regenerates nothing still
-    // advances this and still invalidates old acknowledgements.
+    // The repo release, hardcoded in MedVision.py. It is ONE of the two values
+    // MedVision_ACK_RELEASE accepts — _enforce_release_ack() tests `in (ack_value, latest_version)`
+    // — and it is the BLANKET one, earning its keep only across a sweep whose configs sit at
+    // different newest versions. This panel hands you a command for a SINGLE config, so its snippet
+    // acknowledges with that config's own newest annotation instead (see ackLine). RELEASE is used
+    // here only for the provenance chip.
     var RELEASE = DATA.release_version;
     // Everything this panel shows — configs, labels, annotation versions — is exported from the
     // medvision_ds dataset codebase, so the release that produced it is stated in the header
@@ -92,7 +96,20 @@
     // instead of the v1.1.1 they would get arriving at T/L directly. Keeping the preference apart
     // means an explicit v1.0.0 sweep still sticks, while an auto-clamp does not become a choice.
     var state = { bodyPart: null, anatomy: {}, modality: null, dataset: null,
-                  versionPref: null, version: null, instanceMode: "single" };
+                  versionPref: null, version: null, instanceMode: "single", split: "test" };
+
+    // Train and test are two separate builder configs, not two splits of one: MedVision.py declares
+    // <base>_Train and <base>_Test, each carrying exactly one split. So switching split moves BOTH
+    // the config name and the split= argument, and neither alone loads anything. The export ships
+    // only the *_Test names (the benchmark set), so the train twin is that name with the suffix
+    // swapped — no config is train-only or test-only, which is why this step never disables an option.
+    var SPLITS = [
+      { key: "test", label: "Test" },
+      { key: "train", label: "Train" }
+    ];
+    function configFor(config, split) {
+      return split === "train" ? String(config).replace(/_Test$/, "_Train") : config;
+    }
 
     var CONCEPTS_URL = "https://medvision.readthedocs.io/en/latest/dataset/concepts.html" +
                        "#multi-instance-vs-single-instance-annotations";
@@ -468,7 +485,7 @@
       dsNames.forEach(function (ds) {
         var card = el("div", "mvx-ds" + (state.dataset === ds ? " is-active" : ""));
         card.appendChild(el("b", null, ds));
-        card.appendChild(el("small", null, dsMap[ds].length + " test config" + (dsMap[ds].length > 1 ? "s" : "")));
+        card.appendChild(el("small", null, dsMap[ds].length + " config" + (dsMap[ds].length > 1 ? "s" : "")));
         card.onclick = function () {
           state.dataset = (state.dataset === ds) ? null : ds;
           render();
@@ -537,19 +554,36 @@
       s6.appendChild(el("div", "mvx-note", vnote));
       mount.appendChild(s6);
 
-      // Step 7 — what the config loads, and the command
-      var s7 = stepBlock(7, "Load command");
-      s7.appendChild(taskPanel(chosenCfg));
-      s7.appendChild(instancePanel(chosenCfg));
+      // Step 7 — train or test. Placed after the version because the annotation version is a
+      // property of the config family (both splits are generated from the same annotation files),
+      // while the split only decides which subjects you get.
+      var s7 = stepBlock(7, "Data split");
+      crumbPush(state.split);
+      var optSplit = el("div", "mvx-options");
+      SPLITS.forEach(function (sp) {
+        var pill = el("button", "mvx-pill" + (state.split === sp.key ? " is-active" : ""), sp.label);
+        pill.onclick = function () { state.split = sp.key; render(); };
+        optSplit.appendChild(pill);
+      });
+      s7.appendChild(optSplit);
+      mount.appendChild(s7);
+
+      // Step 8 — what the config loads, and the command
+      var s8 = stepBlock(8, "Load command");
+      s8.appendChild(taskPanel(chosenCfg));
+      s8.appendChild(instancePanel(chosenCfg));
 
       var result = el("div", "mvx-result");
-      var needAck = ackNeeded(chosenCfg, state.version);
+      // The value, not merely the fact: newestFor() already resolves this config's plan kind out
+      // of its task_key, so no task_type -> kind table is needed here.
+      var ackVal = ackNeeded(chosenCfg, state.version) ? newestFor(chosenCfg) : null;
+      var cfgName = configFor(state.chosenConfig, state.split);
       var wrap = el("div", "mvx-cmd-wrap");
       var pre = el("pre", "mvx-cmd");
-      pre.innerHTML = commandHTML(state.chosenConfig, state.version, isMulti(chosenCfg), needAck);
+      pre.innerHTML = commandHTML(cfgName, state.version, isMulti(chosenCfg), ackVal, state.split);
       var copy = el("button", "mvx-copy", "Copy");
       copy.onclick = function () {
-        var text = commandText(state.chosenConfig, state.version, isMulti(chosenCfg), needAck);
+        var text = commandText(cfgName, state.version, isMulti(chosenCfg), ackVal, state.split);
         function done() { copy.textContent = "Copied!"; setTimeout(function () { copy.textContent = "Copy"; }, 1500); }
         function fail() { copy.textContent = "Select & copy"; setTimeout(function () { copy.textContent = "Copy"; }, 2000); }
         try {
@@ -561,11 +595,11 @@
       wrap.appendChild(pre); wrap.appendChild(copy);
       result.appendChild(wrap);
       result.appendChild(el("div", "mvx-note",
-        "Loading a *_Test config downloads the full source dataset — the loader fetches and preprocesses the raw " +
+        "Loading either split downloads the full source dataset — the loader fetches and preprocesses the raw " +
         "images for both the training and testing subjects (the split is applied per-subject after download), so " +
-        "budget for the whole dataset's footprint even when you only need the test slices."));
-      s7.appendChild(result);
-      mount.appendChild(s7);
+        "budget for the whole dataset's footprint even when you only need one split's slices."));
+      s8.appendChild(result);
+      mount.appendChild(s8);
     }
 
     // ── command builders ──────────────────────────────────────────────────────
@@ -575,17 +609,21 @@
       });
     }
 
-    // `needed` is per config: the gate fires only when the pin is older than this config's newest
-    // annotation. The VALUE is the repo release, not that annotation version — so acknowledging an
-    // old KiTS23 T/L pin means "1.2.0", and the next release invalidates it again.
-    function ackLine(needed, html) {
-      if (!needed) return "";
+    // Both the trigger and the VALUE are per config. The gate fires only when the pin is older
+    // than this config's newest annotation, and what we acknowledge with is that same number —
+    // KiTS23 T/L pinned at 1.1.0 acknowledges "1.1.1", not the "1.2.0" release. The per-config
+    // value is the right one to print here because it expires precisely: regenerate this config
+    // and the number moves, the acknowledgement stops matching, and the next load stops again with
+    // the note that explains what changed. Acknowledging the release instead would also silence
+    // that future prompt. A falsy ackVal means the pin already IS the newest — no line at all.
+    function ackLine(ackVal, html) {
+      if (!ackVal) return "";
       var comment = html
-        ? '<span class="c"># Older than this config\'s newest annotation — acknowledge the release:</span>\n'
-        : "# Older than this config's newest annotation — acknowledge the release:\n";
+        ? '<span class="c"># Older than this config\'s newest annotation — acknowledge it:</span>\n'
+        : "# Older than this config's newest annotation — acknowledge it:\n";
       var line = html
-        ? 'os.environ[<span class="s">"MedVision_ACK_RELEASE"</span>] = <span class="s">"' + esc(RELEASE) + '"</span>\n'
-        : 'os.environ["MedVision_ACK_RELEASE"] = "' + RELEASE + '"\n';
+        ? 'os.environ[<span class="s">"MedVision_ACK_RELEASE"</span>] = <span class="s">"' + esc(ackVal) + '"</span>\n'
+        : 'os.environ["MedVision_ACK_RELEASE"] = "' + ackVal + '"\n';
       return comment + line;
     }
 
@@ -599,38 +637,38 @@
         : 'os.environ["MedVision_DISABLE_SAMPLE_FILTERING"] = "true"   # multi-instance (unfiltered)\n';
     }
 
-    function commandText(config, version, multi, needAck) {
+    function commandText(config, version, multi, ackVal, split) {
       return (
         "import os\n" +
         "from datasets import load_dataset          # pip install datasets==3.6.0\n\n" +
         'os.environ["MedVision_DATA_DIR"] = "/path/to/Data"\n' +
         'os.environ["MedVision_PLANNER_VERSION"] = "' + version + '"\n' +
-        ackLine(needAck, false) +
+        ackLine(ackVal, false) +
         multiLine(multi, false) +
         "\n" +
         "ds = load_dataset(\n" +
         '    "YongchengYAO/MedVision",\n' +
         '    name="' + config + '",\n' +
         "    trust_remote_code=True,\n" +
-        '    split="test",\n' +
+        '    split="' + split + '",\n' +
         ")\n"
       );
     }
 
-    function commandHTML(config, version, multi, needAck) {
+    function commandHTML(config, version, multi, ackVal, split) {
       return (
         '<span class="k">import</span> os\n' +
         '<span class="k">from</span> datasets <span class="k">import</span> load_dataset          <span class="c"># pip install datasets==3.6.0</span>\n\n' +
         'os.environ[<span class="s">"MedVision_DATA_DIR"</span>] = <span class="s">"/path/to/Data"</span>\n' +
         'os.environ[<span class="s">"MedVision_PLANNER_VERSION"</span>] = <span class="s">"' + esc(version) + '"</span>\n' +
-        ackLine(needAck, true) +
+        ackLine(ackVal, true) +
         multiLine(multi, true) +
         "\n" +
         "ds = load_dataset(\n" +
         '    <span class="s">"YongchengYAO/MedVision"</span>,\n' +
         '    name=<span class="s">"' + esc(config) + '"</span>,\n' +
         '    trust_remote_code=<span class="k">True</span>,\n' +
-        '    split=<span class="s">"test"</span>,\n' +
+        '    split=<span class="s">"' + esc(split) + '"</span>,\n' +
         ")\n"
       );
     }
