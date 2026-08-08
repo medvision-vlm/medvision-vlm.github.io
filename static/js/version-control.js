@@ -101,7 +101,9 @@
     // so a future version simply gets no tooltip. Everything else here is data-driven; this table
     // and its "latest" line are the one thing a release has to update by hand.
     var PIN_MEANING = {
-      "latest": "Resolves to the current release, 1.2.1.",
+      "latest": "Resolves to the current release, 1.4.0.",
+      "1.4.0": "Regenerates the T/L annotations of all 12 tumor/lesion datasets; a millimetre size floor replaces the pixel-count floor.",
+      "1.3.0": "Adds MSWAL; existing annotations unchanged.",
       "1.2.1": "Corrects MAMA-MIA and PI-CAI to RAS+; their v1.2.0 is withdrawn.",
       "1.2.0": "Adds 8 datasets; existing annotations unchanged.",
       "1.1.1": "Fixes transposed in-plane voxel spacing in the tumor/lesion ellipse fit.",
