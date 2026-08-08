@@ -2014,3 +2014,206 @@ body {
   #mv-preview .mvp-name,
   #mv-preview .mvp-dot-node { transition: none; }
 }
+
+/* =========================================================================
+   13. Annotation Preview (#mv-annot-preview / .ap-*)
+   A quieter sibling of the §6 Case Viewer "workstation": same lightbox
+   chrome and IBM Plex type, but no per-case controls — just one rolling
+   filmstrip of pre-rendered landmark/ellipse QC figures, grouped T/L vs A/D
+   via the shared .mv-tabs component, filtered by a per-dataset chip panel.
+   Dataset quick-select
+   (All/None) reuses §9 Interactive radar's .mvr-quickbtn design verbatim,
+   scoped here as .ap-quickbtn. The bottom tick rail reuses the .mv-divider
+   ruler pattern as a filmstrip edge; each thumbnail gets a two-corner
+   viewfinder frame on hover, which also highlights its dataset's chip
+   amber — the same hover-probe color as §12 Dataset Preview's
+   .mvp-chip.is-match, reused verbatim.
+   ========================================================================= */
+/* Shell copied verbatim from #mv-explorer / #mv-preview — the sibling panels on this page. */
+.annot-preview {
+  position: relative; margin: 2rem 0 0; padding: 1.5rem 1.5rem 1.35rem;
+  border: 1px solid var(--mv-border); border-radius: 18px;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(14, 140, 139, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--mv-ink); font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  overflow: hidden;
+}
+.annot-preview::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+.annot-preview > * { position: relative; z-index: 1; }
+
+.ap-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; flex-wrap: wrap; }
+/* Eyebrow + pulse dot: accent-colored and uppercase like every other panel on this
+   page (#mv-explorer, #mv-preview, #mv-versions); dot reuses the shared §6 keyframe. */
+.ap-eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mv-accent);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+.ap-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mv-accent);
+  animation: cvPulse 2.4s ease-out infinite;   /* reuse §6 keyframe */
+}
+/* Count badge + play/pause switch, side by side (switch sits to the right) —
+   both styled as the case viewer's .cv-count / .cv-play playback controls. */
+.ap-head-right { display: flex; align-items: center; gap: .45rem; }
+.ap-count {
+  font-family: "IBM Plex Mono", monospace; font-size: .9rem; font-weight: 700;
+  letter-spacing: .14em; color: var(--mv-ink); min-width: 5.6rem; text-align: center;
+  padding: .42rem .6rem; border-radius: 10px;
+  background: #ffffff; border: 1px solid rgba(15, 23, 42, .10);
+}
+/* Only meaningful (and shown) while the active tab's strip is actually
+   animating — hidden for is-static/empty states, which have nothing to stop. */
+.ap-play-toggle {
+  width: 2.2rem; height: 2.2rem; border-radius: 11px;
+  border: 1px solid rgba(15, 23, 42, .10); background: #ffffff; color: var(--mv-ink);
+  font-size: .68rem; letter-spacing: -.05em; line-height: 1; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.ap-play-toggle.is-hidden { display: none; }
+.ap-play-toggle:hover {
+  border-color: var(--mv-accent); color: var(--mv-accent); transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, .20);
+}
+.ap-play-toggle:active { transform: translateY(0); box-shadow: none; background: #f1f5f9; }
+/* Filled while the strip is rolling — same reading as .cv-play.is-on. */
+.ap-play-toggle.is-on { background: var(--mv-accent); color: #fff; border-color: var(--mv-accent); }
+.ap-play-toggle:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+
+/* Dataset panel: row 1 = label + All/None quick-select, row 2 = the chips. */
+.ap-datasets { margin: .8rem 0 .9rem; }
+.ap-datasets-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+.ap-datasets-label {
+  font-family: "IBM Plex Mono", monospace; font-size: .66rem; font-weight: 700;
+  letter-spacing: .16em; color: var(--mv-muted);
+}
+/* Quick-select buttons — same design as index.md's radar widget (.mvr-quick /
+   .mvr-quickbtn), reused verbatim under the .ap-* namespace. */
+.ap-quick { display: flex; gap: .4rem; }
+.ap-quickbtn {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: var(--mv-accent); background: transparent; border: 1px solid var(--mv-accent);
+  border-radius: 999px; padding: .22rem .7rem; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.ap-quickbtn:hover { background: var(--mv-accent-soft); }
+.ap-quickbtn:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+.ap-datasets-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+/* Selectable chip — same shape/behaviour as #mv-preview's .mvp-chip and
+   #mv-explorer's .mvx-pill: outlined when off, indigo-filled when on. */
+.ap-chip {
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 8px; padding: .33rem .55rem; cursor: pointer; line-height: 1.2;
+  transition: color .15s ease, background .15s ease, border-color .15s ease,
+              box-shadow .15s ease, transform .1s ease;
+}
+.ap-chip:hover { color: var(--mv-ink); border-color: var(--mv-accent); transform: translateY(-1px); }
+.ap-chip.is-active {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 2px 10px rgba(59, 76, 200, .25);
+}
+.ap-chip:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+.ap-chip-n { opacity: .55; margin-left: .45em; }
+/* Set from JS when a figure of this dataset is hovered in the strip below — same amber
+   "hover-probe" treatment as Dataset Preview's .mvp-chip.is-match (#12), reused verbatim.
+   An already-selected chip keeps its indigo fill and takes an amber RING instead, so
+   "I chose this" and "this is what you are pointing at" stay two separate readings. */
+.ap-chip.is-highlighted {
+  color: #b45309; background: #fffbeb; border-color: rgba(217, 119, 6, .55);
+}
+.ap-chip.is-active.is-highlighted {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, .55), 0 2px 10px rgba(59, 76, 200, .25);
+}
+
+/* Filmstrip viewport — one scrolling row. */
+.ap-viewport {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e6e9ef;
+  border-radius: 12px;
+  padding: .9rem .9rem 1.1rem;
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, .06);
+}
+.ap-viewport.is-static { overflow-x: auto; }
+.ap-track {
+  display: flex; align-items: center; gap: .55rem;
+  width: max-content;
+}
+.ap-viewport.is-animated .ap-track {
+  animation: apScroll var(--ap-duration, 100s) linear infinite;
+}
+.annot-preview:hover .ap-viewport.is-animated .ap-track,
+.annot-preview:focus-within .ap-viewport.is-animated .ap-track,
+.ap-viewport.is-user-paused .ap-track {
+  animation-play-state: paused;
+}
+@keyframes apScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ap-empty {
+  font-family: "IBM Plex Mono", monospace; font-size: .78rem; color: var(--mv-muted);
+  padding: 1.4rem 0; margin: 0; text-align: center; width: 100%;
+}
+
+/* Thumbnails: two-corner viewfinder frame on hover, echoing the case viewer's
+   "radiology workstation" idiom for the same figure content. Height was
+   scaled 2.5x, then 0.7x twice (net ~1.225x the original 8.5rem). */
+.ap-fig-frame {
+  position: relative; flex: none;
+  height: 10.4125rem; display: flex; align-items: center;
+}
+.ap-fig-frame::before, .ap-fig-frame::after {
+  content: ""; position: absolute; width: 14px; height: 14px;
+  border: 2px solid var(--mv-accent-2); opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+}
+.ap-fig-frame::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+.ap-fig-frame::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+.ap-fig-frame:hover::before, .ap-fig-frame:hover::after { opacity: 1; }
+.ap-fig {
+  height: 100%; width: auto; max-width: 18.375rem;
+  object-fit: contain; border-radius: 6px; display: block;
+  border: 1px solid #e6e9ef;
+}
+
+/* Bottom tick rail — the site's own ruler/measurement motif (see .mv-divider-rail),
+   here reading as a filmstrip edge along the scrolling strip. */
+.ap-viewport::after {
+  content: "";
+  position: absolute; left: .9rem; right: .9rem; bottom: .45rem; height: 2px;
+  background: repeating-linear-gradient(90deg,
+    var(--mv-accent) 0 2px, transparent 2px 14px);
+  opacity: .4;
+  pointer-events: none;
+}
+
+.ap-caption {
+  font-size: .78rem; line-height: 1.5; color: var(--mv-muted); font-style: italic;
+  text-align: center; margin: .8rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .ap-fig-frame { height: 7.9625rem; }
+  .ap-head { align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-dot { animation: none; }
+  .ap-viewport.is-animated .ap-track { animation: none; }
+  .ap-chip { transition: none; }
+  .ap-quickbtn { transition: none; }
+  .ap-fig-frame::before, .ap-fig-frame::after { transition: none; }
+  .ap-play-toggle { transition: none; }
+}

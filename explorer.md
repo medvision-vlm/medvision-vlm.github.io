@@ -88,6 +88,35 @@ Read more in the documentation: [📚 what MedVision holds](https://medvision.re
 · [📚 the four annotation types](https://medvision.readthedocs.io/en/latest/dataset/concepts.html#the-four-annotation-types)
 · [📚 multi-instance vs single-instance annotations](https://medvision.readthedocs.io/en/latest/dataset/concepts.html#multi-instance-vs-single-instance-annotations)
 
+<div id="mv-annot-preview" class="annot-preview">
+  <div class="ap-head">
+    <span class="ap-eyebrow"><span class="ap-dot"></span>ANNOTATION PREVIEW · SAMPLED FIGURES</span>
+    <div class="ap-head-right">
+      <span class="ap-count" id="ap-count">— / —</span>
+      <button type="button" class="ap-play-toggle" id="ap-play-toggle" aria-pressed="false" aria-label="Stop rolling">❚❚</button>
+    </div>
+  </div>
+
+  <div class="mv-tabs">
+    <div class="mv-tablist" role="tablist" aria-label="Annotation preview task group">
+      <button type="button" class="mv-tab is-active" role="tab" id="ap-tab-tl" aria-controls="ap-panel-tl" aria-selected="true">Tumor / Lesion (T/L)</button>
+      <button type="button" class="mv-tab" role="tab" id="ap-tab-ad" aria-controls="ap-panel-ad" aria-selected="false">Angle / Distance (A/D)</button>
+    </div>
+
+    <div class="mv-tabpanel" id="ap-panel-tl" role="tabpanel" aria-labelledby="ap-tab-tl">
+      <div class="ap-datasets" data-group="TL"></div>
+      <div class="ap-viewport" data-group="TL"><div class="ap-track"></div></div>
+    </div>
+
+    <div class="mv-tabpanel" id="ap-panel-ad" role="tabpanel" aria-labelledby="ap-tab-ad">
+      <div class="ap-datasets" data-group="AD"></div>
+      <div class="ap-viewport" data-group="AD"><div class="ap-track"></div></div>
+    </div>
+  </div>
+
+  <p class="ap-caption">Pre-rendered QC figures — the landmark / ellipse ground truth drawn on each sampled slice, not what the model receives as input.</p>
+</div>
+
 </div>
 
 
