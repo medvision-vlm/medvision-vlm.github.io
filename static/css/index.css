@@ -1702,7 +1702,6 @@ body {
   font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
   color: var(--mv-accent);
 }
-.content ol.mv-release-fns li b { color: var(--mv-ink); font-family: "IBM Plex Mono", monospace; font-weight: 700; }
 .content ol.mv-release-fns li:target { color: var(--mv-ink); }
 @media (max-width: 640px) {
   .mv-release-date { flex-basis: 100%; }
@@ -2216,4 +2215,150 @@ body {
   .ap-quickbtn { transition: none; }
   .ap-fig-frame::before, .ap-fig-frame::after { transition: none; }
   .ap-play-toggle { transition: none; }
+}
+
+/* =========================================================================
+   14. Blog (blog.md .mv-blog-* / post pages .mv-post-*)
+   The blog index is a stack of cards, not a ledger: unlike releases, posts
+   are prose with a headline and a teaser, so each one gets a surface. Date
+   and the "read" affordance reuse the site's micro-mono classification
+   voice; the card hover borrows the accent border used across the site.
+   ========================================================================= */
+.content ol.mv-blog-list {
+  list-style: none;
+  margin: 1.3rem 0 1.1rem;
+  padding: 0;
+  display: flex; flex-direction: column; gap: .9rem;
+}
+.mv-blog-card { margin: 0; }
+.content a.mv-blog-link {
+  display: grid; gap: .3rem;
+  padding: 1.05rem 1.2rem 1rem;
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border); border-radius: 12px;
+  box-shadow: var(--mv-shadow);
+  text-decoration: none; color: var(--mv-ink);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.content a.mv-blog-link:hover {
+  border-color: var(--mv-accent);
+  transform: translateY(-2px);
+}
+.mv-blog-date {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: var(--mv-muted); letter-spacing: .02em;
+}
+.mv-blog-title {
+  font-family: "IBM Plex Sans", 'Noto Sans', sans-serif;
+  font-size: 1.12rem; font-weight: 700; line-height: 1.35;
+  color: var(--mv-ink);
+}
+.content a.mv-blog-link:hover .mv-blog-title { color: var(--mv-accent); }
+.mv-blog-teaser { font-size: .9rem; line-height: 1.55; color: var(--mv-muted); }
+.mv-blog-read {
+  margin-top: .35rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: var(--mv-accent);
+}
+.mv-blog-read .fas { font-size: .65rem; transition: transform .15s ease; }
+.content a.mv-blog-link:hover .mv-blog-read .fas { transform: translateX(3px); }
+
+/* Post header: the way back and the date, one quiet row above the headline. */
+.mv-post-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: .8rem; flex-wrap: wrap;
+  margin: 0 0 1.1rem;
+}
+.content a.mv-post-back {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: var(--mv-accent); background: var(--mv-accent-soft);
+  border: 1px solid rgba(14, 140, 139, .28); border-radius: 6px;
+  padding: .12rem .45rem; text-decoration: none; white-space: nowrap;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.content a.mv-post-back:hover { color: #fff; background: var(--mv-accent); border-color: var(--mv-accent); }
+.mv-post-date {
+  font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 600;
+  color: var(--mv-muted); letter-spacing: .01em;
+}
+
+/* Post figure: a plain surface frame with the site's italic micro-caption. */
+.mv-post-fig {
+  margin: 1.4rem 0;
+  padding: .9rem .9rem .2rem;
+  background: #ffffff;
+  border: 1px solid var(--mv-border); border-radius: 12px;
+}
+.mv-post-fig img { width: 100%; height: auto; display: block; }
+/* Narrower variant: the figure block (frame, image and caption together) drops to
+   80% of the column and stays centred, for plates that read fine smaller. On phones
+   the column is already narrow, so the modifier stands down. */
+.mv-post-fig.is-narrow { max-width: 80%; margin-left: auto; margin-right: auto; }
+@media (max-width: 640px) { .mv-post-fig.is-narrow { max-width: 100%; } }
+.mv-post-fig .mv-post-figcap {
+  font-size: .78rem; line-height: 1.5; color: var(--mv-muted); font-style: italic;
+  text-align: center; margin: .7rem 0 .7rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content a.mv-blog-link { transition: none; }
+  .mv-blog-read .fas { transition: none; }
+  .content a.mv-post-back { transition: none; }
+}
+
+/* =========================================================================
+   15. Acceptance announcement (.mv-accepted)
+   ========================================================================= */
+/* Publication news, sitting in the teaser between the title block and the
+   one-line project description. It has to register as new without out-shouting
+   the paper title directly above it, so it stays a single quiet pill rather
+   than a full-width coloured banner.
+
+   The chassis is deliberately neutral. The EMNLP mark brings red and green,
+   two hues this palette does not own, and a teal or amber fill behind them
+   would read as a third signal competing with the logo for the same glance.
+   White surface, hairline border, and the mark is the only saturated thing in
+   the row. The leading marker is the site's rotated-diamond origin node (same
+   gradient and 45deg rotation as .mv-divider-node, one size down), so the
+   announcement is stamped in this page's own visual language rather than with
+   a generic star or party emoji. */
+.mv-accepted {
+  display: inline-flex; align-items: center; flex-wrap: wrap;
+  justify-content: center; gap: .7rem;
+  max-width: 100%;
+  margin: .35rem auto 1.35rem;
+  padding: .5rem 1.15rem;
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  border-radius: 999px;
+  box-shadow: var(--mv-shadow);
+}
+.mv-accepted-node {
+  flex: none;
+  width: 8px; height: 8px; border-radius: 2px;
+  background: linear-gradient(135deg, var(--mv-accent), var(--mv-accent-2));
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 3px var(--mv-accent-soft);
+}
+.mv-accepted-text {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-size: .95rem; font-weight: 600; line-height: 1.3;
+  color: var(--mv-ink); white-space: nowrap;
+}
+/* Hairline rule. The logo restates the venue the sentence just named, so it
+   needs a field of its own — without the divider the mark reads as a run-on
+   word ending the line instead of as the conference's own signature. */
+.mv-accepted-rule {
+  flex: none; width: 1px; height: 1.15rem; background: var(--mv-border);
+}
+.mv-accepted-logo { display: block; height: 1.7rem; width: auto; }
+
+/* Phones: sentence plus logo is wider than the viewport on one row, so the
+   pill relaxes into a rounded rectangle and lets the logo wrap underneath.
+   The vertical rule would then divide nothing, so it stands down. */
+@media (max-width: 640px) {
+  .mv-accepted { border-radius: 16px; gap: .5rem; padding: .6rem .9rem; }
+  .mv-accepted-text { white-space: normal; font-size: .9rem; }
+  .mv-accepted-rule { display: none; }
 }

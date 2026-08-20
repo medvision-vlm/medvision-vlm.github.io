@@ -55,11 +55,11 @@ title: Dataset Explorer
 </ol>
 
 <ol class="mv-release-fns">
-  <li id="mv-fn1">For T/L tasks, use axial slices only — the error in T/L annotations on sagittal and coronal slices is resolved in <b>v1.1.1</b>.</li>
+  <li id="mv-fn1">For T/L tasks, use axial slices only — the error in T/L annotations on sagittal and coronal slices is resolved in <code>v1.1.1</code>.</li>
   <li id="mv-fn2">Fixed a T/L annotation error in anisotropic slices (only sagittal and coronal slices).</li>
-  <li id="mv-fn3">Missing image reorientation to RAS+: annotations were recorded in the orientation the source shipped, while the loader reoriented the images to RAS+ at loading stage. Withdrawn in <b>v1.2.1</b>.</li>
+  <li id="mv-fn3">Missing image reorientation to RAS+: annotations were recorded in the orientation the source shipped, while the loader reoriented the images to RAS+ at loading stage. Withdrawn in <code>v1.2.1</code>.</li>
   <li id="mv-fn4">Reissues the MAMA-MIA &amp; PI-CAI annotations in RAS+. If you have ever loaded either, clear the cache once — the release note has the snippet.</li>
-  <li id="mv-fn5">Regenerates the T/L annotations of all 12 tumor/lesion datasets: a millimetre size floor replaces the pixel-count floor, growing published landmarks from 75.8K to 3.8M (50×). Train/test membership changes for six datasets — do not compare a v1.4.0 test metric against an earlier one there.</li>
+  <li id="mv-fn5">Regenerates the T/L annotations of all 12 tumor/lesion datasets: a millimetre size floor replaces the pixel-count floor, growing published landmarks from 75.8K to 3.8M (50×). Train/test membership changes for six datasets (those with <code>v1.1.1</code> annotations: autoPET-III, BraTS24, HNTSMRG24, KiPA22, KiTS23, and MSD) — do not compare a <code>v1.4.0</code> test metric against an earlier one there. Read the <a href="{{ '/blog/tl-annotations-v140.html' | relative_url }}">blog</a>.</li>
 </ol>
 
 </div>

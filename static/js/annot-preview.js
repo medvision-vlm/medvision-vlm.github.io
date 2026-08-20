@@ -54,6 +54,19 @@
   // figure is a good stand-in for pixels-per-second without measuring layout.
   var SEC_PER_FIGURE = 4.5;
 
+  // Datasets hidden from the preview UI. Filtered here (not in the data file):
+  // annot-preview-data.js is auto-generated with no hardcoded dataset list, so
+  // an edit there would be clobbered on the next export.
+  var EXCLUDED_DATASETS = ["AFIDs", "PDDCA", "VerSe"];
+
+  function withoutExcluded(byDataset) {
+    var out = {};
+    Object.keys(byDataset || {}).forEach(function (ds) {
+      if (EXCLUDED_DATASETS.indexOf(ds) === -1) out[ds] = byDataset[ds];
+    });
+    return out;
+  }
+
   // Round-robin flatten so the strip mixes datasets instead of running one
   // dataset's whole block before the next.
   function interleave(perDataset, datasets) {
@@ -257,7 +270,9 @@
     if (!mount) return;
 
     var data = window.MEDVISION_ANNOT_PREVIEW;
-    if (!data || (!Object.keys(data.TL || {}).length && !Object.keys(data.AD || {}).length)) {
+    var tlData = withoutExcluded(data && data.TL);
+    var adData = withoutExcluded(data && data.AD);
+    if (!Object.keys(tlData).length && !Object.keys(adData).length) {
       mount.innerHTML = '<p class="cv-note">No preview figures available yet.</p>';
       return;
     }
@@ -265,8 +280,8 @@
     playToggleEl = document.getElementById("ap-play-toggle");
 
     var groups = {
-      TL: new Group("TL", data.TL || {}),
-      AD: new Group("AD", data.AD || {}),
+      TL: new Group("TL", tlData),
+      AD: new Group("AD", adData),
     };
 
     // Build + render BOTH groups upfront (so the hidden tab's track is ready the
