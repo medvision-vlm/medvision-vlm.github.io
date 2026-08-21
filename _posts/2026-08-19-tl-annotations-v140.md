@@ -6,7 +6,7 @@ description: "Dataset v1.4.0 selects tumor and lesion measurements by physical s
 
 <div class="mv-post-head">
   <a class="mv-post-back" href="{{ '/blog.html' | relative_url }}"><i class="fas fa-arrow-left"></i> All posts</a>
-  <time class="mv-post-date" datetime="2026-08-19">Aug 19, 2026</time>
+  <time class="mv-post-date" datetime="2026-08-21">Aug 21, 2026</time>
 </div>
 
 # MedVision v1.4.0: 50× More Tumor/Lesion Measurements and Their Annotation Recall
@@ -35,7 +35,7 @@ No measurement published by an earlier version was incorrect. The earlier rules 
 
 ## Measurement distribution
 
-<div class="mv-post-fig is-narrow">
+<div class="mv-post-fig">
   <img src="{{ '/figure/blog/tl-v140-overview-major-axis.svg' | relative_url }}"
        alt="Box plot of major axis distributions for all 38 tumor and lesion types in MedVision v1.4.0">
   <p class="mv-post-figcap">
@@ -51,45 +51,62 @@ The median major axis spans 7.7 mm (non-enhancing brain tumor core, BraTS24-GLI)
 
 Recall is measured clusters divided by all clusters, with the denominator obtained by recounting the expert masks directly rather than by reading the annotation plan. Across the 12 collections the masks contain **6,951,667** clusters, of which **3,801,540 (0.547)** carry a measurement.
 
-The unmeasured remainder is dominated by fragments: **95.5% of unmeasured clusters are ≤10 px and 84.7% are ≤5 px, and clusters of 1–2 px**, over a quarter of the corpus, cannot yield the 5-point contour that a fit requires. The corpus value of 0.547 therefore counts components, not clinically measurable lesions. The two stratifications below separate the two quantities; each partitions the same 6,951,667 clusters and reproduces the same margins.
+The unmeasured remainder is dominated by fragments: **95.5% of unmeasured clusters are ≤10 px and 84.7% are ≤5 px**. The corpus value of 0.547 therefore counts components, not clinically measurable lesions. The two stratifications below separate the two quantities; each partitions the same 6,951,667 clusters and reproduces the same margins.
 
 ### Recall by major axis length
 
-Length is the maximum Feret diameter of a cluster in millimetres, the mask-side proxy for the fitted major axis on which the selection rule acts. Each in-plane axis is scaled by its own spacing, since 43.8% of slices are anisotropic in-plane.
+Length is the maximum Feret diameter of a cluster in millimetres, the mask-side proxy for the fitted major axis on which the selection rule acts. Each in-plane axis is scaled by its own spacing.
 
-| Cluster length | Clusters | Measured | Recall | Cumulative recall |
-| --- | ---: | ---: | ---: | ---: |
-| ≤2 mm | 2,232,427 | 1,952 | 0.001 | 0.547 |
-| 2–5 mm | 974,881 | 409,412 | 0.420 | 0.805 |
-| 5–10 mm | 955,724 | 694,683 | 0.727 | 0.905 |
-| 10–20 mm | 1,055,235 | 976,105 | 0.925 | 0.967 |
-| 20–50 mm | 1,263,241 | 1,250,268 | 0.990 | 0.992 |
-| 50–100 mm | 413,816 | 412,849 | 0.998 | 0.998 |
-| >100 mm | 56,343 | 56,271 | 0.999 | 0.999 |
-| **All** | **6,951,667** | **3,801,540** | **0.547** | |
+<table>
+  <thead>
+    <tr>
+      <th colspan="4"><b>Per bin</b></th>
+      <th colspan="4"><b>Cumulative recall (&le; t)</b></th>
+      <th colspan="4"><b>Recall above threshold (&gt; t)</b></th>
+    </tr>
+    <tr><th><b>Cluster length</b></th><th><b>Clusters</b></th><th><b>Measured</b></th><th><b>Recall</b></th><th><b>Cluster length</b></th><th><b>Clusters</b></th><th><b>Measured</b></th><th><b>Recall</b></th><th><b>Cluster length</b></th><th><b>Clusters</b></th><th><b>Measured</b></th><th><b>Recall</b></th></tr>
+  </thead>
+  <tbody>
+    <tr><td>≤2 mm</td><td>2,232,427</td><td>1,952</td><td>0.001</td><td>≤2 mm</td><td>2,232,427</td><td>1,952</td><td>0.001</td><td>&gt;2 mm</td><td>4,719,240</td><td>3,799,588</td><td>0.805</td></tr>
+    <tr><td>2–5 mm</td><td>974,881</td><td>409,412</td><td>0.420</td><td>≤5 mm</td><td>3,207,308</td><td>411,364</td><td>0.128</td><td>&gt;5 mm</td><td>3,744,359</td><td>3,390,176</td><td>0.905</td></tr>
+    <tr><td>5–10 mm</td><td>955,724</td><td>694,683</td><td>0.727</td><td>≤10 mm</td><td>4,163,032</td><td>1,106,047</td><td>0.266</td><td><b>&gt;10 mm</b></td><td>2,788,635</td><td>2,695,493</td><td><b>0.967</b></td></tr>
+    <tr><td>10–20 mm</td><td>1,055,235</td><td>976,105</td><td>0.925</td><td>≤20 mm</td><td>5,218,267</td><td>2,082,152</td><td>0.399</td><td><b>&gt;20 mm</b></td><td>1,733,400</td><td>1,719,388</td><td><b>0.992</b></td></tr>
+    <tr><td>20–50 mm</td><td>1,263,241</td><td>1,250,268</td><td>0.990</td><td>≤50 mm</td><td>6,481,508</td><td>3,332,420</td><td>0.514</td><td>&gt;50 mm</td><td>470,159</td><td>469,120</td><td>0.998</td></tr>
+    <tr><td>50–100 mm</td><td>413,816</td><td>412,849</td><td>0.998</td><td>≤100 mm</td><td>6,895,324</td><td>3,745,269</td><td>0.543</td><td>&gt;100 mm</td><td>56,343</td><td>56,271</td><td>0.999</td></tr>
+    <tr><td>&gt;100 mm</td><td>56,343</td><td>56,271</td><td>0.999</td><td><b>All</b></td><td><b>6,951,667</b></td><td><b>3,801,540</b></td><td><b>0.547</b></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
 
-The fourth column is the recall of each bin in isolation; the fifth pools every cluster at or above that bin, which is the quantity a user of the dataset sees when selecting lesions above a size threshold. Pooled that way, **recall is 0.967 for clusters ≥10 mm and 0.992 for clusters ≥20 mm**, and at ≥20 mm no collection falls below 0.972 (PI-CAI, the minimum).
+The first block is the recall of each bin in isolation. The second accumulates the bins upward from the smallest, the cumulative recall in the usual sense, and closes on the corpus total. The third pools every cluster above a threshold, which is the quantity a user of the dataset sees when selecting lesions above a size floor; the second and third blocks at one threshold partition the corpus exactly. Read from the third block, **recall is 0.967 for clusters >10 mm and 0.992 for clusters >20 mm**.
 
-The gradient between 2 and 20 mm reflects the resolution-adjusted floor rather than a loss of measurable disease: the 2 mm term binds only on sub-millimetre grids, whereas a reformat of 3 mm spacing retains nothing under 6 mm. The 1,952 measured clusters in the ≤2 mm bin are not an exception to the floor: the bin variable is the Feret proxy, which understates the fitted major axis by roughly one pixel.
 
 ### Recall by cluster area
 
 Area is the physical area of the cluster on its slice in mm², derived from the same recount.
 
-| Cluster area | Clusters | Measured | Recall | Cumulative recall |
-| --- | ---: | ---: | ---: | ---: |
-| ≤2 mm² | 1,684,011 | 64 | 0.000 | 0.547 |
-| 2–5 mm² | 696,041 | 40,093 | 0.058 | 0.722 |
-| 5–10 mm² | 526,878 | 237,702 | 0.451 | 0.823 |
-| 10–20 mm² | 545,631 | 371,569 | 0.681 | 0.871 |
-| 20–50 mm² | 725,574 | 530,074 | 0.731 | 0.901 |
-| 50–100 mm² | 582,689 | 467,469 | 0.802 | 0.945 |
-| 100–500 mm² | 1,347,005 | 1,311,216 | 0.973 | 0.983 |
-| 500–1000 mm² | 428,510 | 428,120 | 0.999 | 0.999 |
-| >1000 mm² | 415,328 | 415,233 | 1.000 | 1.000 |
-| **All** | **6,951,667** | **3,801,540** | **0.547** | |
+<table>
+  <thead>
+    <tr>
+      <th colspan="4"><b>Per bin</b></th>
+      <th colspan="4"><b>Cumulative recall (&le; t)</b></th>
+      <th colspan="4"><b>Recall above threshold (&gt; t)</b></th>
+    </tr>
+    <tr><th><b>Cluster area</b></th><th><b>Clusters</b></th><th><b>Measured</b></th><th><b>Recall</b></th><th><b>Cluster area</b></th><th><b>Clusters</b></th><th><b>Measured</b></th><th><b>Recall</b></th><th><b>Cluster area</b></th><th><b>Clusters</b></th><th><b>Measured</b></th><th><b>Recall</b></th></tr>
+  </thead>
+  <tbody>
+    <tr><td>≤2 mm²</td><td>1,684,011</td><td>64</td><td>0.000</td><td>≤2 mm²</td><td>1,684,011</td><td>64</td><td>0.000</td><td>&gt;2 mm²</td><td>5,267,656</td><td>3,801,476</td><td>0.722</td></tr>
+    <tr><td>2–5 mm²</td><td>696,041</td><td>40,093</td><td>0.058</td><td>≤5 mm²</td><td>2,380,052</td><td>40,157</td><td>0.017</td><td>&gt;5 mm²</td><td>4,571,615</td><td>3,761,383</td><td>0.823</td></tr>
+    <tr><td>5–10 mm²</td><td>526,878</td><td>237,702</td><td>0.451</td><td>≤10 mm²</td><td>2,906,930</td><td>277,859</td><td>0.096</td><td>&gt;10 mm²</td><td>4,044,737</td><td>3,523,681</td><td>0.871</td></tr>
+    <tr><td>10–20 mm²</td><td>545,631</td><td>371,569</td><td>0.681</td><td>≤20 mm²</td><td>3,452,561</td><td>649,428</td><td>0.188</td><td>&gt;20 mm²</td><td>3,499,106</td><td>3,152,112</td><td>0.901</td></tr>
+    <tr><td>20–50 mm²</td><td>725,574</td><td>530,074</td><td>0.731</td><td>≤50 mm²</td><td>4,178,135</td><td>1,179,502</td><td>0.282</td><td>&gt;50 mm²</td><td>2,773,532</td><td>2,622,038</td><td>0.945</td></tr>
+    <tr><td>50–100 mm²</td><td>582,689</td><td>467,469</td><td>0.802</td><td>≤100 mm²</td><td>4,760,824</td><td>1,646,971</td><td>0.346</td><td><b>&gt;100 mm²</b></td><td>2,190,843</td><td>2,154,569</td><td><b>0.983</b></td></tr>
+    <tr><td>100–500 mm²</td><td>1,347,005</td><td>1,311,216</td><td>0.973</td><td>≤500 mm²</td><td>6,107,829</td><td>2,958,187</td><td>0.484</td><td><b>&gt;500 mm²</b></td><td>843,838</td><td>843,353</td><td><b>0.999</b></td></tr>
+    <tr><td>500–1000 mm²</td><td>428,510</td><td>428,120</td><td>0.999</td><td>≤1000 mm²</td><td>6,536,339</td><td>3,386,307</td><td>0.518</td><td>&gt;1000 mm²</td><td>415,328</td><td>415,233</td><td>1.000</td></tr>
+    <tr><td>&gt;1000 mm²</td><td>415,328</td><td>415,233</td><td>1.000</td><td><b>All</b></td><td><b>6,951,667</b></td><td><b>3,801,540</b></td><td><b>0.547</b></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
 
-Pooled upward as before, **recall reaches 0.983 for clusters ≥100 mm² and 0.999 for clusters ≥500 mm²**, where the lowest collection is 0.999 (MSD). Saturation is more gradual than for length, and one collection remains below 0.97 at ≥100 mm² (autoPET-III, 0.948). Area does not determine the major axis: at a fixed area an elongated cluster has a longer major axis than a compact one and is more likely to clear the floor, while the thinnest clusters are removed by the sub-voxel minor-axis guard. Length, the variable the rule acts on, is therefore the sharper predictor of recall, and the area view describes the same corpus with shapes mixed together.
+Read from the third block as before, **recall reaches 0.983 for clusters >100 mm² and 0.999 for clusters >500 mm²**. Area does not determine the major axis: at a fixed area an elongated cluster has a longer major axis than a compact one and is more likely to clear the floor, while the thinnest clusters are removed by the sub-voxel minor-axis guard. Length, the variable the rule acts on, is therefore the sharper predictor of recall, and the area view describes the same corpus with shapes mixed together.
 
 <div class="mv-post-fig">
   <img src="{{ '/figure/blog/tl-v140-overview-recall.svg' | relative_url }}"
@@ -97,7 +114,7 @@ Pooled upward as before, **recall reaches 0.983 for clusters ≥100 mm² and 0.9
   <p class="mv-post-figcap">
     Recall against cluster area (left) and cluster length (right), one curve per
     collection. Both panels stratify the same 6,951,667 clusters. Recall rises with
-    size in every collection and is at least 0.972 for clusters ≥20 mm long.
+    size in every collection and is at least 0.972 for clusters >20 mm long.
   </p>
 </div>
 
