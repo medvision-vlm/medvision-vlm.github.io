@@ -4,7 +4,7 @@ layout: default
 
 <div class="columns is-centered has-text-centered">
   <div class="column is-full">
-    <img src="figure/medvision.png" alt="MedVision overview" class="publication-banner"  style="width: 100%;">
+    <img src="figure/overview.png" alt="MedVision overview" class="publication-banner"  style="width: 100%;">
   </div>
 </div>
 
@@ -61,21 +61,6 @@ MedVision evaluates this ability across three quantitative tasks:
   </div>
 </div>
 
-<div class="columns is-centered has-text-centered">
-  <div class="column is-full">
-    <img src="figure/TL-samples.png" alt="TL samples" class="fig" style="width: 90%;">
-  </div>
-</div>
-<p class="caption"><b>Figure 1:</b> Tumor/lesion size annotation. An ellipse is fitted to the tumor/lesion mask and 4 landmarks are recorded.</p>
-
-<div class="columns is-centered has-text-centered">
-  <div class="column is-full">
-    <img src="figure/ceph-feta.png" alt="ceph-feta" class="fig" style="width: 100%;">
-  </div>
-</div>
-<p class="caption"><b>Figure 2:</b> Landmarks in the Ceph-Bio-400 (top-left) and FeTA24 datasets. Ground truth angle and distance measurements are computed from these landmarks.</p>
-
-
 <div class="mv-divider" role="separator" aria-label="Pilot Study section">
   <span class="mv-divider-rail is-left"></span>
   <span class="mv-divider-node"></span>
@@ -88,7 +73,13 @@ MedVision evaluates this ability across three quantitative tasks:
 
 <div class="reveal" markdown="1">
 
-*Last updated: Aug 21, 2026*
+*Last updated: Aug 25, 2026*
+
+</div>
+
+<div class="mv-figpanel mv-timeline"></div>
+
+<div class="reveal" markdown="1">
 
 **MedVision-V0 outperforms all 17 evaluated off-the-shelf VLMs across all three quantitative task families.** Each task below leads with the full leaderboard (🥇/🥈/🥉 mark the best three per column; click any metric to rank the table by it, best first; <span class="mv-lowsr-key">underlined metrics belong to a sub-task whose success rate fell below 50%</span>, meaning they are computed on a minority of samples and should be read with care), followed by an interactive viewer of real predictions — the complete prompt, the model's chain-of-thought response, and the error metrics, beside the image with a ground-truth-vs-prediction overlay.
 
@@ -132,6 +123,10 @@ MedVision evaluates this ability across three quantitative tasks:
   </tbody>
 </table>
 
+<div class="mv-figpanel mv-boxsize" data-task="Detection"></div>
+
+<div class="mv-figpanel mv-boxratio" data-task="Detection"></div>
+
 <div class="mv-radar" data-task="Detection"></div>
 
 <div class="case-viewer" data-task="Detection" data-autoplay="false"></div>
@@ -151,22 +146,22 @@ MedVision evaluates this ability across three quantitative tasks:
     </tr>
   </thead>
   <tbody>
-    <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>10.5<span class="medal">🥇</span></td><td>25.9<span class="medal">🥇</span></td><td>100.0</td><td>23.5<span class="medal">🥇</span></td></tr>
+    <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>10.5<span class="medal">🥇</span></td><td>26.0<span class="medal">🥇</span></td><td>100.0</td><td>23.5<span class="medal">🥇</span></td></tr>
     <tr><td>Gemma-4 (31B)</td><td>21.7<span class="medal">🥈</span></td><td>72.6<span class="medal">🥈</span></td><td>98.9</td><td>16.8<span class="medal">🥈</span></td></tr>
-    <tr><td>GLM-4.6V (106B)</td><td>31.4<span class="medal">🥉</span></td><td>107.2<span class="medal">🥉</span></td><td>92.2</td><td>4.1</td></tr>
+    <tr><td>GLM-4.6V (106B)</td><td>31.4<span class="medal">🥉</span></td><td>107.3<span class="medal">🥉</span></td><td>92.2</td><td>4.1</td></tr>
     <tr><td>MiniMax-M3 (428B, int4)</td><td>32.7</td><td>108.1</td><td>95.8</td><td>5.6</td></tr>
     <tr><td>GLM-4.6V-Flash (9B)</td><td>34.4</td><td>109.2</td><td>95.2</td><td>3.0</td></tr>
-    <tr><td>Lingshu (32B)</td><td>35.7</td><td>118.5</td><td>99.5</td><td>4.5</td></tr>
+    <tr><td>Lingshu (32B)</td><td>35.7</td><td>118.6</td><td>99.5</td><td>4.5</td></tr>
     <tr><td>HealthGPT (14B)</td><td>51.8</td><td>176.0</td><td>100.0</td><td>2.2</td></tr>
     <tr><td>Qwen3-VL-Thinking (32B)</td><td>53.2</td><td>140.6</td><td>94.0</td><td>6.2<span class="medal">🥉</span></td></tr>
-    <tr><td>MedDr (40B)</td><td>78.0</td><td>240.7</td><td>87.2</td><td>1.9</td></tr>
+    <tr><td>MedDr (40B)</td><td>78.0</td><td>240.7</td><td>87.3</td><td>1.9</td></tr>
     <tr><td>Llama-3.2-Vision (11B)</td><td>101.2</td><td>329.4</td><td>98.3</td><td>0.7</td></tr>
     <tr><td>Gemma-3 (27B)</td><td>225.8</td><td>611.4</td><td>99.0</td><td>0.5</td></tr>
     <tr><td>MedGemma (27B)</td><td>523.4</td><td>1905.0</td><td>57.0</td><td>0.5</td></tr>
     <tr><td>HuatuoGPT-Vision (34B)</td><td>1018.6</td><td>2847.2</td><td>98.3</td><td>1.5</td></tr>
     <tr><td>LLaVA-OneVision (72B)</td><td>1089.1</td><td>3368.0</td><td>100.0</td><td>1.2</td></tr>
-    <tr><td>Qwen2.5-VL (32B)</td><td>2054.6</td><td>6989.1</td><td>99.9</td><td>1.2</td></tr>
-    <tr><td>Qwen2.5-VL (7B)</td><td>2897.2</td><td>7680.8</td><td>95.4</td><td>0.7</td></tr>
+    <tr><td>Qwen2.5-VL (32B)</td><td>2054.6</td><td>6989.2</td><td>99.9</td><td>1.3</td></tr>
+    <tr><td>Qwen2.5-VL (7B)</td><td>2897.2</td><td>7680.9</td><td>95.4</td><td>0.7</td></tr>
     <tr><td>InternVL3 (38B)</td><td>8606.8</td><td>25285.1</td><td>100.0</td><td>0.2</td></tr>
     <tr><td>MedGemma (4B)</td><td>1109532.7</td><td>3733526.8</td><td>90.9</td><td>0.1</td></tr>
   </tbody>
@@ -187,37 +182,35 @@ MedVision evaluates this ability across three quantitative tasks:
   </div>
 
   <div class="mv-tabpanel" id="ad-panel-distance" role="tabpanel" aria-labelledby="ad-tab-distance">
-<table class="mv-tight-model mv-sortable" data-default-sort="0">
+<table class="mv-center mv-sortable" data-default-sort="0">
   <thead>
     <tr>
       <th rowspan="2"><b>Model</b></th>
-      <th colspan="4"><b>Ceph-Bio-400 · Distance (1000 samples)</b></th>
-      <th colspan="4"><b>FeTA24 · Distance (100 samples)</b></th>
+      <th colspan="4"><b>Ceph-Bio-400 + FeTA24 &middot; Distance (1,100 samples)</b></th>
     </tr>
     <tr>
-      <th><b>MAE</b> &darr;</th><th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th><th><b>MRE<sub>&lt;0.1</sub></b> &uarr;</th>
       <th><b>MAE</b> &darr;</th><th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th><th><b>MRE<sub>&lt;0.1</sub></b> &uarr;</th>
     </tr>
   </thead>
   <tbody>
-    <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>3.4<span class="medal">🥇</span></td><td>5.4<span class="medal">🥇</span></td><td>100</td><td>85.3<span class="medal">🥇</span></td><td>5.6<span class="medal">🥇</span></td><td>15.8<span class="medal">🥇</span></td><td>100</td><td>42.0<span class="medal">🥇</span></td></tr>
-    <tr><td>MiniMax-M3 (428B, int4)</td><td>17.7<span class="medal">🥈</span></td><td>26.3<span class="medal">🥈</span></td><td>97.4</td><td>23.6<span class="medal">🥈</span></td><td>20.9<span class="medal">🥉</span></td><td>71.8<span class="medal">🥉</span></td><td>98.0</td><td>6.0</td></tr>
-    <tr><td>GLM-4.6V (106B)</td><td>21.8<span class="medal">🥉</span></td><td>34.2</td><td>88.7</td><td>15.5</td><td>32.1</td><td>113.8</td><td>85.0</td><td>1.0</td></tr>
-    <tr><td>HealthGPT (14B)</td><td>22.7</td><td>33.1<span class="medal">🥉</span></td><td>99.7</td><td>19.0</td><td>27.0</td><td>134.9</td><td>76.0</td><td>8.0</td></tr>
-    <tr><td>Gemma-4 (31B)</td><td>24.6</td><td>34.8</td><td>99.8</td><td>10.7</td><td>16.0<span class="medal">🥈</span></td><td>68.5<span class="medal">🥈</span></td><td>100</td><td>12.0</td></tr>
-    <tr><td>GLM-4.6V-Flash (9B)</td><td>30.1</td><td>46.9</td><td>100</td><td>12.6</td><td>33.0</td><td>146.7</td><td>97.0</td><td>11.0</td></tr>
-    <tr><td>MedDr (40B)</td><td>105.4</td><td>167.0</td><td>92.1</td><td>9.2</td><td>115.3</td><td>503.7</td><td>82.0</td><td>1.0</td></tr>
-    <tr><td>Qwen3-VL-Thinking (32B)</td><td>127.8</td><td>205.3</td><td>98.3</td><td>19.7</td><td>30.9</td><td>123.2</td><td>99.0</td><td>7.0</td></tr>
-    <tr><td>Lingshu (32B)</td><td>214.4</td><td>257.6</td><td>100</td><td>23.5<span class="medal">🥉</span></td><td>43.5</td><td>148.4</td><td>100</td><td>0.0</td></tr>
-    <tr><td>LLaVA-OneVision (72B)</td><td>2399.1</td><td>3543.4</td><td>100</td><td>5.3</td><td>3967.4</td><td>14694.4</td><td>100</td><td>14.0<span class="medal">🥉</span></td></tr>
-    <tr><td>HuatuoGPT-Vision (34B)</td><td>3890.6</td><td>5506.9</td><td>98.2</td><td>5.6</td><td>4231.4</td><td>13697.5</td><td>98.0</td><td>3.0</td></tr>
-    <tr><td>Llama-3.2-Vision (11B)</td><td>4869.4</td><td>6979.8</td><td>98.8</td><td>1.6</td><td>2634.0</td><td>7925.7</td><td>96.0</td><td>7.0</td></tr>
-    <tr><td>Gemma-3 (27B)</td><td>5556.1</td><td>7250.3</td><td>98.9</td><td>13.7</td><td>35.1</td><td>173.3</td><td>100</td><td>9.0</td></tr>
-    <tr><td>MedGemma (27B)</td><td>6796.7</td><td>9386.3</td><td>45.9</td><td>7.1</td><td>662.1</td><td>917.1</td><td>49.0</td><td>3.0</td></tr>
-    <tr><td>MedGemma (4B)</td><td>16739.2</td><td>27396.4</td><td>95.6</td><td>0.1</td><td>50.3</td><td>133.1</td><td>90.0</td><td>0.0</td></tr>
-    <tr><td>Qwen2.5-VL (32B)</td><td>61478.2</td><td>78095.7</td><td>99.9</td><td>6.4</td><td>1720.7</td><td>8124.7</td><td>100</td><td>5.0</td></tr>
-    <tr><td>InternVL3 (38B)</td><td>67516.4</td><td>65356.7</td><td>99.8</td><td>7.1</td><td>7571.4</td><td>30542.5</td><td>100</td><td>17.0<span class="medal">🥈</span></td></tr>
-    <tr><td>Qwen2.5-VL (7B)</td><td>68610.5</td><td>101639.4</td><td>100</td><td>0.5</td><td>13536.3</td><td>45568.5</td><td>81.0</td><td>0.0</td></tr>
+    <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>3.6<span class="medal">🥇</span></td><td>6.4<span class="medal">🥇</span></td><td>100</td><td>81.4<span class="medal">🥇</span></td></tr>
+    <tr><td>MiniMax-M3 (428B, int4)</td><td>18.0<span class="medal">🥈</span></td><td>30.4<span class="medal">🥈</span></td><td>97.5</td><td>22.0<span class="medal">🥈</span></td></tr>
+    <tr><td>GLM-4.6V (106B)</td><td>22.7<span class="medal">🥉</span></td><td>41.5</td><td>88.4</td><td>14.2</td></tr>
+    <tr><td>HealthGPT (14B)</td><td>23.1</td><td>42.4</td><td>97.6</td><td>18.0</td></tr>
+    <tr><td>Gemma-4 (31B)</td><td>23.8</td><td>37.9<span class="medal">🥉</span></td><td>99.8</td><td>10.8</td></tr>
+    <tr><td>GLM-4.6V-Flash (9B)</td><td>30.3</td><td>56.0</td><td>99.7</td><td>12.5</td></tr>
+    <tr><td>MedDr (40B)</td><td>106.3</td><td>197.6</td><td>91.2</td><td>8.5</td></tr>
+    <tr><td>Qwen3-VL-Thinking (32B)</td><td>119.0</td><td>197.8</td><td>98.4</td><td>18.6</td></tr>
+    <tr><td>Lingshu (32B)</td><td>198.8</td><td>247.7</td><td>100</td><td>21.4<span class="medal">🥉</span></td></tr>
+    <tr><td>LLaVA-OneVision (72B)</td><td>2541.7</td><td>4557.2</td><td>100</td><td>6.1</td></tr>
+    <tr><td>HuatuoGPT-Vision (34B)</td><td>3921.6</td><td>6251.5</td><td>98.2</td><td>5.4</td></tr>
+    <tr><td>Llama-3.2-Vision (11B)</td><td>4666.2</td><td>7065.8</td><td>98.6</td><td>2.1</td></tr>
+    <tr><td>Gemma-3 (27B)</td><td>5054.2</td><td>6606.9</td><td>99.0</td><td>13.3</td></tr>
+    <tr><td>MedGemma (27B)</td><td>6239.0</td><td>8616.4</td><td>46.2</td><td>6.7</td></tr>
+    <tr><td>MedGemma (4B)</td><td>15222.0</td><td>24918.0</td><td>95.1</td><td>0.1</td></tr>
+    <tr><td>Qwen2.5-VL (32B)</td><td>56045.7</td><td>71734.7</td><td>99.9</td><td>6.3</td></tr>
+    <tr><td>InternVL3 (38B)</td><td>62066.9</td><td>62191.8</td><td>99.8</td><td>8.0</td></tr>
+    <tr><td>Qwen2.5-VL (7B)</td><td>63603.8</td><td>96542.0</td><td>98.3</td><td>0.5</td></tr>
   </tbody>
 </table>
   </div>
@@ -227,7 +220,7 @@ MedVision evaluates this ability across three quantitative tasks:
   <thead>
     <tr>
       <th rowspan="2"><b>Model</b></th>
-      <th colspan="4"><b>Ceph-Bio-400 · Angle (957 samples)</b></th>
+      <th colspan="4"><b>Ceph-Bio-400 &middot; Angle (960 samples)</b></th>
     </tr>
     <tr>
       <th><b>MAE</b> &darr;</th><th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th><th><b>MRE<sub>&lt;0.1</sub></b> &uarr;</th>
@@ -237,21 +230,21 @@ MedVision evaluates this ability across three quantitative tasks:
     <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>4.7<span class="medal">🥇</span></td><td>52.1<span class="medal">🥇</span></td><td>99.9</td><td>52.0<span class="medal">🥇</span></td></tr>
     <tr><td>MiniMax-M3 (428B, int4)</td><td>17.9<span class="medal">🥈</span></td><td>477.1</td><td>48.6</td><td>8.5</td></tr>
     <tr><td>GLM-4.6V (106B)</td><td>19.7<span class="medal">🥉</span></td><td>322.7</td><td>88.8</td><td>20.9<span class="medal">🥈</span></td></tr>
-    <tr><td>HealthGPT (14B)</td><td>25.9</td><td>463.2</td><td>99.3</td><td>16.7</td></tr>
     <tr><td>Gemma-4 (31B)</td><td>23.9</td><td>428.0</td><td>88.5</td><td>11.7</td></tr>
-    <tr><td>GLM-4.6V-Flash (9B)</td><td>35.0</td><td>531.7</td><td>99.1</td><td>8.1</td></tr>
-    <tr><td>MedDr (40B)</td><td>45.7</td><td>591.5</td><td>94.5</td><td>5.3</td></tr>
-    <tr><td>Qwen3-VL-Thinking (32B)</td><td>32.4</td><td>378.2</td><td>69.6</td><td>3.5</td></tr>
-    <tr><td>Lingshu (32B)</td><td>35.0</td><td>512.5</td><td>100</td><td>6.3</td></tr>
-    <tr><td>LLaVA-OneVision (72B)</td><td>33.6</td><td>473.5</td><td>100</td><td>2.9</td></tr>
-    <tr><td>HuatuoGPT-Vision (34B)</td><td>7070.0</td><td>9032.7</td><td>95.4</td><td>3.7</td></tr>
-    <tr><td>Llama-3.2-Vision (11B)</td><td>34.2</td><td>287.1<span class="medal">🥉</span></td><td>100</td><td>3.2</td></tr>
-    <tr><td>Gemma-3 (27B)</td><td>36.3</td><td>702.2</td><td>99.9</td><td>6.7</td></tr>
-    <tr><td>MedGemma (27B)</td><td>46.4</td><td>1024.8</td><td>93.0</td><td>6.8</td></tr>
-    <tr><td>MedGemma (4B)</td><td>35.8</td><td>298.8</td><td>96.7</td><td>6.0</td></tr>
-    <tr><td>Qwen2.5-VL (32B)</td><td>41.2</td><td>258.3<span class="medal">🥈</span></td><td>99.2</td><td>1.0</td></tr>
+    <tr><td>HealthGPT (14B)</td><td>25.9</td><td>463.2</td><td>99.3</td><td>16.7</td></tr>
     <tr><td>InternVL3 (38B)</td><td>30.3</td><td>616.8</td><td>100</td><td>20.4<span class="medal">🥉</span></td></tr>
+    <tr><td>Qwen3-VL-Thinking (32B)</td><td>32.4</td><td>378.2</td><td>69.6</td><td>3.6</td></tr>
+    <tr><td>LLaVA-OneVision (72B)</td><td>33.6</td><td>473.5</td><td>100</td><td>2.9</td></tr>
+    <tr><td>Llama-3.2-Vision (11B)</td><td>34.2</td><td>287.1<span class="medal">🥉</span></td><td>100</td><td>3.2</td></tr>
+    <tr><td>Lingshu (32B)</td><td>35.0</td><td>512.5</td><td>100</td><td>6.3</td></tr>
+    <tr><td>GLM-4.6V-Flash (9B)</td><td>35.0</td><td>531.7</td><td>99.1</td><td>8.1</td></tr>
+    <tr><td>MedGemma (4B)</td><td>35.8</td><td>298.8</td><td>96.7</td><td>6.0</td></tr>
+    <tr><td>Gemma-3 (27B)</td><td>36.3</td><td>702.2</td><td>99.9</td><td>6.7</td></tr>
+    <tr><td>Qwen2.5-VL (32B)</td><td>41.2</td><td>258.3<span class="medal">🥈</span></td><td>99.2</td><td>1.0</td></tr>
+    <tr><td>MedDr (40B)</td><td>45.7</td><td>591.5</td><td>94.5</td><td>5.3</td></tr>
+    <tr><td>MedGemma (27B)</td><td>46.4</td><td>1024.8</td><td>93.0</td><td>6.8</td></tr>
     <tr><td>Qwen2.5-VL (7B)</td><td>48.0</td><td>724.9</td><td>97.6</td><td>2.0</td></tr>
+    <tr><td>HuatuoGPT-Vision (34B)</td><td>7070.0</td><td>9032.7</td><td>95.4</td><td>3.7</td></tr>
   </tbody>
 </table>
   </div>

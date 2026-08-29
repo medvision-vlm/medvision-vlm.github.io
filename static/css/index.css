@@ -1331,6 +1331,195 @@ body {
 }
 
 /* =========================================================================
+   9a. Interactive figure panels (.mv-figpanel / .mvb-*)
+   Shared chrome for the Cartesian twins of the detection PDF figures: the
+   box-size explorer (.mv-boxsize) and the box-ratio curves (.mv-boxratio).
+   Both are siblings of §9 — same workstation card, same segmented pills, same
+   chip and tooltip design — so they share ONE namespace rather than repeating
+   it; .mv-figpanel styles them, and the widget class only tells the JS which
+   renderer owns the mount. What differs from §9 is the stage: a wide Cartesian
+   plot, scrolling horizontally when the targets cannot fit a screen width,
+   rather than a square SVG scaled to the column. Chart text is sized in px
+   (SVG user units), not rem, so a label keeps its size when the stage scrolls.
+   ========================================================================= */
+.mv-figpanel {
+  position: relative; margin: 2rem 0; padding: 1.5rem 1.5rem 1.35rem;
+  border: 1px solid var(--mv-border); border-radius: 18px;
+  background:
+    radial-gradient(1100px 280px at 14% -12%, rgba(14, 140, 139, .08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef3f7 100%);
+  box-shadow: 0 14px 38px rgba(20, 30, 50, .10), inset 0 1px 0 rgba(255, 255, 255, .6);
+  color: var(--mv-ink); font-family: "IBM Plex Sans", 'Google Sans', sans-serif;
+  overflow: hidden;
+}
+.mv-figpanel::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--mv-accent), var(--mv-accent-2));
+}
+.mv-figpanel > * { position: relative; z-index: 1; }
+
+/* header: eyebrow + live crumb */
+.mv-figpanel .mvb-head {
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+  padding-bottom: .9rem; margin-bottom: 1.15rem; border-bottom: 1px solid rgba(15, 23, 42, .10);
+}
+.mv-figpanel .mvb-eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mv-accent);
+  display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap;
+}
+.mv-figpanel .mvb-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--mv-accent);
+  animation: cvPulse 2.4s ease-out infinite;   /* reuse §6 keyframe */
+}
+.mv-figpanel .mvb-crumb {
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: #64748b;
+  margin-left: auto; text-align: right; min-width: 0;
+}
+.mv-figpanel .mvb-crumb b { color: var(--mv-accent-2); font-weight: 700; }
+.mv-figpanel .mvb-sep { color: #cbd5e1; margin: 0 .35rem; }
+
+/* controls: metric + target-granularity pills (same design as §9) */
+.mv-figpanel .mvb-controls { display: flex; flex-wrap: wrap; gap: 1.1rem 1.6rem; margin-bottom: 1.1rem; }
+.mv-figpanel .mvb-seg { display: flex; align-items: center; gap: .55rem; }
+.mv-figpanel .mvb-seglabel {
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--mv-muted);
+}
+.mv-figpanel .mvb-segbtns { display: inline-flex; flex-wrap: wrap; gap: .35rem; }
+.mv-figpanel .mvb-segbtn {
+  font-family: "IBM Plex Mono", monospace; font-size: .78rem; font-weight: 600;
+  color: #64748b; background: #fff; border: 1px solid rgba(15, 23, 42, .10);
+  border-radius: 9px; padding: .34rem .66rem; cursor: pointer; line-height: 1.2;
+  transition: color .15s ease, background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.mv-figpanel .mvb-segbtn:hover { color: var(--mv-ink); border-color: var(--mv-accent); transform: translateY(-1px); }
+.mv-figpanel .mvb-segbtn.is-active {
+  color: #fff; background: var(--mv-accent-2); border-color: var(--mv-accent-2);
+  box-shadow: 0 2px 10px rgba(59, 76, 200, .25);
+}
+.mv-figpanel .mvb-segstatic {
+  font-family: "IBM Plex Mono", monospace; font-size: .82rem; font-weight: 700;
+  color: var(--mv-accent-2); padding: .34rem .1rem; line-height: 1.2;
+}
+
+/* stage: one wide scrolling plot (metric scatter over the sample-size bars) */
+.mv-figpanel .mvb-stage { margin-bottom: .3rem; }
+.mv-figpanel .mvb-svgwrap {
+  overflow-x: auto; overflow-y: hidden; padding-bottom: .35rem;
+  scrollbar-width: thin;
+}
+.mv-figpanel .mvb-svg { display: block; }
+.mv-figpanel .mvb-axlab {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; fill: #94a3b8;
+}
+.mv-figpanel .mvb-axtitle {
+  font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; fill: var(--mv-muted);
+}
+.mv-figpanel .mvb-xlab { font-family: "IBM Plex Sans", sans-serif; }
+/* per-bin sample count printed above its bar (box-ratio strip) */
+.mv-figpanel .mvb-barnum {
+  font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 700; fill: #b45309;
+}
+.mv-figpanel .mvb-mark { transition: opacity .12s ease; }
+.mv-figpanel .mvb-hit { cursor: pointer; }
+.mv-figpanel .mvb-bar { cursor: pointer; }
+.mv-figpanel .mvb-bar:hover { fill-opacity: 1; }
+
+/* legends: ratio bands (colour) and models (marker glyph) */
+.mv-figpanel .mvb-legend { margin-top: 1.15rem; padding-top: .9rem; border-top: 1px solid rgba(15, 23, 42, .10); }
+.mv-figpanel .mvb-legendhead {
+  display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin-bottom: .7rem;
+}
+.mv-figpanel .mvb-legendtitle {
+  font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--mv-muted);
+}
+.mv-figpanel .mvb-quick { display: flex; gap: .4rem; flex-wrap: wrap; }
+.mv-figpanel .mvb-quickbtn {
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem; font-weight: 600;
+  color: var(--mv-accent); background: transparent; border: 1px solid var(--mv-accent);
+  border-radius: 999px; padding: .22rem .7rem; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.mv-figpanel .mvb-quickbtn:hover { background: var(--mv-accent-soft); }
+.mv-figpanel .mvb-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.mv-figpanel .mvb-chip {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-family: "IBM Plex Sans", sans-serif; font-size: .78rem; font-weight: 500; color: var(--mv-ink);
+  background: #fff; border: 1px solid rgba(15, 23, 42, .12); border-radius: 9px;
+  padding: .3rem .6rem; cursor: pointer; line-height: 1.15;
+  transition: opacity .15s ease, border-color .15s ease, transform .1s ease, box-shadow .15s ease;
+}
+.mv-figpanel .mvb-chip:hover { transform: translateY(-1px); border-color: var(--mv-accent); box-shadow: 0 3px 12px rgba(15, 23, 42, .08); }
+.mv-figpanel .mvb-chip:not(.is-active) { opacity: .4; }
+.mv-figpanel .mvb-chip:not(.is-active) .mvb-chipname { text-decoration: line-through; }
+.mv-figpanel .mvb-sw { width: 12px; height: 12px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); }
+/* marker glyph stands in for a colour swatch on model chips — in this figure shape is the model */
+.mv-figpanel .mvb-glyph { width: 14px; height: 14px; flex: none; display: block; }
+
+/* floating hover tooltip */
+.mv-figpanel .mvb-tip {
+  position: absolute; z-index: 6; pointer-events: none; max-width: 280px;
+  background: var(--mv-ink); color: #fff; border-radius: 9px; padding: .5rem .65rem;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, .32); font-size: .76rem; line-height: 1.35;
+}
+.mv-figpanel .mvb-tiphead { display: flex; align-items: center; gap: .45rem; font-weight: 700; margin-bottom: .2rem; }
+.mv-figpanel .mvb-tiphead .mvb-glyph { width: 13px; height: 13px; }
+.mv-figpanel .mvb-tiptarget { color: #cbd5e1; font-size: .72rem; margin-bottom: .2rem; }
+.mv-figpanel .mvb-tiptarget.is-tl { color: #e6b3f2; }
+.mv-figpanel .mvb-tipratio {
+  display: flex; align-items: center; gap: .4rem; color: #cbd5e1;
+  font-family: "IBM Plex Mono", monospace; font-size: .7rem; margin-bottom: .25rem;
+}
+.mv-figpanel .mvb-tipsw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.mv-figpanel .mvb-tipval { font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+.mv-figpanel .mvb-tipsub { font-family: "IBM Plex Mono", monospace; font-size: .68rem; color: #94a3b8; margin-top: .1rem; }
+.mv-figpanel .mvb-empty { color: var(--mv-muted); font-style: italic; }
+
+/* a11y: visible keyboard focus + reduced motion */
+.mv-figpanel .mvb-chip:focus-visible,
+.mv-figpanel .mvb-segbtn:focus-visible,
+.mv-figpanel .mvb-quickbtn:focus-visible { outline: 2px solid var(--mv-accent-2); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .mv-figpanel .mvb-dot { animation: none; }
+  .mv-figpanel .mvb-chip, .mv-figpanel .mvb-segbtn, .mv-figpanel .mvb-quickbtn,
+  .mv-figpanel .mvb-mark { transition: none; }
+}
+@media (max-width: 640px) {
+  .mv-figpanel { padding: 1.1rem 1rem 1rem; }
+  .mv-figpanel .mvb-crumb { display: none; }
+}
+
+/* =========================================================================
+   9a.1. Release timeline (.mv-timeline) — a §9a figure panel with two extras
+   Rendered by static/js/timeline.js: benchmark score against model release
+   date, one point per model, at the head of the Leaderboard section. It reuses
+   every .mvb-* rule above; only two things are its own.
+   (1) The task pill takes the PDF panel's own accent (--mvt-accent, set inline
+   per button by timeline.js) instead of the shared indigo, so the four tasks
+   stay colour-identified between the widget and the paper figure.
+   (2) In-plot point labels, which no other §9a panel draws — the scatter is
+   sparse enough to name a point in place, and only MedVision-V0 plus the
+   chip-hovered model are ever shown, so they cannot pile up.
+   ========================================================================= */
+.mv-figpanel.mv-timeline .mvb-segbtn.is-active {
+  background: var(--mvt-accent, var(--mv-accent-2));
+  border-color: var(--mvt-accent, var(--mv-accent-2));
+  box-shadow: 0 2px 10px rgba(20, 30, 50, .22);
+}
+.mv-figpanel.mv-timeline .mvb-segbtn:hover { border-color: var(--mvt-accent, var(--mv-accent)); }
+.mv-figpanel.mv-timeline .mvt-label {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+  fill: #475569; paint-order: stroke;      /* halo under the glyphs, not over them */
+  stroke: rgba(255, 255, 255, .9); stroke-width: 3px; stroke-linejoin: round;
+  pointer-events: none;
+}
+.mv-figpanel.mv-timeline .mvt-label.is-ours { font-size: 12px; font-weight: 700; fill: var(--mv-ink); }
+.mv-figpanel.mv-timeline .mvb-chipname { white-space: nowrap; }
+
+/* =========================================================================
    9b. Provenance chip (.mv-provenance) — shared by §8, §10 and §11
    Both panels are rendered from data exported out of the medvision_ds dataset
    codebase, so each header states the release that produced it. Two-tone pill:

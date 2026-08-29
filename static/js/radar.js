@@ -84,12 +84,18 @@
     var present = groups[0].values;
     var MODELS = DATA.models.filter(function (m) { return present[m.name] !== undefined; });
 
+    // Per-spoke distributions (violin-data.js, emitted by export_violin_data.py). Entirely
+    // optional: a page that never loads that file — or a task with no blob, e.g. the API pilot
+    // whose models have no per-sample records — just keeps the plain radar, no control drawn.
+    var VD = (window.MEDVISION_VIOLIN && window.MEDVISION_VIOLIN.tasks)
+      ? window.MEDVISION_VIOLIN.tasks[taskKey] : null;
+
     // ── state ────────────────────────────────────────────────────────────────
     var defaultMetric = (metrics.filter(function (m) { return m.default; })[0] || metrics[0]).key;
     // A/D groups are [Angle, Distance] — default to Distance to match the page's default A/D tab.
     var defaultGroup = 0;
     for (var gi = 0; gi < groups.length; gi++) if (groups[gi].name === "Distance") defaultGroup = gi;
-    var state = { metric: defaultMetric, groupIdx: defaultGroup, active: {}, emphasis: null };
+    var state = { metric: defaultMetric, groupIdx: defaultGroup, active: {}, emphasis: null, violin: false };
     MODELS.forEach(function (m) { state.active[m.name] = true; });
 
     function metricDef() { return metrics.filter(function (m) { return m.key === state.metric; })[0]; }
@@ -119,6 +125,14 @@
     controls.appendChild(segmented("Task", groups.map(function (g, i) {
       return { id: String(i), label: g.name || TASK_GROUP_LABEL[taskKey] || TASK_LABEL[taskKey] };
     }), function () { return String(state.groupIdx); }, function (id) { state.groupIdx = +id; redraw(); }));
+    // Opt-in, and off by default: with every model active the overlay is 18 violins per spoke,
+    // which is legible only once the legend has been narrowed (the "Only …" quick button).
+    if (VD) {
+      controls.appendChild(segmented("Distribution", [
+        { id: "off", label: "Off" }, { id: "on", label: "Violin" }
+      ], function () { return state.violin ? "on" : "off"; },
+        function (id) { state.violin = id === "on"; redraw(); }));
+    }
     mount.appendChild(controls);
 
     // chart + spoke-number legend
@@ -193,6 +207,11 @@
         paths[i].setAttribute("opacity", on ? (name && pn === name ? "1" : "0.85") : "0.10");
         paths[i].setAttribute("stroke-width", name && pn === name ? "3.2" : "2");
       }
+      var vs = svgHolder.querySelectorAll(".mvr-violin");
+      for (var j = 0; j < vs.length; j++) {
+        var vn = vs[j].getAttribute("data-model");
+        vs[j].style.opacity = (name == null || vn === name) ? "" : "0.08";
+      }
     }
 
     // ── drawing ────────────────────────────────────────────────────────────────
@@ -255,6 +274,27 @@
         num.textContent = spokes[i].n;
         var title = svg("title"); title.textContent = spokes[i].name; num.appendChild(title);
         root.appendChild(num);
+      }
+
+      // Distribution overlay, drawn BEFORE the traces so the summary lines stay on top.
+      // Faithful port of viz_radar.plot_violin_on_spoke: peak-normalised density, angular
+      // half-width capped at 30% of the inter-spoke gap, box at 40% of that half-width.
+      if (state.violin && VD) {
+        var vgrp = VD.groups[state.groupIdx];
+        var maxHW = (2 * Math.PI / N) * 0.3;
+        names.forEach(function (name) {
+          var byMetric = vgrp && vgrp.values[name];
+          var cells = byMetric && byMetric[md.key];
+          if (!cells) return;
+          var vcolor = colorOf(name);
+          for (var vi = 0; vi < N; vi++) {
+            if (!cells[vi]) continue;
+            var theta = spokeAngle(vi, N);
+            root.appendChild(violinPath(cells[vi], theta, maxHW, vcolor, name));
+            var parts = boxParts(cells[vi], theta, maxHW, vcolor, name);
+            for (var pi = 0; pi < parts.length; pi++) root.appendChild(parts[pi]);
+          }
+        });
       }
 
       // model traces (lines only, no fill) + hover vertices. A metric that is null/NaN — a target the
@@ -404,6 +444,50 @@
     return (v * 100).toFixed(1) + "%";
   }
   function fmtXY(p) { return p[0].toFixed(1) + " " + p[1].toFixed(1); }
+  // ── violin overlay geometry ─────────────────────────────────────────────────
+  // Stored coordinates are already in PLOTTED space (see export_violin_data.py), so pixelR maps
+  // them directly. Edges spanning two angles are drawn as chords rather than arcs; at these
+  // half-widths (<0.05 rad) the difference is well under a pixel.
+  function violinPath(cell, angle, maxHW, color, name) {
+    var d = cell.d, G = d.length, pts = [], i, hw;
+    for (i = 0; i < G; i++) {
+      hw = (d[i] / 100) * maxHW;
+      pts.push(fmtXY(pt(pixelR(i / (G - 1)), angle - hw)));
+    }
+    for (i = G - 1; i >= 0; i--) {
+      hw = (d[i] / 100) * maxHW;
+      pts.push(fmtXY(pt(pixelR(i / (G - 1)), angle + hw)));
+    }
+    return svg("path", {
+      d: "M" + pts.join("L") + "Z", fill: color, "fill-opacity": 0.28, stroke: "none",
+      class: "mvr-violin", "data-model": name
+    });
+  }
+
+  // IQR box, 1.5xIQR whiskers with caps, and the median bar — q = [w_lo,q1,median,q3,w_hi].
+  function boxParts(cell, angle, maxHW, color, name) {
+    var q = cell.q, bhw = maxHW * 0.4, out = [];
+    function seg(r1, t1, r2, t2, w) {
+      var a = pt(pixelR(r1), t1), b = pt(pixelR(r2), t2);
+      return svg("line", {
+        x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: color, "stroke-width": w,
+        "stroke-linecap": "round", class: "mvr-violin", "data-model": name
+      });
+    }
+    var corners = [[q[1], angle - bhw], [q[1], angle + bhw], [q[3], angle + bhw], [q[3], angle - bhw]]
+      .map(function (c) { return fmtXY(pt(pixelR(c[0]), c[1])); });
+    out.push(svg("path", {
+      d: "M" + corners.join("L") + "Z", fill: "#fff", "fill-opacity": 0.35, stroke: color,
+      "stroke-width": 1.1, class: "mvr-violin", "data-model": name
+    }));
+    out.push(seg(q[0], angle, q[1], angle, 1.1));                          // lower whisker
+    out.push(seg(q[3], angle, q[4], angle, 1.1));                          // upper whisker
+    out.push(seg(q[0], angle - bhw * 0.6, q[0], angle + bhw * 0.6, 1.1));  // lower cap
+    out.push(seg(q[4], angle - bhw * 0.6, q[4], angle + bhw * 0.6, 1.1));  // upper cap
+    out.push(seg(q[2], angle - bhw, q[2], angle + bhw, 1.9));              // median
+    return out;
+  }
+
   function radarPath(verts) {
     // Closed polygon when every spoke is defined; otherwise open runs of consecutive defined
     // vertices (cyclic), breaking at each missing spoke so a gap is never bridged by a chord.
