@@ -19,12 +19,12 @@ authors:
   - name: "Timothy Hospedales<sup>1</sup>"
     url: "https://homepages.inf.ed.ac.uk/thospeda/"
 
-publication: "<sup>1</sup>School of Informatics, University of Edinburgh<br><sup>2</sup>School of Engineering, University of Edinburgh<br><sup>3</sup>Queen Mary University of London"
+publication: "<sup>1</sup>School of Informatics, University of Edinburgh<br><sup>2</sup>School of Engineering, University of Edinburgh<br><sup>3</sup>King’s College London"
 doi: ""
 
 links:
-  paper: ""
-  arxiv: "https://arxiv.org/abs/2511.18676"
+  paper: "https://aclanthology.org/2026.emnlp-main.1362/"
+  arxiv: ""
   code: "https://github.com/YongchengYAO/MedVision"
   docs: "https://medvision.readthedocs.io/en/latest/index.html"
   data: "https://huggingface.co/datasets/YongchengYAO/MedVision"
@@ -32,14 +32,26 @@ links:
   demo: "https://huggingface.co/spaces/YongchengYAO/MedVision-V0-demo"
 
 bibtex: |
-  @misc{yao2026medvisionbenchmarkingquantitativemedical,
-      title={MedVision: Benchmarking Quantitative Medical Image Analysis}, 
-      author={Yongcheng Yao and Yongshuo Zong and Raman Dutt and Yongxin Yang and Sotirios A Tsaftaris and Timothy Hospedales},
-      year={2026},
-      eprint={2511.18676},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2511.18676}, 
+  @inproceedings{yao-etal-2026-medvision,
+      title = "{M}ed{V}ision: Benchmarking Quantitative Medical Image Analysis",
+      author = "Yao, Yongcheng  and
+        Zong, Yongshuo  and
+        Dutt, Raman  and
+        Yang, Yongxin  and
+        Tsaftaris, Sotirios A.  and
+        Hospedales, Timothy",
+      editor = "Lee, Hung-Yi  and
+        Dev, Sunipa  and
+        Li, Jessy  and
+        Elliott, Desmond",
+      booktitle = "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing",
+      month = oct,
+      year = "2026",
+      address = "Budapest, Hungary",
+      publisher = "Association for Computational Linguistics",
+      url = "https://aclanthology.org/2026.emnlp-main.1362/",
+      pages = "31065--31102",
+      ISBN = "979-8-89176-459-0"
   }
 
 # Build settings

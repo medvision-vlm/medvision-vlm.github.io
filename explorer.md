@@ -9,7 +9,7 @@ title: Dataset Explorer
 
 <ol class="mv-releases">
   <li class="mv-release is-current">
-    <time class="mv-release-date" datetime="2026-08-18">Aug 18, 2026</time>
+    <time class="mv-release-date" datetime="2026-08-19">Aug 19, 2026</time>
     <span class="mv-release-what">Release MedVision dataset <b>v1.4.0</b></span>
     <span class="mv-release-kind">T/L regeneration<a class="mv-release-fnref" href="#mv-fn5" id="mv-fnref5">5</a></span>
     <a class="mv-release-note" href="https://huggingface.co/datasets/YongchengYAO/MedVision/blob/main/doc/release-v1.4.0.md" target="_blank" rel="noopener">release-v1.4.0</a>

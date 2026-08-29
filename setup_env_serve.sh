@@ -35,10 +35,10 @@ conda activate "${ENV_NAME}"
 
 cd "${SCRIPT_DIR}"
 
-if ! gem list bundler -i > /dev/null 2>&1; then
-    gem install bundler
-fi
-bundle install
+#if ! gem list bundler -i > /dev/null 2>&1; then
+#    gem install bundler
+#fi
+#bundle install
 
 echo ""
 echo "Starting Jekyll on http://0.0.0.0:${SERVE_PORT}"

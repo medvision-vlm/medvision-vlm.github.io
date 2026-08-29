@@ -6,6 +6,8 @@
 //   case = { title, image:overlay_png, segments:[{label,html}], holdMs, parseFailed }
 //   segments = the full Prompt / Response / Metrics panels as inline-styled HTML
 //   (color-coded to match script/visualization/viz_*_responses.py figures).
+//   image:null + notEvaluated:true = a --partial_models stand-in: that model never ran
+//   this sample, kept so case[i] stays the same sample across models.
 
 window.MEDVISION_CASES = Object.assign(window.MEDVISION_CASES || {}, {
   "Detection-Pilot": {},
@@ -1640,6 +1642,426 @@ window.MEDVISION_CASES = Object.assign(window.MEDVISION_CASES || {}, {
           {
             "label": "GT · Prediction · Metrics",
             "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.0847    minor axis = 0.0591\n\nGround Truth:    major axis length = 44.406 mm    minor axis length = 32.250 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">16.810</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">12.010</span> mm\nMeasurement Error  (major axis):   MRE  = 0.6214    nMAE = 0.0813\nMeasurement Error  (minor axis):   MRE  = 0.6276    nMAE = 0.0596"
+          }
+        ],
+        "originToggle": true,
+        "originLabel": "top-left",
+        "originLabelAlt": "lower-left",
+        "parseFailed": false
+      }
+    ],
+    "GPT-5.5-Pro": [
+      {
+        "target": "brain resection cavity",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Resection cavity of brain size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T04_S2_62_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2 Fluid Attenuated Inversion Recovery (FLAIR) brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">resection cavity of brain</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.426</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.355</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the resection cavity as the dark oval region on the right side; its longest span is nearly horizontal. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (x1_major, y1_major) ≈ (0.638, 0.514), (x2_major, y2_major) ≈ (0.863, 0.508) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the shortest span roughly perpendicular to the major axis, near vertical through the cavity center. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (x1_minor, y1_minor) ≈ (0.751, 0.423), (x2_minor, y2_minor) ≈ (0.755, 0.589) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Using image size 512×512 and pixel size 0.426×0.355 mm, the major axis length is about 49.09 mm. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 49.09 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Using the same scaling, the minor axis length is about 30.18 mm. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 30.18 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">49.09</span>,<span style=\"color:#EA580C;font-weight:bold\">30.18</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: top-left.</span>\nLocalization error (normalized L2):   major axis = 0.0480    minor axis = 0.0509\n\nGround Truth:    major axis length = 56.312 mm    minor axis length = 32.250 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">49.090</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">30.180</span> mm\nMeasurement Error  (major axis):   MRE  = 0.1283    nMAE = 0.0254\nMeasurement Error  (minor axis):   MRE  = 0.0642    nMAE = 0.0073"
+          }
+        ],
+        "image_alt": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T04_S2_62_overlay_lowerleft.png",
+        "segments_alt": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2 Fluid Attenuated Inversion Recovery (FLAIR) brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">resection cavity of brain</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.426</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.355</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the resection cavity as the dark oval region on the right side; its longest span is nearly horizontal. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (x1_major, y1_major) ≈ (0.638, 0.514), (x2_major, y2_major) ≈ (0.863, 0.508) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the shortest span roughly perpendicular to the major axis, near vertical through the cavity center. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (x1_minor, y1_minor) ≈ (0.751, 0.423), (x2_minor, y2_minor) ≈ (0.755, 0.589) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Using image size 512×512 and pixel size 0.426×0.355 mm, the major axis length is about 49.09 mm. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 49.09 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Using the same scaling, the minor axis length is about 30.18 mm. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 30.18 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">49.09</span>,<span style=\"color:#EA580C;font-weight:bold\">30.18</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.0632    minor axis = 0.0596\n\nGround Truth:    major axis length = 56.312 mm    minor axis length = 32.250 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">49.090</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">30.180</span> mm\nMeasurement Error  (major axis):   MRE  = 0.1283    nMAE = 0.0254\nMeasurement Error  (minor axis):   MRE  = 0.0642    nMAE = 0.0073"
+          }
+        ],
+        "originToggle": true,
+        "originLabel": "top-left",
+        "originLabelAlt": "lower-left",
+        "parseFailed": false
+      },
+      {
+        "target": "brain resection cavity",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Resection cavity of brain size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T04_S2_17_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2 Fluid Attenuated Inversion Recovery (FLAIR) brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">resection cavity of brain</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.426</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.355</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the dark superior resection cavity as an approximately vertical ellipse. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (0.494, 0.121), (0.508, 0.298) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the perpendicular short diameter through the widest portion of the cavity. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (0.449, 0.210), (0.552, 0.215) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length computed from the relative-coordinate displacement and pixel spacing. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 32.32 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length computed similarly. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 22.48 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">32.32</span>, <span style=\"color:#EA580C;font-weight:bold\">22.48</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: top-left.</span>\nLocalization error (normalized L2):   major axis = 0.0184    minor axis = 0.0150\n\nGround Truth:    major axis length = 26.078 mm    minor axis length = 18.109 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">32.320</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">22.480</span> mm\nMeasurement Error  (major axis):   MRE  = 0.2394    nMAE = 0.0220\nMeasurement Error  (minor axis):   MRE  = 0.2413    nMAE = 0.0154"
+          }
+        ],
+        "image_alt": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T04_S2_17_overlay_lowerleft.png",
+        "segments_alt": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2 Fluid Attenuated Inversion Recovery (FLAIR) brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">resection cavity of brain</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.426</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.355</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the dark superior resection cavity as an approximately vertical ellipse. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (0.494, 0.121), (0.508, 0.298) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the perpendicular short diameter through the widest portion of the cavity. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (0.449, 0.210), (0.552, 0.215) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length computed from the relative-coordinate displacement and pixel spacing. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 32.32 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length computed similarly. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 22.48 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">32.32</span>, <span style=\"color:#EA580C;font-weight:bold\">22.48</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.4155    minor axis = 0.4134\n\nGround Truth:    major axis length = 26.078 mm    minor axis length = 18.109 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">32.320</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">22.480</span> mm\nMeasurement Error  (major axis):   MRE  = 0.2394    nMAE = 0.0220\nMeasurement Error  (minor axis):   MRE  = 0.2413    nMAE = 0.0154"
+          }
+        ],
+        "originToggle": true,
+        "originLabel": "top-left",
+        "originLabelAlt": "lower-left",
+        "parseFailed": false
+      },
+      {
+        "target": "brain tumor",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Gross tumor volume of brain size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T05_S2_0_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">contrast enhanced T1-weighted brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">gross tumor volume of brain</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.508</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.508</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">23.88</span>,<span style=\"color:#EA580C;font-weight:bold\">19.30</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#b91c1c;font-weight:700\">⚠️Fail to parse reasoning text.</span> Landmark coordinates could not be extracted, so the figure shows the input image with the GT overlay but without the model prediction.\n\nGround Truth:    major axis length = 22.438 mm    minor axis length = 16.375 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">23.880</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">19.300</span> mm\nMeasurement Error  (major axis):   MRE  = 0.0643    nMAE = 0.0039\nMeasurement Error  (minor axis):   MRE  = 0.1786    nMAE = 0.0080"
+          }
+        ],
+        "parseFailed": true
+      },
+      {
+        "target": "brain tumor",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Gross tumor volume of brain size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T05_S2_11_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">contrast enhanced T1-weighted brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">gross tumor volume of brain</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.508</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.508</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">43.18</span>,<span style=\"color:#EA580C;font-weight:bold\">41.66</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#b91c1c;font-weight:700\">⚠️Fail to parse reasoning text.</span> Landmark coordinates could not be extracted, so the figure shows the input image with the GT overlay but without the model prediction.\n\nGround Truth:    major axis length = 28.516 mm    minor axis length = 26.406 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">43.180</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">41.660</span> mm\nMeasurement Error  (major axis):   MRE  = 0.5143    nMAE = 0.0399\nMeasurement Error  (minor axis):   MRE  = 0.5777    nMAE = 0.0415"
+          }
+        ],
+        "parseFailed": true
+      },
+      {
+        "target": "enhancing brain tumor",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Enhancing brain tumor size — MRI",
+        "image": null,
+        "segments": [
+          {
+            "label": "Not evaluated",
+            "html": "GPT-5.5-Pro was not evaluated on this sample: its run stopped before reaching it (API budget exhausted), so there is no response, overlay, or metrics to show."
+          }
+        ],
+        "parseFailed": false,
+        "notEvaluated": true
+      },
+      {
+        "target": "enhancing brain tumor",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Enhancing brain tumor size — MRI",
+        "image": null,
+        "segments": [
+          {
+            "label": "Not evaluated",
+            "html": "GPT-5.5-Pro was not evaluated on this sample: its run stopped before reaching it (API budget exhausted), so there is no response, overlay, or metrics to show."
+          }
+        ],
+        "parseFailed": false,
+        "notEvaluated": true
+      },
+      {
+        "target": "kidney tumor",
+        "modality": "CT",
+        "holdMs": 4200,
+        "title": "Kidney tumor size — CT",
+        "image": null,
+        "segments": [
+          {
+            "label": "Not evaluated",
+            "html": "GPT-5.5-Pro was not evaluated on this sample: its run stopped before reaching it (API budget exhausted), so there is no response, overlay, or metrics to show."
+          }
+        ],
+        "parseFailed": false,
+        "notEvaluated": true
+      },
+      {
+        "target": "kidney tumor",
+        "modality": "CT",
+        "holdMs": 4200,
+        "title": "Kidney tumor size — CT",
+        "image": null,
+        "segments": [
+          {
+            "label": "Not evaluated",
+            "html": "GPT-5.5-Pro was not evaluated on this sample: its run stopped before reaching it (API budget exhausted), so there is no response, overlay, or metrics to show."
+          }
+        ],
+        "parseFailed": false,
+        "notEvaluated": true
+      },
+      {
+        "target": "liver tumor",
+        "modality": "CT",
+        "holdMs": 4200,
+        "title": "Liver tumor size — CT",
+        "image": null,
+        "segments": [
+          {
+            "label": "Not evaluated",
+            "html": "GPT-5.5-Pro was not evaluated on this sample: its run stopped before reaching it (API budget exhausted), so there is no response, overlay, or metrics to show."
+          }
+        ],
+        "parseFailed": false,
+        "notEvaluated": true
+      },
+      {
+        "target": "liver tumor",
+        "modality": "CT",
+        "holdMs": 4200,
+        "title": "Liver tumor size — CT",
+        "image": null,
+        "segments": [
+          {
+            "label": "Not evaluated",
+            "html": "GPT-5.5-Pro was not evaluated on this sample: its run stopped before reaching it (API budget exhausted), so there is no response, overlay, or metrics to show."
+          }
+        ],
+        "parseFailed": false,
+        "notEvaluated": true
+      },
+      {
+        "target": "metastatic lymph node",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Metastatic lymph node size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_HNTSMRG24_T02_S2_80_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2-weighted head and neck magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">metastatic lymph node</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">1.016</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">1.016</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the dominant left-sided metastatic lymph node long axis. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (0.396, 0.460), (0.483, 0.522) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the perpendicular short axis of the same ellipse. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (0.451, 0.457), (0.429, 0.526) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length ≈ sqrt((0.087×512×1.016)^2 + (0.062×512×1.016)^2). &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 55.57 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length ≈ sqrt((0.022×512×1.016)^2 + (0.069×512×1.016)^2). &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 37.67 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">55.57</span>,<span style=\"color:#EA580C;font-weight:bold\">37.67</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: top-left.</span>\nLocalization error (normalized L2):   major axis = 0.0969    minor axis = 0.0965\n\nGround Truth:    major axis length = 34.281 mm    minor axis length = 22.047 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">55.570</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">37.670</span> mm\nMeasurement Error  (major axis):   MRE  = 0.6210    nMAE = 0.0290\nMeasurement Error  (minor axis):   MRE  = 0.7086    nMAE = 0.0213"
+          }
+        ],
+        "image_alt": "figure/cases-pilot/GPT-5.5-Pro/tl_HNTSMRG24_T02_S2_80_overlay_lowerleft.png",
+        "segments_alt": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2-weighted head and neck magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">metastatic lymph node</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">1.016</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">1.016</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the dominant left-sided metastatic lymph node long axis. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (0.396, 0.460), (0.483, 0.522) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the perpendicular short axis of the same ellipse. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (0.451, 0.457), (0.429, 0.526) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length ≈ sqrt((0.087×512×1.016)^2 + (0.062×512×1.016)^2). &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 55.57 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length ≈ sqrt((0.022×512×1.016)^2 + (0.069×512×1.016)^2). &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 37.67 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">55.57</span>,<span style=\"color:#EA580C;font-weight:bold\">37.67</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.0889    minor axis = 0.0873\n\nGround Truth:    major axis length = 34.281 mm    minor axis length = 22.047 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">55.570</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">37.670</span> mm\nMeasurement Error  (major axis):   MRE  = 0.6210    nMAE = 0.0290\nMeasurement Error  (minor axis):   MRE  = 0.7086    nMAE = 0.0213"
+          }
+        ],
+        "originToggle": true,
+        "originLabel": "top-left",
+        "originLabelAlt": "lower-left",
+        "parseFailed": false
+      },
+      {
+        "target": "metastatic lymph node",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Metastatic lymph node size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_HNTSMRG24_T02_S2_32_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">T2-weighted head and neck magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">metastatic lymph node</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.500</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.500</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">27.00</span>,<span style=\"color:#EA580C;font-weight:bold\">18.50</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#b91c1c;font-weight:700\">⚠️Fail to parse reasoning text.</span> Landmark coordinates could not be extracted, so the figure shows the input image with the GT overlay but without the model prediction.\n\nGround Truth:    major axis length = 14.039 mm    minor axis length = 11.047 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">27.000</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">18.500</span> mm\nMeasurement Error  (major axis):   MRE  = 0.9232    nMAE = 0.0358\nMeasurement Error  (minor axis):   MRE  = 0.6747    nMAE = 0.0206"
+          }
+        ],
+        "parseFailed": true
+      },
+      {
+        "target": "miscellaneous tumor/lesion",
+        "modality": "CT",
+        "holdMs": 4200,
+        "title": "Kidney tumor size — CT",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_KiPA22_T01_S2_60_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">kidney contrast computed tomography (CT) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">kidney tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.195</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.195</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the tumor boundary as an oblique ellipse, with the longest axis running roughly superior-inferior. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (x1_major, y1_major) = (0.229, 0.174), (x2_major, y2_major) = (0.365, 0.664) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the shortest perpendicular axis across the tumor through the same center. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (x1_minor, y1_minor) = (0.080, 0.479), (x2_minor, y2_minor) = (0.514, 0.357) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length ≈ sqrt((70×0.195)^2 + (251×0.195)^2) = 50.81. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 50.81 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length ≈ sqrt((222×0.195)^2 + (62×0.195)^2) = 44.95. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 44.95 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">50.81</span>,<span style=\"color:#EA580C;font-weight:bold\">44.95</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: top-left.</span>\nLocalization error (normalized L2):   major axis = 0.0952    minor axis = 0.0855\n\nGround Truth:    major axis length = 50.750 mm    minor axis length = 43.062 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">50.810</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">44.950</span> mm\nMeasurement Error  (major axis):   MRE  = 0.0012    nMAE = 0.0004\nMeasurement Error  (minor axis):   MRE  = 0.0438    nMAE = 0.0134"
+          }
+        ],
+        "image_alt": "figure/cases-pilot/GPT-5.5-Pro/tl_KiPA22_T01_S2_60_overlay_lowerleft.png",
+        "segments_alt": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">kidney contrast computed tomography (CT) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">kidney tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.195</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.195</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the tumor boundary as an oblique ellipse, with the longest axis running roughly superior-inferior. &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (x1_major, y1_major) = (0.229, 0.174), (x2_major, y2_major) = (0.365, 0.664) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; Estimated the shortest perpendicular axis across the tumor through the same center. &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (x1_minor, y1_minor) = (0.080, 0.479), (x2_minor, y2_minor) = (0.514, 0.357) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length ≈ sqrt((70×0.195)^2 + (251×0.195)^2) = 50.81. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 50.81 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length ≈ sqrt((222×0.195)^2 + (62×0.195)^2) = 44.95. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 44.95 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">50.81</span>,<span style=\"color:#EA580C;font-weight:bold\">44.95</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.1198    minor axis = 0.1224\n\nGround Truth:    major axis length = 50.750 mm    minor axis length = 43.062 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">50.810</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">44.950</span> mm\nMeasurement Error  (major axis):   MRE  = 0.0012    nMAE = 0.0004\nMeasurement Error  (minor axis):   MRE  = 0.0438    nMAE = 0.0134"
+          }
+        ],
+        "originToggle": true,
+        "originLabel": "top-left",
+        "originLabelAlt": "lower-left",
+        "parseFailed": false
+      },
+      {
+        "target": "miscellaneous tumor/lesion",
+        "modality": "CT",
+        "holdMs": 4200,
+        "title": "Kidney tumor size — CT",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_KiPA22_T01_S2_4_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">kidney contrast computed tomography (CT) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">kidney tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.166</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.166</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-answer&gt; (0.570, 0.250), (0.699, 0.645) &lt;/step-1-answer&gt; &lt;step-2-answer&gt; (0.477, 0.500), (0.801, 0.404) &lt;/step-2-answer&gt; &lt;step-3-answer&gt; 35.28 &lt;/step-3-answer&gt; &lt;step-4-answer&gt; 28.73 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">35.28</span>,<span style=\"color:#EA580C;font-weight:bold\">28.73</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: top-left.</span>\nLocalization error (normalized L2):   major axis = 0.0597    minor axis = 0.0525\n\nGround Truth:    major axis length = 22.516 mm    minor axis length = 16.516 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">35.280</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">28.730</span> mm\nMeasurement Error  (major axis):   MRE  = 0.5669    nMAE = 0.1065\nMeasurement Error  (minor axis):   MRE  = 0.7396    nMAE = 0.1019"
+          }
+        ],
+        "image_alt": "figure/cases-pilot/GPT-5.5-Pro/tl_KiPA22_T01_S2_4_overlay_lowerleft.png",
+        "segments_alt": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">kidney contrast computed tomography (CT) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">kidney tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.166</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.166</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-answer&gt; (0.570, 0.250), (0.699, 0.645) &lt;/step-1-answer&gt; &lt;step-2-answer&gt; (0.477, 0.500), (0.801, 0.404) &lt;/step-2-answer&gt; &lt;step-3-answer&gt; 35.28 &lt;/step-3-answer&gt; &lt;step-4-answer&gt; 28.73 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">35.28</span>,<span style=\"color:#EA580C;font-weight:bold\">28.73</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.0983    minor axis = 0.0973\n\nGround Truth:    major axis length = 22.516 mm    minor axis length = 16.516 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">35.280</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">28.730</span> mm\nMeasurement Error  (major axis):   MRE  = 0.5669    nMAE = 0.1065\nMeasurement Error  (minor axis):   MRE  = 0.7396    nMAE = 0.1019"
+          }
+        ],
+        "originToggle": true,
+        "originLabel": "top-left",
+        "originLabelAlt": "lower-left",
+        "parseFailed": false
+      },
+      {
+        "target": "non-enhancing brain tumor",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Non-enhancing brain tumor size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T10_S2_3_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">contrast enhanced T1-weighted brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">non-enhancing brain tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.469</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.469</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">54.15</span>,<span style=\"color:#EA580C;font-weight:bold\">48.83</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#b91c1c;font-weight:700\">⚠️Fail to parse reasoning text.</span> Landmark coordinates could not be extracted, so the figure shows the input image with the GT overlay but without the model prediction.\n\nGround Truth:    major axis length = 42.438 mm    minor axis length = 34.250 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">54.150</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">48.830</span> mm\nMeasurement Error  (major axis):   MRE  = 0.2760    nMAE = 0.0345\nMeasurement Error  (minor axis):   MRE  = 0.4257    nMAE = 0.0430"
+          }
+        ],
+        "parseFailed": true
+      },
+      {
+        "target": "non-enhancing brain tumor",
+        "modality": "MRI",
+        "holdMs": 4200,
+        "title": "Non-enhancing brain tumor size — MRI",
+        "image": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T10_S2_2_overlay.png",
+        "segments": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">contrast enhanced T1-weighted brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">non-enhancing brain tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.469</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.469</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the target non-enhancing tumor as the central oval region. The longest span is approximately horizontal, from about pixel (171, 256) to (255, 256). &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (0.333984, 0.500000), (0.498047, 0.500000) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; The shortest orthogonal span through the same region is approximately vertical, from about pixel (213, 217) to (213, 296). &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (0.416016, 0.423828), (0.416016, 0.578125) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length ≈ 84 pixels × 0.469 mm/pixel. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 39.40 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length ≈ 79 pixels × 0.469 mm/pixel. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 37.05 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">39.40</span>,<span style=\"color:#EA580C;font-weight:bold\">37.05</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: top-left.</span>\nLocalization error (normalized L2):   major axis = 0.0819    minor axis = 0.0690\n\nGround Truth:    major axis length = 44.406 mm    minor axis length = 32.250 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">39.400</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">37.050</span> mm\nMeasurement Error  (major axis):   MRE  = 0.1127    nMAE = 0.0147\nMeasurement Error  (minor axis):   MRE  = 0.1488    nMAE = 0.0141"
+          }
+        ],
+        "image_alt": "figure/cases-pilot/GPT-5.5-Pro/tl_BraTS24_T10_S2_2_overlay_lowerleft.png",
+        "segments_alt": [
+          {
+            "label": "Prompt",
+            "html": "<span style=\"color:#111827;font-weight:bold\">Task:</span>\nGiven the input medical image: <span style=\"color:#D97706;font-weight:bold\">contrast enhanced T1-weighted brain magnetic resonance imaging (MRI) scan</span>, estimate the major and minor axis lengths of the ellipse enclosing the <span style=\"color:#059669;font-weight:bold\">non-enhancing brain tumor</span>, in millimeters.\n<span style=\"color:#111827;font-weight:bold\">Additional information:</span>\nThe image size is <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (width) x <span style=\"color:#1D4ED8;font-weight:bold\">512</span> pixels (height).\nThe pixel size for this image is <span style=\"color:#6D28D9;font-weight:bold\">0.469</span> millimeters (width) x <span style=\"color:#6D28D9;font-weight:bold\">0.469</span> millimeters (height).\n<span style=\"color:#6b7280\">&lt;<b>Format Requirement</b> &amp; <b>Reasoning Instruction</b> omitted here&gt;</span>"
+          },
+          {
+            "label": "Response",
+            "html": "&lt;think&gt; &lt;step-1-reasoning&gt; Estimated the target non-enhancing tumor as the central oval region. The longest span is approximately horizontal, from about pixel (171, 256) to (255, 256). &lt;/step-1-reasoning&gt; &lt;step-1-answer&gt; (0.333984, 0.500000), (0.498047, 0.500000) &lt;/step-1-answer&gt; &lt;step-2-reasoning&gt; The shortest orthogonal span through the same region is approximately vertical, from about pixel (213, 217) to (213, 296). &lt;/step-2-reasoning&gt; &lt;step-2-answer&gt; (0.416016, 0.423828), (0.416016, 0.578125) &lt;/step-2-answer&gt; &lt;step-3-reasoning&gt; Major axis length ≈ 84 pixels × 0.469 mm/pixel. &lt;/step-3-reasoning&gt; &lt;step-3-answer&gt; 39.40 &lt;/step-3-answer&gt; &lt;step-4-reasoning&gt; Minor axis length ≈ 79 pixels × 0.469 mm/pixel. &lt;/step-4-reasoning&gt; &lt;step-4-answer&gt; 37.05 &lt;/step-4-answer&gt; &lt;/think&gt; &lt;answer&gt; <span style=\"color:#EA580C;font-weight:bold\">39.40</span>,<span style=\"color:#EA580C;font-weight:bold\">37.05</span> &lt;/answer&gt;"
+          },
+          {
+            "label": "GT · Prediction · Metrics",
+            "html": "<span style=\"color:#3b4cc8;font-weight:700\">Assumed coordinate origin: lower-left.</span>\nLocalization error (normalized L2):   major axis = 0.0819    minor axis = 0.0688\n\nGround Truth:    major axis length = 44.406 mm    minor axis length = 32.250 mm\nPrediction:      major axis length = <span style=\"color:#EA580C;font-weight:bold\">39.400</span> mm    minor axis length = <span style=\"color:#EA580C;font-weight:bold\">37.050</span> mm\nMeasurement Error  (major axis):   MRE  = 0.1127    nMAE = 0.0147\nMeasurement Error  (minor axis):   MRE  = 0.1488    nMAE = 0.0141"
           }
         ],
         "originToggle": true,
