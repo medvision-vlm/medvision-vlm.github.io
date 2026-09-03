@@ -298,8 +298,9 @@
       }
 
       // model traces (lines only, no fill) + hover vertices. A metric that is null/NaN — a target the
-      // model failed on EVERY sample (SR 0), so MRE/MAE is undefined — is skipped: no vertex and the
-      // line breaks into a gap, the same way matplotlib drops NaN. Never plotted at the centre or rim.
+      // model failed on EVERY sample (SR 0), so MRE/MAE is undefined, or one it was never evaluated
+      // on (the pilot's partial GPT-5.5-Pro run) — is skipped: no vertex and the line breaks into a
+      // gap, the same way matplotlib drops NaN. Never plotted at the centre or rim.
       names.forEach(function (name) {
         var color = colorOf(name);
         var series = g.values[name];

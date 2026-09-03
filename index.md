@@ -73,7 +73,7 @@ MedVision evaluates this ability across three quantitative tasks:
 
 <div class="reveal" markdown="1">
 
-*Last updated: Aug 25, 2026*
+*Last updated: Sep 3, 2026*
 
 </div>
 
@@ -269,7 +269,7 @@ Running API-served frontier VLMs across the entire benchmark is prohibitively co
 
 </div>
 
-<p class="caption" style="margin-top: 3rem;"><b>Table 5:</b> Pilot study on tumor/lesion size estimation using a small testing subset (750 samples). MAE in millimeters; MRE, SR, and MRE<sub>&lt;0.1</sub> in %. Cost is the total API evaluation spend in USD. <b>&dagger;</b> Gemini-3.1-Pro's thinking (non-disableable, default level) shares its 16,000-token output budget with the answer; ~20% of responses exhaust it on reasoning and return empty/truncated output, lowering SR.</p>
+<p class="caption" style="margin-top: 3rem;"><b>Table 5:</b> Pilot study on tumor/lesion size estimation using a small testing subset (750 samples). MAE in millimeters; MRE, SR, and MRE<sub>&lt;0.1</sub> in %. Cost is the total API evaluation spend in USD.</p>
 <table class="mv-center mv-sortable" data-default-sort="0">
   <thead>
     <tr>
@@ -284,9 +284,51 @@ Running API-served frontier VLMs across the entire benchmark is prohibitively co
   <tbody>
     <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>9.6<span class="medal">🥇</span></td><td>26.9<span class="medal">🥇</span></td><td>100.0</td><td>24.1<span class="medal">🥇</span></td><td>$0</td></tr>
     <tr><td>Claude-Fable-5</td><td>12.5</td><td>46.5</td><td>100.0</td><td>23.7</td><td>$63.9</td></tr>
-    <tr><td>Gemini-3.1-Pro</td><td>15.2</td><td>49.9</td><td>79.2 &dagger;</td><td>18.1</td><td>$101.3</td></tr>
+    <tr><td>Gemini-3.1-Pro</td><td>14.9</td><td>48.8</td><td>79.2 &dagger;</td><td>18.1</td><td>$101.3</td></tr>
+    <tr><td>GPT-5.5-Pro &Dagger;<span class="mv-cellnote">490 of 750 samples</span></td><td>13.7</td><td>52.4</td><td>100.0</td><td>23.7</td><td>$959</td></tr>
   </tbody>
 </table>
+<div class="mv-tablenote">
+<p><b>&dagger;</b> All API models were run with the same 16,000-token output budget. Gemini-3.1-Pro's thinking (non-disableable, default level) shares that budget with the answer; ~20% of responses exhaust it on reasoning and return empty/truncated output, lowering SR.</p>
+<p><b>&Dagger;</b> GPT-5.5-Pro was evaluated on 490 of the 750 samples: the run stopped after 6 of the 10 dataset tasks when its API spending budget was exhausted (a cost limit, not the token limit). Its metrics are computed over those 490 samples and are not directly comparable to the full-subset rows. Liver tumor and enhancing brain tumor were not evaluated, and kidney tumor covers KiPA22 only (100 of 199 samples); Table 6 and the radar below leave all three targets empty as incomplete.</p>
+</div>
+
+
+<p class="caption" style="margin-top: 3rem;"><b>Table 6:</b> Per-target MRE and SR (%) of the pilot-study models; n is the number of samples per target in the 750-sample subset; the miscellaneous tumor/lesion group (52 samples) is omitted, as in the radar below.</p>
+<table class="mv-sortable" data-default-sort="0">
+  <thead>
+    <tr>
+      <th rowspan="2"><b>Model</b></th>
+      <th colspan="2"><b>kidney tumor</b><span class="mv-cellnote">CT (A) &middot; n=199</span></th>
+      <th colspan="2"><b>liver tumor</b><span class="mv-cellnote">CT (A) &middot; n=118</span></th>
+      <th colspan="2"><b>brain tumor</b><span class="mv-cellnote">MR (A) &middot; n=96</span></th>
+      <th colspan="2"><b>brain resection cavity</b><span class="mv-cellnote">MR (A) &middot; n=91</span></th>
+      <th colspan="2"><b>non-enhancing brain tumor</b><span class="mv-cellnote">MR (A) &middot; n=88</span></th>
+      <th colspan="2"><b>metastatic lymph node</b><span class="mv-cellnote">MR (A) &middot; n=63</span></th>
+      <th colspan="2"><b>enhancing brain tumor</b><span class="mv-cellnote">MR (A) &middot; n=43</span></th>
+    </tr>
+    <tr>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+      <th><b>MRE</b> &darr;</th><th><b>SR</b> &uarr;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="is-mv"><td>MedVision-V0 (7B)</td><td>35.3</td><td>100.0</td><td>31.4</td><td>100.0</td><td>25.9</td><td>100.0</td><td>21.5</td><td>100.0</td><td>15.2</td><td>100.0</td><td>28.3</td><td>100.0</td><td>11.7</td><td>100.0</td></tr>
+    <tr><td>Claude-Fable-5</td><td>55.5</td><td>100.0</td><td>64.4</td><td>100.0</td><td>59.5</td><td>100.0</td><td>14.1</td><td>100.0</td><td>40.3</td><td>100.0</td><td>42.2</td><td>100.0</td><td>20.8</td><td>100.0</td></tr>
+    <tr><td>Gemini-3.1-Pro &dagger;</td><td>64.9</td><td>73.9</td><td>63.2</td><td>70.3</td><td>42.8</td><td>83.3</td><td>22.5</td><td>82.4</td><td>50.8</td><td>86.4</td><td>37.6</td><td>84.1</td><td>14.7</td><td>90.7</td></tr>
+    <tr><td>GPT-5.5-Pro</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>76.4</td><td>100.0</td><td>24.4</td><td>100.0</td><td>55.8</td><td>100.0</td><td>97.4</td><td>100.0</td><td>&mdash;</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+<div class="mv-tablenote">
+<p><b>&dagger;</b> SR below 100% for the reason given under Table 5.</p>
+<p><b>&mdash;</b> Not evaluated or incomplete: GPT-5.5-Pro's run stopped after 6 of the 10 dataset tasks (490 of 750 samples) when the API budget ran out, skipping the KiTS23 and MSD tasks. Liver tumor and enhancing brain tumor were never evaluated, and its kidney-tumor result (KiPA22 only, 100 of 199 samples) is omitted as incomplete.</p>
+</div>
+
 
 <div class="mv-radar" data-task="TL-Pilot"></div>
 

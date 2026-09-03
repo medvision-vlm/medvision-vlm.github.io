@@ -135,6 +135,16 @@ body {
   display: block;
 }
 
+/* Footnotes under a results table (the †/‡/— markers its cells carry) */
+.content .mv-tablenote {
+  max-width: 46rem;
+  margin: .5rem auto 0;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--mv-muted);
+}
+.content .mv-tablenote p { margin: .2rem 0; }
+
 .content h2, .content h3, .content h4, .content h5, .content h6 {
   text-align: center;
   margin-top: 6rem;
@@ -556,6 +566,19 @@ body {
   font-size: .82em;
   line-height: 1;
   margin-left: .3em;
+}
+
+/* Secondary line under a model name or a target header, e.g. the pilot's
+   partial sample count or a target's modality and n */
+.content table.mv-sortable .mv-cellnote {
+  display: block;
+  font-size: .7rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-top: .1rem;
+  color: var(--mv-muted);
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 /* ---- Rows --------------------------------------------------------------- */
